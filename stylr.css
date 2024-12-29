@@ -1,0 +1,187 @@
+/* 全局樣式設定 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+body {
+    background-color: #f0f0f0; /* 預設淺色背景 */
+    color: #333; /* 預設淺色文字 */
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    justify-content: center; /* 水平置中 */
+    align-items: center; /* 垂直置中 */
+    min-height: 100vh; /* 確保至少佔滿整個畫面高度 */
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* 容器設定 */
+.container {
+    max-width: 800px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: white; /* 容器預設背景 */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: background-color 0.3s, box-shadow 0.3s; /* 夜間模式轉換效果 */
+}
+
+/* 標題樣式 */
+h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: center;
+    color:#2e3d44
+}
+
+/* 標籤導覽樣式 */
+.tabs {
+    display: flex;
+    flex-wrap: wrap; /* 允許標籤換行 */
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.tab {
+    background: #4c5b60;
+    color: #c3e9a4;
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    gap: 5px;
+}
+
+
+.tab:hover, .tab.active {
+    background: #c3e9a4;
+    color: #2e3d44;
+    transform: scale(1.05);
+}
+
+/* 標籤內容區域樣式 */
+.tab-contents {
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.tab-content {
+    display: none;
+    width: 100%;
+    max-height: 500px;
+    border: none;
+    border-radius: 8px;
+    overflow: hidden; /* 確保 iframe 不超出邊界 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* iframe 樣式 */
+.tab-content iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+/* 按鈕樣式 */
+.button {
+    background: linear-gradient(45deg, #4c5b60, #6a7a7c);
+    color: #c3e9a4;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+.button:hover {
+    background: linear-gradient(45deg, #6a7a7c, #c3e9a4);
+    color: #2e3d44;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* 夜間模式按鈕 */
+.dark-mode-button {
+    background: #444;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.dark-mode-button:hover {
+    background: #666;
+}
+
+/* 夜間模式樣式 */
+.dark-mode {
+    background-color: #333; /* 夜間深色背景 */
+    color: #eee; /* 夜間淺色文字 */
+}
+
+.dark-mode .container {
+    background-color: #444; /* 容器夜間背景 */
+    box-shadow: 0 4px 10px rgba(255,255,255,0.1);
+}
+
+.dark-mode h1 {
+    color:#eee;
+}
+
+/* 響應式設計 */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .tabs {
+         flex-direction: column;
+         align-items: center;
+    }
+
+    .tab {
+        width: 90%;
+         margin: 5px auto;
+    }
+
+    .dark-mode-button {
+        top: 10px;
+         right: 10px;
+    }
+}
