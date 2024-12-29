@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>微波一排大秘寶</title>
     <style>
+        /* 全域樣式 */
         * {
             margin: 0;
             padding: 0;
@@ -13,174 +14,154 @@
 
         body {
             font-family: 'Courier New', Courier, monospace;
-            background: linear-gradient(120deg, #2e3d44, #3b5249);
+            background: linear-gradient(to bottom, #1e3c72, #2a5298); /* 漸層背景 */
+            background-attachment: fixed;
+            background-size: cover;
             color: #f1f1f1;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            height: 100vh;
             padding: 20px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        /* 背景動態星空 */
-        body::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/black-paper.png');
-            opacity: 0.2;
-            pointer-events: none;
-        }
-
-        body::before {
-            content: '';
-            position: absolute;
-            width: 3000px;
-            height: 3000px;
-            background: radial-gradient(circle, rgba(195, 233, 164, 0.15) 10%, transparent 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: pulse 15s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: translate(-50%, -50%) scale(1);
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(1.1);
-            }
+            min-height: 100vh;
         }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 3rem;
             color: #c3e9a4;
             font-weight: bold;
             margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
         }
 
+        /* 分頁按鈕 */
         .tabs {
             display: flex;
             justify-content: center;
             margin-bottom: 20px;
+            gap: 10px;
         }
 
         .tab {
-            background: rgba(76, 91, 96, 0.8);
-            color: #c3e9a4;
-            padding: 10px 20px;
-            margin: 0 5px;
+            background: linear-gradient(to right, #4c5b60, #7a8b94);
+            color: #fff;
             border: 2px solid #c3e9a4;
             border-radius: 5px;
+            padding: 10px 20px;
             cursor: pointer;
+            font-size: 1.2rem;
             text-transform: uppercase;
-            font-size: 1rem;
-            font-weight: bold;
-            transition: background-color 0.3s, color 0.3s, transform 0.2s;
+            transition: all 0.3s;
         }
 
-        .tab:hover, .tab.active {
-            background: rgba(195, 233, 164, 0.9);
+        .tab:hover {
+            background: #c3e9a4;
             color: #2e3d44;
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
 
+        .tab.active {
+            background: #c3e9a4;
+            color: #2e3d44;
+        }
+
+        /* 分頁內容區 */
         .tab-content {
             display: none;
             width: 100%;
-            max-width: 800px;
-            height: 500px;
+            max-width: 1200px;
+            background: #4c5b60;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            background-color: rgba(76, 91, 96, 0.8);
             border: 3px solid #c3e9a4;
-        }
-
-        .tab-content iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
+            padding: 15px;
         }
 
         .tab-content.active {
             display: block;
         }
 
-        /* 新按鈕樣式 */
-        .button {
-            background: linear-gradient(45deg, #4c5b60, #6a7a7c);
-            color: #c3e9a4;
-            padding: 15px 30px;
+        iframe {
+            width: 100%;
+            height: 600px;
             border: none;
-            border-radius: 25px;
+        }
+
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            iframe {
+                height: 400px;
+            }
+        }
+
+        /* 動態按鈕 */
+        .button {
+            background: linear-gradient(to right, #4c5b60, #7a8b94);
+            color: #fff;
+            padding: 15px 30px;
+            border: 2px solid #c3e9a4;
+            border-radius: 5px;
             font-size: 1.2rem;
             font-weight: bold;
             text-transform: uppercase;
             cursor: pointer;
+            transition: all 0.3s;
             margin-top: 20px;
-            transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         .button:hover {
-            background: linear-gradient(45deg, #6a7a7c, #c3e9a4);
+            background: #c3e9a4;
             color: #2e3d44;
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
     <h1>微波一排大秘寶</h1>
 
-    <!-- Tabs Navigation -->
+    <!-- 分頁按鈕 -->
     <div class="tabs">
-        <div class="tab active" data-tab="1">提早假別</div>
-        <div class="tab" data-tab="2">保養編組</div>
-        <div class="tab" data-tab="3">休假假表</div>
-        <div class="tab" data-tab="4">年度三寶</div>
-        <div class="tab" data-tab="5">慰勞服裝</div>
+        <div class="tab active" data-target="tab1">提早假</div>
+        <div class="tab" data-target="tab2">保養編組</div>
+        <div class="tab" data-target="tab3">年度三寶</div>
+        <div class="tab" data-target="tab4">慰勞APP</div>
+        <div class="tab" data-target="tab5">假表</div>
     </div>
 
-    <!-- Tabs Content -->
-    <div class="tab-content active" id="tab-1">
+    <!-- 分頁內容 -->
+    <div id="tab1" class="tab-content active">
         <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=188349276&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
     </div>
-    <div class="tab-content" id="tab-2">
+    <div id="tab2" class="tab-content">
         <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=1117875532&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
     </div>
-    <div class="tab-content" id="tab-3">
-        <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=84635788&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-    </div>
-    <div class="tab-content" id="tab-4">
+    <div id="tab3" class="tab-content">
         <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=2128671677&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
     </div>
-    <div class="tab-content" id="tab-5">
+    <div id="tab4" class="tab-content">
         <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=982598890&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
     </div>
+    <div id="tab5" class="tab-content">
+        <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=84635788&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+    </div>
 
-    <button class="button" onclick="window.location.href='https://line.me/R/ti/g/-DCpAZvFkb'">加入我們</button>
+    <!-- 按鈕 -->
+    <button class="button" onclick="window.location.href='https://line.me/R/ti/g/-DCpAZvFkb'">千萬不要點擊我</button>
 
     <script>
+        // 分頁切換功能
         const tabs = document.querySelectorAll('.tab');
         const contents = document.querySelectorAll('.tab-content');
 
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
+                // 移除所有選中狀態
                 tabs.forEach(t => t.classList.remove('active'));
                 contents.forEach(c => c.classList.remove('active'));
 
+                // 添加選中狀態
                 tab.classList.add('active');
-                document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+                document.getElementById(tab.getAttribute('data-target')).classList.add('active');
             });
         });
     </script>
