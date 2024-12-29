@@ -23,27 +23,43 @@
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 2.5rem;
             color: #c3e9a4; /* 軍事綠色 */
             font-weight: bold;
             margin-bottom: 20px;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* 文字陰影 */
         }
 
-        .grid-container {
-            display: grid;
-            grid-template-areas:
-                "left-top right-top"
-                "center center"
-                "left-bottom right-bottom";
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr auto 1fr;
-            gap: 15px;
-            width: 100%;
-            max-width: 1200px;
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
         }
 
-        .iframe-container {
+        .tab {
+            background-color: #4c5b60;
+            color: #c3e9a4;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border: 2px solid #c3e9a4;
+            border-radius: 5px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .tab:hover, .tab.active {
+            background-color: #c3e9a4;
+            color: #2e3d44;
+        }
+
+        .tab-content {
+            display: none;
+            width: 100%;
+            max-width: 800px;
+            height: 500px;
             border-radius: 8px;
             overflow: hidden;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* 陰影效果 */
@@ -51,46 +67,16 @@
             border: 3px solid #c3e9a4; /* 軍事風格邊框 */
         }
 
-        iframe {
+        .tab-content iframe {
             width: 100%;
             height: 100%;
             border: none;
         }
 
-        .left-top {
-            grid-area: left-top;
+        .tab-content.active {
+            display: block;
         }
 
-        .right-top {
-            grid-area: right-top;
-        }
-
-        .center {
-            grid-area: center;
-        }
-
-        .left-bottom {
-            grid-area: left-bottom;
-        }
-
-        .right-bottom {
-            grid-area: right-bottom;
-        }
-
-        @media (max-width: 768px) {
-            .grid-container {
-                grid-template-areas:
-                    "center"
-                    "left-top"
-                    "right-top"
-                    "left-bottom"
-                    "right-bottom";
-                grid-template-columns: 1fr;
-                grid-template-rows: auto;
-            }
-        }
-
-        /* 為按鈕設置軍事風格 */
         .button {
             background-color: #4c5b60;
             color: #c3e9a4;
@@ -115,28 +101,49 @@
 <body>
     <h1>微波一排大秘寶</h1>
 
-    <div class="grid-container">
-        <div class="iframe-container left-top">
-            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=188349276&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-        </div><!-- 提早假 -->
-
-        <div class="iframe-container right-top">
-            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=1117875532&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-        </div><!-- 保養編組 -->
-
-        <div class="iframe-container center">
-            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=84635788&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-        </div><!-- 假表 -->
-
-        <div class="iframe-container left-bottom">
-            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=2128671677&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-        </div><!-- 年度三寶 -->
-
-        <div class="iframe-container right-bottom">
-            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=982598890&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-        </div><!-- 慰勞APP -->
+    <!-- Tabs Navigation -->
+    <div class="tabs">
+        <div class="tab active" data-tab="1">提早假</div>
+        <div class="tab" data-tab="2">保養編組</div>
+        <div class="tab" data-tab="3">假表</div>
+        <div class="tab" data-tab="4">年度三寶</div>
+        <div class="tab" data-tab="5">慰勞APP</div>
     </div>
 
-    <button class="button" onclick="window.location.href='https://line.me/R/ti/g/-DCpAZvFkb'">千萬不要點擊我</button>
+    <!-- Tabs Content -->
+    <div class="tab-content active" id="tab-1">
+        <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=188349276&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+    </div>
+    <div class="tab-content" id="tab-2">
+        <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=1117875532&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+    </div>
+    <div class="tab-content" id="tab-3">
+        <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=84635788&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+    </div>
+    <div class="tab-content" id="tab-4">
+        <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=2128671677&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+    </div>
+    <div class="tab-content" id="tab-5">
+        <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=982598890&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+    </div>
+
+    <button class="button" onclick="window.location.href='https://line.me/R/ti/g/-DCpAZvFkb'">加入我們</button>
+
+    <script>
+        const tabs = document.querySelectorAll('.tab');
+        const contents = document.querySelectorAll('.tab-content');
+
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // 移除所有的 active
+                tabs.forEach(t => t.classList.remove('active'));
+                contents.forEach(c => c.classList.remove('active'));
+
+                // 為當前 tab 和內容增加 active
+                tab.classList.add('active');
+                document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+            });
+        });
+    </script>
 </body>
 </html>
