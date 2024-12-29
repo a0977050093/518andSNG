@@ -13,21 +13,58 @@
 
         body {
             font-family: 'Courier New', Courier, monospace;
-            background-color: #2e3d44; /* 深色背景 */
-            color: #f1f1f1; /* 淺色文字 */
+            background: linear-gradient(120deg, #2e3d44, #3b5249);
+            color: #f1f1f1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
+            height: 100vh;
             padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* 背景動態星空 */
+        body::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/black-paper.png');
+            opacity: 0.2;
+            pointer-events: none;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            width: 3000px;
+            height: 3000px;
+            background: radial-gradient(circle, rgba(195, 233, 164, 0.15) 10%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: pulse 15s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+            }
         }
 
         h1 {
             font-size: 2.5rem;
-            color: #c3e9a4; /* 軍事綠色 */
+            color: #c3e9a4;
             font-weight: bold;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* 文字陰影 */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
         }
 
         .tabs {
@@ -37,7 +74,7 @@
         }
 
         .tab {
-            background-color: #4c5b60;
+            background: rgba(76, 91, 96, 0.8);
             color: #c3e9a4;
             padding: 10px 20px;
             margin: 0 5px;
@@ -47,12 +84,13 @@
             text-transform: uppercase;
             font-size: 1rem;
             font-weight: bold;
-            transition: background-color 0.3s, color 0.3s;
+            transition: background-color 0.3s, color 0.3s, transform 0.2s;
         }
 
         .tab:hover, .tab.active {
-            background-color: #c3e9a4;
+            background: rgba(195, 233, 164, 0.9);
             color: #2e3d44;
+            transform: scale(1.1);
         }
 
         .tab-content {
@@ -62,9 +100,9 @@
             height: 500px;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* 陰影效果 */
-            background-color: #4c5b60; /* 深卡其色背景 */
-            border: 3px solid #c3e9a4; /* 軍事風格邊框 */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            background-color: rgba(76, 91, 96, 0.8);
+            border: 3px solid #c3e9a4;
         }
 
         .tab-content iframe {
@@ -77,24 +115,27 @@
             display: block;
         }
 
+        /* 新按鈕樣式 */
         .button {
-            background-color: #4c5b60;
+            background: linear-gradient(45deg, #4c5b60, #6a7a7c);
             color: #c3e9a4;
             padding: 15px 30px;
-            border: 2px solid #c3e9a4;
-            border-radius: 5px;
+            border: none;
+            border-radius: 25px;
             font-size: 1.2rem;
             font-weight: bold;
             text-transform: uppercase;
             cursor: pointer;
             margin-top: 20px;
-            transition: background-color 0.3s, transform 0.3s;
+            transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         }
 
         .button:hover {
-            background-color: #c3e9a4;
+            background: linear-gradient(45deg, #6a7a7c, #c3e9a4);
             color: #2e3d44;
-            transform: scale(1.05); /* 按鈕放大效果 */
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
         }
     </style>
 </head>
@@ -135,11 +176,9 @@
 
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
-                // 移除所有的 active
                 tabs.forEach(t => t.classList.remove('active'));
                 contents.forEach(c => c.classList.remove('active'));
 
-                // 為當前 tab 和內容增加 active
                 tab.classList.add('active');
                 document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
             });
