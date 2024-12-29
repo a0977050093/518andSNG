@@ -1,4 +1,4 @@
-// 取得元素
+// 獲取元素
 const tabs = document.querySelectorAll('.tab');
 const contents = document.querySelectorAll('.tab-content');
 const darkModeToggle = document.getElementById('darkModeToggle');
@@ -23,29 +23,34 @@ tabs.forEach(tab => {
 darkModeToggle.addEventListener('click', () => {
     body.classList.toggle('dark-mode');
     const icon = darkModeToggle.querySelector('i');
-    icon.classList.toggle('fa-moon');
-    icon.classList.toggle('fa-sun');
+    if (body.classList.contains('dark-mode')) {
+      icon.classList.remove('fa-moon');
+      icon.classList.add('fa-sun');
+    } else {
+      icon.classList.remove('fa-sun');
+      icon.classList.add('fa-moon');
+    }
 });
 
 // 全螢幕彈出視窗
 expandButtons.forEach(button => {
     button.addEventListener('click', () => {
-        const iframe = button.closest('.content-wrapper').querySelector('iframe');
-        modalIframe.src = iframe.src;
-        modal.style.display = "block";
+        const iframe = button.parentElement.querySelector('iframe');
+        modalIframe.src = iframe.src; // 設定 iframe 的來源
+        modal.style.display = "block"; // 顯示全螢幕視窗
     });
 });
 
 // 關閉全螢幕視窗
 closeButton.addEventListener('click', () => {
-    modal.style.display = 'none';
-    modalIframe.src = '';
+    modal.style.display = 'none'; // 隱藏全螢幕視窗
+    modalIframe.src = ''; // 清除 iframe 的來源
 });
 
-// 點擊模態視窗外部隱藏
+// 點擊彈出視窗外部區域關閉視窗
 window.addEventListener('click', (event) => {
-    if (event.target === modal) {
-        modal.style.display = "none";
-        modalIframe.src = '';
+    if (event.target == modal) {
+        modal.style.display = "none"; // 隱藏全螢幕視窗
+        modalIframe.src = ''; // 清除 iframe 的來源
     }
 });
