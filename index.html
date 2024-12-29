@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="管理早假、保養編組、休假假表等功能，歡迎加入我們！">
+    <meta name="keywords" content="早假, 保養, 休假, 微波一排大秘寶, LINE 群組">
     <title>微波一排大秘寶</title>
+
+    <!-- 引入外部CSS -->
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
         integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
@@ -13,50 +17,54 @@
     <div class="container">
         <h1>微波一排大秘寶</h1>
 
-        <nav class="tabs">
-            <button class="tab active" data-tab="1"><i class="fas fa-calendar-check"></i> 提早假</button>
-            <button class="tab" data-tab="2"><i class="fas fa-tools"></i> 保養編組</button>
-            <button class="tab" data-tab="3"><i class="fas fa-calendar-alt"></i> 休假假表</button>
-            <button class="tab" data-tab="4"><i class="fas fa-gem"></i> 年度三寶</button>
-            <button class="tab" data-tab="5"><i class="fas fa-tshirt"></i> 慰勞服裝</button>
+        <!-- 選項卡 -->
+        <nav class="tabs" role="tablist" aria-label="選項卡導航">
+            <button class="tab active" data-tab="1" role="tab" aria-selected="true"><i class="fas fa-calendar-check"></i> 提早假</button>
+            <button class="tab" data-tab="2" role="tab" aria-selected="false"><i class="fas fa-tools"></i> 保養編組</button>
+            <button class="tab" data-tab="3" role="tab" aria-selected="false"><i class="fas fa-calendar-alt"></i> 休假假表</button>
+            <button class="tab" data-tab="4" role="tab" aria-selected="false"><i class="fas fa-gem"></i> 年度三寶</button>
+            <button class="tab" data-tab="5" role="tab" aria-selected="false"><i class="fas fa-tshirt"></i> 慰勞服裝</button>
         </nav>
 
         <div class="tab-contents">
+            <!-- Tab 內容區塊，分別顯示不同的 iframe -->
             <div class="tab-content active" id="tab-1">
                 <div class="content-wrapper">
-                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=188349276&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=188349276&amp;single=true&amp;widget=true&amp;headers=false" loading="lazy"></iframe>
                     <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
                 </div>
             </div>
             <div class="tab-content" id="tab-2">
                <div class="content-wrapper">
-                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=1117875532&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=1117875532&amp;single=true&amp;widget=true&amp;headers=false" loading="lazy"></iframe>
                     <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
                </div>
             </div>
             <div class="tab-content" id="tab-3">
                 <div class="content-wrapper">
-                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=84635788&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=84635788&amp;single=true&amp;widget=true&amp;headers=false" loading="lazy"></iframe>
                     <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
                 </div>
             </div>
             <div class="tab-content" id="tab-4">
                 <div class="content-wrapper">
-                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=2128671677&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=2128671677&amp;single=true&amp;widget=true&amp;headers=false" loading="lazy"></iframe>
                     <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
                 </div>
             </div>
             <div class="tab-content" id="tab-5">
                <div class="content-wrapper">
-                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=982598890&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=982598890&amp;single=true&amp;widget=true&amp;headers=false" loading="lazy"></iframe>
                     <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
                </div>
             </div>
         </div>
 
-        <button class="button" onclick="window.location.href='https://line.me/R/ti/g/-DCpAZvFkb'">加入我們</button>
+        <!-- 加入我們按鈕 -->
+        <button class="button" onclick="window.location.href='https://line.me/R/ti/g/-DCpAZvFkb'" aria-label="加入我們的 LINE 群組">加入我們</button>
 
-        <button id="darkModeToggle" class="dark-mode-button">
+        <!-- 夜間模式切換按鈕 -->
+        <button id="darkModeToggle" class="dark-mode-button" aria-label="切換夜間模式">
             <i class="fas fa-moon"></i> 夜間模式
         </button>
     </div>
@@ -68,6 +76,8 @@
             <iframe id="modal-iframe" src="" frameborder="0"></iframe>
         </div>
     </div>
+
+    <!-- 引入外部JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
