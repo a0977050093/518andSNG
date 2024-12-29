@@ -4,305 +4,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>微波一排大秘寶</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <style>
-        /* 全局樣式 */
-        :root {
-            --primary-color: #c3e9a4;
-            --secondary-color: #2e3d44;
-            --background-color: linear-gradient(120deg, #2e3d44, #3b5249);
-            --text-color: #f1f1f1;
-            --tab-bg: rgba(76, 91, 96, 0.8);
-            --tab-active-bg: rgba(195, 233, 164, 0.9);
-            --button-gradient: linear-gradient(45deg, #4c5b60, #6a7a7c);
-            --button-hover-gradient: linear-gradient(45deg, #6a7a7c, #c3e9a4);
-        }
-
-        body {
-            font-family: 'Courier New', Courier, monospace;
-            background: var(--background-color);
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            min-height: 100vh; /* 確保內容足夠時填滿螢幕 */
-            padding: 20px;
-            overflow-x: hidden; /* 避免橫向滾動 */
-            position: relative;
-            transition: background 0.5s ease; /* 切換夜間模式的過渡效果 */
-        }
-
-        body.dark-mode {
-            --background-color: linear-gradient(120deg, #1a1a1a, #222);
-            --text-color: #ddd;
-            --tab-bg: rgba(30, 30, 30, 0.8);
-            --tab-active-bg: rgba(80, 80, 80, 0.9);
-            --button-gradient: linear-gradient(45deg, #333, #444);
-            --button-hover-gradient: linear-gradient(45deg, #444, #888);
-        }
-
-        body::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://www.transparenttextures.com/patterns/black-paper.png');
-            opacity: 0.2;
-            pointer-events: none;
-        }
-        body::before {
-            content: '';
-            position: absolute;
-            width: 3000px;
-            height: 3000px;
-            background: radial-gradient(circle, rgba(195, 233, 164, 0.15) 10%, transparent 70%);
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            animation: pulse 15s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: translate(-50%, -50%) scale(1);
-            }
-            50% {
-                transform: translate(-50%, -50%) scale(1.1);
-            }
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            color: var(--primary-color);
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
-            text-align: center;
-        }
-
-        .tabs {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap; /* 標籤過多時換行 */
-        }
-
-        .tab {
-            background: var(--tab-bg);
-            color: var(--primary-color);
-            padding: 10px 20px;
-            margin: 5px;
-            border: 2px solid var(--primary-color);
-            border-radius: 5px;
-            cursor: pointer;
-            text-transform: uppercase;
-            font-size: 1rem;
-            font-weight: bold;
-            transition: background-color 0.3s, color 0.3s, transform 0.2s;
-        }
-
-        .tab:hover, .tab.active {
-            background: var(--tab-active-bg);
-            color: var(--secondary-color);
-            transform: scale(1.1);
-        }
-
-        .tab-content {
-            display: none;
-            width: 100%;
-            max-width: 800px;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            background-color: var(--tab-bg);
-            border: 3px solid var(--primary-color);
-            margin-bottom: 20px;
-            padding: 10px;
-        }
-
-        .tab-content.active {
-            display: block;
-        }
-
-        .tab-content iframe {
-            width: 100%;
-            height: 500px;
-            border: none;
-            display: block; /* 移除iframe底部多餘的空間 */
-        }
-        
-        .button {
-            background: var(--button-gradient);
-            color: var(--primary-color);
-            padding: 15px 30px;
-            border: none;
-            border-radius: 25px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .button:hover {
-            background: var(--button-hover-gradient);
-            color: var(--secondary-color);
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        #theme-toggle {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: var(--tab-bg);
-            color: var(--primary-color);
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            transition: background 0.3s ease, color 0.3s ease;
-            z-index: 10;
-        }
-
-        #theme-toggle:hover {
-            background: var(--tab-active-bg);
-            color: var(--secondary-color);
-            transform: scale(1.1)
-        }
-
-        /* 響應式設計 */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            .tabs {
-                flex-direction: column;
-                align-items: center;
-            }
-            .tab {
-                margin: 5px 0;
-                width: 90%;
-            }
-            .tab-content {
-                padding: 5px;
-            }
-            .tab-content iframe {
-               height: 300px;
-            }
-             
-        }
-        
-        /* 分頁內元素風格 */
-        .tab-content ul {
-        list-style-type: disc; /* 使用小圓點 */
-        padding-left: 20px; /* 稍微縮進 */
-        margin-bottom: 10px;
-        }
-
-        .tab-content li {
-        margin-bottom: 5px;
-        font-size: 1rem;
-        }
-        .tab-content h2 {
-        font-size: 1.5rem;
-        color: var(--primary-color);
-        margin-bottom: 10px;
-        text-align: center;
-        }
-        .tab-content p {
-        font-size: 1rem;
-        line-height: 1.6; /* 增加行高 */
-        margin-bottom: 15px;
-        }
-    </style>
 </head>
 <body>
-    <h1>微波一排大秘寶</h1>
+    <div class="container">
+        <h1>微波一排大秘寶</h1>
 
-    <button id="theme-toggle"><i class="fas fa-moon"></i></button>
+        <nav class="tabs">
+            <button class="tab active" data-tab="1"><i class="fas fa-calendar-check"></i> 提早假</button>
+            <button class="tab" data-tab="2"><i class="fas fa-tools"></i> 保養編組</button>
+            <button class="tab" data-tab="3"><i class="fas fa-calendar-alt"></i> 休假假表</button>
+            <button class="tab" data-tab="4"><i class="fas fa-gem"></i> 年度三寶</button>
+            <button class="tab" data-tab="5"><i class="fas fa-tshirt"></i> 慰勞服裝</button>
+        </nav>
 
-    <div class="tabs">
-        <div class="tab active" data-tab="1">提早假別</div>
-        <div class="tab" data-tab="2">保養編組</div>
-        <div class="tab" data-tab="3">休假假表</div>
-        <div class="tab" data-tab="4">年度三寶</div>
-        <div class="tab" data-tab="5">慰勞服裝</div>
-        <div class="tab" data-tab="6">使用說明</div>
+        <div class="tab-contents">
+            <div class="tab-content active" id="tab-1">
+                <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=188349276&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+            </div>
+            <div class="tab-content" id="tab-2">
+                <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=1117875532&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+            </div>
+            <div class="tab-content" id="tab-3">
+                <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=84635788&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+            </div>
+            <div class="tab-content" id="tab-4">
+               <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=2128671677&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+            </div>
+            <div class="tab-content" id="tab-5">
+                <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=982598890&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+           </div>
+        </div>
+
+        <button class="button" onclick="window.location.href='https://line.me/R/ti/g/-DCpAZvFkb'">加入我們</button>
+
+         <!-- 夜間模式切換按鈕 -->
+        <button id="darkModeToggle" class="dark-mode-button">()
+          <i class="fas fa-moon"></i> 夜間模式
+        </button>
     </div>
 
-    <div class="tab-content active" id="tab-1">
-        <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=188349276&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-    </div>
-    <div class="tab-content" id="tab-2">
-        <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=1117875532&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-    </div>
-    <div class="tab-content" id="tab-3">
-        <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=84635788&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-    </div>
-    <div class="tab-content" id="tab-4">
-        <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=2128671677&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-    </div>
-    <div class="tab-content" id="tab-5">
-       <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=982598890&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-    </div>
-    <div class="tab-content" id="tab-6">
-        <h2>使用說明</h2>
-        <p>歡迎來到微波一排大秘寶，這個網站旨在方便大家查閱重要資訊。下方為各分頁的使用說明：</p>
-        <ul>
-            <li><strong>提早假別：</strong> 此分頁顯示提早假的相關申請資訊。</li>
-            <li><strong>保養編組：</strong> 此分頁列出保養編組的相關資訊。</li>
-            <li><strong>休假假表：</strong> 在這裡您可以找到最新的休假假表。</li>
-            <li><strong>年度三寶：</strong> 此分頁提供年度三寶的相關資訊。</li>
-            <li><strong>慰勞服裝：</strong> 此分頁展示慰勞服裝的相關細節。</li>
-        </ul>
-        <p>我們致力於提供便捷的使用體驗，如您有任何問題或建議，請隨時通過「加入我們」按鈕聯繫我們。</p>
-    </div>
-
-    <button class="button" onclick="window.location.href='https://line.me/R/ti/g/-DCpAZvFkb'">加入我們</button>
-
-    <script>
-        const tabs = document.querySelectorAll('.tab');
-        const contents = document.querySelectorAll('.tab-content');
-        const themeToggle = document.getElementById('theme-toggle');
-        let darkMode = localStorage.getItem('darkMode') === 'enabled';
-        
-        // 設定初始主題
-        if (darkMode) {
-            document.body.classList.add('dark-mode');
-            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-        }
-
-        themeToggle.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            darkMode = !darkMode;
-             if (darkMode) {
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
-                localStorage.setItem('darkMode', 'enabled');
-             } else {
-                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
-                localStorage.setItem('darkMode', 'disabled');
-             }
-        });
-
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                tabs.forEach(t => t.classList.remove('active'));
-                contents.forEach(c => c.classList.remove('active'));
-
-                tab.classList.add('active');
-                document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
-            });
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
