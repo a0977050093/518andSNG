@@ -180,22 +180,21 @@
         <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=982598890&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
     </div>
 
-    <!-- 15. 按鈕 -->
+    <!-- 15. 加入我們按鈕 -->
     <button class="button" onclick="window.location.href='https://line.me/R/ti/g/-DCpAZvFkb'">加入我們</button>
 
-    <!-- 16. 標籤頁切換功能的JavaScript -->
+    <!-- 16. JavaScript腳本，用於處理標籤頁切換 -->
     <script>
         const tabs = document.querySelectorAll('.tab');
         const contents = document.querySelectorAll('.tab-content');
 
-        // 添加點擊事件來切換標籤頁
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
-                tabs.forEach(t => t.classList.remove('active'));  // 先移除所有標籤頁的active類
-                contents.forEach(c => c.classList.remove('active'));  // 隱藏所有內容
+                tabs.forEach(t => t.classList.remove('active')); // 移除所有標籤的active class
+                contents.forEach(c => c.classList.remove('active')); // 隱藏所有tab內容
 
-                tab.classList.add('active');  // 為當前點擊的標籤頁添加active類
-                document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');  // 顯示對應內容
+                tab.classList.add('active'); // 設置當前標籤為active
+                document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active'); // 顯示對應的內容
             });
         });
     </script>
