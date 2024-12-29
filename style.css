@@ -1,157 +1,227 @@
-/* 全局設定 */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+   body {
+     font-family: 'Arial', sans-serif;
+     margin: 0;
+     padding: 0;
+     background-color: #f4f4f4;
+     color: #333;
+     transition: background-color 0.3s, color 0.3s; /* 夜間模式切換動畫 */
+     min-height: 100vh; /* 確保 body 佔滿螢幕高度 */
+     display: flex;
+     flex-direction: column;
+   }
 
-body {
-  font-family: 'Courier New', Courier, monospace;
-  background: linear-gradient(120deg, #2e3d44, #3b5249);
-  color: #f1f1f1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
-  padding: 20px;
-  overflow-x: hidden;
-  position: relative;
-  transition: background-color 0.3s ease;
-}
+   .container {
+     width: 90%;
+     max-width: 1200px;
+     margin: 20px auto;
+     padding: 20px;
+     background-color: #fff;
+     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+     border-radius: 8px;
+     display: flex;
+     flex-direction: column; /* 確保內容垂直排列 */
+     position: relative; /* 讓夜間模式按鈕可以絕對定位 */
+   }
 
-body::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('https://www.transparenttextures.com/patterns/black-paper.png');
-  opacity: 0.2;
-  pointer-events: none;
-}
+   h1 {
+     text-align: center;
+     margin-bottom: 20px;
+   }
 
-body::before {
-  content: '';
-  position: absolute;
-  width: 3000px;
-  height: 3000px;
-  background: radial-gradient(circle, rgba(195, 233, 164, 0.15) 10%, transparent 70%);
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  animation: pulse 15s infinite;
-}
+   .tabs {
+     display: flex;
+     justify-content: center;
+     margin-bottom: 20px;
+   }
 
+   .tab {
+     padding: 10px 15px;
+     background-color: #e0e0e0;
+     border: none;
+     cursor: pointer;
+     margin: 0 5px;
+     border-radius: 5px 5px 0 0;
+     transition: background-color 0.3s;
+   }
 
-@keyframes pulse {
-    0%, 100% {
-        transform: translate(-50%, -50%) scale(1);
-    }
-    50% {
-        transform: translate(-50%, -50%) scale(1.1);
-    }
-}
+   .tab.active {
+     background-color: #ddd;
+   }
 
-/* 夜間模式樣式 */
-body.dark-mode {
-    background: linear-gradient(120deg, #1a1a1a, #222);
-    color: #ccc;
-}
+   .tab:hover {
+     background-color: #ddd;
+   }
 
-body.dark-mode::before {
-    background: radial-gradient(circle, rgba(100, 100, 100, 0.15) 10%, transparent 70%);
-}
-
-/* 標題樣式 */
-h1 {
-  font-size: 2.5rem;
-  color: #c3e9a4;
-  font-weight: bold;
-  margin-bottom: 20px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
-  text-align: center;
-}
-
-/* 導覽列樣式 */
-.tabs {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-bottom: 20px;
-}
-
-.tab {
-    background: rgba(76, 91, 96, 0.8);
-    color: #c3e9a4;
-    padding: 10px 20px;
-    margin: 5px;
-    border: 2px solid #c3e9a4;
-    border-radius: 5px;
-    cursor: pointer;
-    text-transform: uppercase;
-    font-size: 1rem;
-    font-weight: bold;
-    transition: background-color 0.3s, color 0.3s, transform 0.2s;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.tab i {
-    margin-right: 8px;
-}
-
-.tab:hover,
-.tab.active {
-  background: rgba(195, 233, 164, 0.9);
-  color: #2e3d44;
-  transform: scale(1.1);
-}
-
-/* 內容區域樣式 */
-.tab-contents {
-  width: 100%;
-  max-width: 1000px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
-}
-
-.tab-content {
-    display: none;
-    width: 100%;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    background-color: rgba(76, 91, 96, 0.8);
-    border: 3px solid #c3e9a4;
-    margin-bottom: 10px;
-}
+    .tab i {
+        margin-right: 5px; /* 圖示與文字之間間距 */
+   }
 
 
-.tab-content.active {
-  display: block;
-}
+   .tab-contents {
+      display: flex;
+       flex-direction: column; /* 確保內容垂直排列 */
+   }
+   .tab-content {
+     display: none;
+     padding: 10px;
+       position: relative; /* 讓 content-wrapper 可以絕對定位 */
 
-/* iframe 容器樣式 */
-.content-wrapper {
-    position: relative;
-    width: 100%;
-    height: 500px;
-}
+   }
 
-.tab-content iframe {
-    width: 100%;
-    height: 100%;
+   .tab-content.active {
+     display: block;
+   }
+
+   .content-wrapper {
+       position: relative; /* 建立定位上下文 */
+       display: flex;
+       flex-direction: column; /* 垂直排列 iframe 和按鈕 */
+       align-items: center; /* 讓內容置中 */
+   }
+
+   .content-wrapper iframe {
+      width: 100%; /* 讓 iframe 寬度填滿 container */
+      height: 500px; /* 設定 iframe 高度 */
+       border: 1px solid #ccc;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+     margin-bottom: 10px;
+     display: block;
+   }
+
+   .expand-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
     border: none;
-}
+    cursor: pointer;
+    border-radius: 5px;
+     display: inline-flex;
+    align-items: center;
+       position: relative; /* 確保按鈕 z-index 生效 */
+    z-index: 2;
+       margin-bottom: 10px;
+   }
 
-.expand-button {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background: rgba(195, 233, 164, 0.8);
-    color: #2e
+    .expand-button i {
+         margin-right: 5px;
+     }
+
+
+   .button {
+     display: block;
+     margin: 20px auto;
+     padding: 10px 15px;
+     background-color: #007bff;
+     color: white;
+     border: none;
+     cursor: pointer;
+     border-radius: 5px;
+     text-decoration: none; /* 移除連結底線 */
+     transition: background-color 0.3s;
+   }
+
+   .button:hover {
+     background-color: #0056b3;
+   }
+
+    .dark-mode-button {
+        background-color: #333;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        display: flex;
+         align-items: center;
+        z-index: 1000; /* 确保按钮在最上面 */
+        transition: background-color 0.3s;
+    }
+
+    .dark-mode-button i {
+        margin-right: 5px;
+    }
+
+    .dark-mode-button:hover {
+        background-color: #555;
+    }
+
+
+   .dark-mode {
+     background-color: #333;
+     color: #fff;
+   }
+
+   .dark-mode .container {
+     background-color: #444;
+     box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+   }
+
+   .dark-mode .tab {
+       background-color: #555;
+       color: #fff;
+
+   }
+
+   .dark-mode .tab.active {
+       background-color: #777;
+   }
+
+   .dark-mode .tab:hover {
+       background-color: #777;
+   }
+
+   .dark-mode .button {
+       background-color: #555;
+   }
+       .dark-mode .button:hover {
+       background-color: #777;
+   }
+
+      /* 全螢幕彈出視窗 */
+   .modal {
+      display: none;
+        position: fixed;
+      z-index: 9999; /* 確保彈出視窗在最上層 */
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.7); /* 黑色背景半透明 */
+   }
+
+   .modal-content {
+     background-color: #fefefe;
+     margin: 5% auto; /* 垂直置中 */
+     padding: 20px;
+     border: 1px solid #888;
+     width: 80%;
+     height: 80%; /* 彈出視窗高度佔 80% */
+       position: relative; /* 讓關閉按鈕可以絕對定位 */
+   }
+
+   .close-button {
+        color: #aaa;
+      position: absolute;
+     top: 10px;
+       right: 15px;
+        font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+   }
+
+   .close-button:hover,
+   .close-button:focus {
+      color: black;
+       text-decoration: none;
+       cursor: pointer;
+   }
+
+   #modal-iframe {
+     width: 100%;
+     height: 100%;
+       border: none;
+   }
