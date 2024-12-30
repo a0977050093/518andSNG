@@ -140,6 +140,14 @@
         transition: background-color 0.3s;
     }
 
+.darkModeToggle {
+    position: fixed;
+    bottom: 10px;
+    top: 10px;
+    right: 10px;
+    
+}
+
     .dark-mode-button i {
         margin-right: 5px;
     }
