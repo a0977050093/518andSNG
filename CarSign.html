@@ -251,16 +251,28 @@
         }
 
         function submitCarLocation() {
-            const carNumber = document.getElementById('carNumbers').value;
-            const location = document.getElementById('locations').value;
+    const carNumber = document.getElementById('carNumbers').value;
+    const location = document.getElementById('locations').value;
 
-            const existingData = JSON.parse(localStorage.getItem('carLocations') || '{}');
-            existingData[carNumber] = location;
+    // 提示用戶輸入密碼
+    const password = prompt("請輸入密碼");
 
-            localStorage.setItem('carLocations', JSON.stringify(existingData));
+    // 預設密碼
+    const correctPassword = "348362";
 
-            alert(`已指定車號 ${carNumber} 到 ${location} 區域`);
-        }
+    // 驗證密碼是否正確
+    if (password !== correctPassword) {
+        alert("密碼錯誤，無法提交車輛位置。");
+        return; // 結束函式執行
+    }
+
+    const existingData = JSON.parse(localStorage.getItem('carLocations') || '{}');
+    existingData[carNumber] = location;
+
+    localStorage.setItem('carLocations', JSON.stringify(existingData));
+
+    alert(`已指定車號 ${carNumber} 到 ${location} 區域`);
+}
 
         function clearCarNumbers() {
             localStorage.removeItem('carLocations');
