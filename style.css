@@ -246,15 +246,18 @@
 
 
 .sidebar-toggle {
-    position: absolute;
+    position: fixed;
     top: 10px;
     left: 10px;
-    background: none;
+    background: #333;
     border: none;
     font-size: 24px;
     color: white;
     cursor: pointer;
-    padding: 10px;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    z-index: 1001; /* 確保按鈕在側邊欄之上 */
 }
 
 .sidebar-content {
