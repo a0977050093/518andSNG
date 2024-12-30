@@ -9,6 +9,11 @@ document.addEventListener('DOMContentLoaded', () => {
   const sidebar = document.querySelector('.sidebar');
   const sidebarToggle = document.getElementById('sidebarToggle');
 
+  
+
+
+
+  
   // 夜間模式狀態
   let isDarkMode = localStorage.getItem('darkMode') === 'enabled';
   if (isDarkMode) {
