@@ -225,3 +225,53 @@
      height: 100%;
        border: none;
    }
+
+/* 側邊欄樣式 */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px; /* 初始隱藏在左側 */
+    width: 250px;
+    height: 100%;
+    background-color: #333;
+    color: white;
+    padding-top: 60px;
+    transition: left 0.3s ease;
+    z-index: 1000; /* 確保側邊欄在其他元素之上 */
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+
+.sidebar-toggle {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.sidebar-content {
+    padding: 20px;
+}
+
+.sidebar-content a {
+    display: block;
+    padding: 10px 0;
+    color: white;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-content a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.sidebar-content a i{
+    margin-right: 8px;
+}
