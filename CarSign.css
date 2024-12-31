@@ -159,6 +159,7 @@ form button {
 }
 
 form button {
+    height: 50px; /* 確保高度一致 */
     cursor: pointer;
     font-weight: bold; /* 按鈕字體加粗 */
 }
