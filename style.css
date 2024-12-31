@@ -1,41 +1,86 @@
-/* 基本樣式設置 */
+/* 基本排版 */
 body {
   font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
 }
 
 .app-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  height: 100vh;
 }
 
 .app-title {
-  font-size: 2em;
-  margin-top: 20px;
   text-align: center;
+  font-size: 2rem;
+  margin: 20px;
 }
 
+/* 側邊欄樣式 */
+.sidebar {
+  width: 250px;
+  background-color: #333;
+  color: white;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  padding-top: 20px;
+}
+
+.sidebar .sidebar-toggle {
+  display: none;
+}
+
+.sidebar-content {
+  margin-top: 40px;
+}
+
+.sidebar h2 {
+  margin-left: 10px;
+}
+
+.sidebar a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  margin: 10px 0;
+}
+
+.sidebar a:hover {
+  background-color: #444;
+}
+
+/* Tab導航樣式 */
 .tabs {
   display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
+  justify-content: center;
+  background-color: #f4f4f4;
+  padding: 10px;
 }
 
 .tab {
-  background-color: #f1f1f1;
-  padding: 10px;
-  border: 1px solid #ddd;
+  padding: 10px 20px;
+  margin: 0 10px;
+  background-color: #ddd;
   cursor: pointer;
+  border: none;
 }
 
 .tab.active {
-  background-color: #008CBA;
+  background-color: #4CAF50;
   color: white;
+}
+
+/* Tab內容樣式 */
+.tab-contents {
+  margin-left: 250px;
+  padding: 20px;
 }
 
 .tab-content {
   display: none;
-  margin-top: 20px;
 }
 
 .tab-content.active {
@@ -46,63 +91,71 @@ body {
   position: relative;
 }
 
+iframe {
+  width: 100%;
+  height: 500px;
+  border: none;
+}
+
 .expand-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: #008CBA;
+  bottom: 20px;
+  right: 20px;
+  background-color: #4CAF50;
   color: white;
   border: none;
+  padding: 10px;
   cursor: pointer;
 }
 
-button {
-  background-color: #008CBA;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
+.expand-button:hover {
+  background-color: #45a049;
 }
 
-button:hover {
-  background-color: #006c8c;
-}
-
-/* 暗黑模式 */
+/* 暗黑模式樣式 */
 .dark-mode {
+  background-color: #121212;
+  color: white;
+}
+
+.dark-mode .tabs {
   background-color: #333;
-  color: white;
 }
 
-.sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 250px;
-  height: 100%;
-  background-color: #333;
-  padding: 20px;
-  display: none;
+.dark-mode .tab {
+  background-color: #444;
 }
 
-.sidebar-content {
-  color: white;
+.dark-mode .tab.active {
+  background-color: #4CAF50;
 }
 
-.sidebar a {
-  color: white;
-  text-decoration: none;
-  display: block;
-  margin-top: 10px;
+.dark-mode .sidebar {
+  background-color: #222;
 }
 
-.sidebar-toggle {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  font-size: 30px;
+.dark-mode .expand-button {
+  background-color: #4CAF50;
+}
+
+.dark-mode .expand-button:hover {
+  background-color: #45a049;
+}
+
+/* 加入我們按鈕 */
+.button-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: #4CAF50;
   color: white;
-  background: none;
   border: none;
   cursor: pointer;
+}
+
+.button:hover {
+  background-color: #45a049;
 }
