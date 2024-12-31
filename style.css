@@ -113,17 +113,21 @@ body {
   display: block; /* 顯示激活的內容 */
 }
 
-.content-wrapper {
-  width: 100%;
-  max-width: 1000px; /* 最大寬度 */
-  height: 80vh; /* 高度為螢幕的 80% */
-  position: relative;
-}
+@media screen and (orientation: landscape) {
+  body {
+    background-color: #f0f0f0; /* 示例：更改背景顏色 */
+    font-size: 18px; /* 示例：調整字體大小 */
+  }
 
-iframe {
-  width: 100%; /* iframe 寬度 100% */
-  height: 100%; /* iframe 高度 100% */
-  border: none; /* 去除邊框 */
+  .content-wrapper {
+    width: 90vw; /* 橫屏時設置寬度為 90% 視窗寬度 */
+    margin: 0 auto; /* 置中 */
+  }
+
+  iframe {
+    width: 100%; /* 確保 iframe 寬度填滿容器 */
+    height: 80vh; /* 使用視窗高度設置 iframe 高度 */
+  }
 }
 
 .expand-button {
