@@ -134,6 +134,11 @@
             color: white;
             display: none;
         }
+
+        #map {
+            height: 400px;
+            margin-top: 20px;
+        }
     </style>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbPe0HVpOt6UHD47PFyRaAqF1CIzK__2U&callback=initMap" async defer></script>
@@ -211,8 +216,8 @@
         </div>
     </div>
 
-  <div id="map"></div>
-    
+    <div id="map"></div>
+
     <script>
         function showStatus() {
             document.getElementById('modal').style.display = 'flex';
@@ -255,73 +260,67 @@
         }
 
         function submitCarLocation() {
-    const carNumber = document.getElementById('carNumbers').value;
-    const location = document.getElementById('locations').value;
+            const carNumber = document.getElementById('carNumbers').value;
+            const location = document.getElementById('locations').value;
 
-    // 提示用戶輸入密碼
-    const password = prompt("請輸入密碼");
+            // 提示用戶輸入密碼
+            const password = prompt("請輸入密碼");
 
-    // 預設密碼
-    const correctPassword = "348362";
+            // 預設密碼
+            const correctPassword = "348362";
 
-    // 驗證密碼是否正確
-    if (password !== correctPassword) {
-        alert("密碼錯誤，無法提交車輛位置。");
-        return; // 結束函式執行
-    }
+            // 驗證密碼是否正確
+            if (password !== correctPassword) {
+                alert("密碼錯誤，無法提交車輛位置。");
+                return; // 結束函式執行
+            }
 
-    // 初始化地圖
-    function initMap() {
-      // 建立地圖，並設定中心位置與縮放級別
-      const map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 24.8940207, lng: 121.2095940 }, // 地圖中心 (經度, 緯度)
-        zoom: 17, // 初始縮放級別
-        mapTypeId: google.maps.MapTypeId.SATELLITE // 衛星圖層
-      });
+            // 更新車號與位置到本地存儲
+            const existingData = JSON.parse(localStorage.getItem('carLocations') || '{}');
+            existingData[carNumber] = location;
 
-      // 新增標記函式
-      function addMarker(lat, lng, title) {
-        const marker = new google.maps.Marker({
-          position: { lat: lat, lng: lng },
-          map: map,
-          title: title
-        });
+            localStorage.setItem('carLocations', JSON.stringify(existingData));
 
-        // 為標記設定資訊視窗
-        const infowindow = new google.maps.InfoWindow({
-          content: `<strong>${title}</strong><br>位置: (${lat}, ${lng})`
-        });
+            alert(`已指定車號 ${carNumber} 到 ${location} 區域`);
 
-        // 當標記被點擊時，顯示資訊視窗
-        marker.addListener("click", function () {
-          infowindow.open(map, marker);
-        });
-      }
+            // 初始化地圖
+            function initMap() {
+                const map = new google.maps.Map(document.getElementById("map"), {
+                    center: { lat: 24.8940207, lng: 121.2095940 }, // 地圖中心 (經度, 緯度)
+                    zoom: 17, // 初始縮放級別
+                    mapTypeId: google.maps.MapTypeId.SATELLITE // 衛星圖層
+                });
 
-      // 新增預設標記
-      addMarker(24.8953731, 121.2110354, "二級廠");
-      addMarker(24.8955410, 121.2094455, "OK鋼棚");
-      addMarker(24.8940207, 121.2095940, "虎嶺大操場");
-    }
+                // 新增標記函式
+                function addMarker(lat, lng, title) {
+                    const marker = new google.maps.Marker({
+                        position: { lat: lat, lng: lng },
+                        map: map,
+                        title: title
+                    });
 
+                    const infowindow = new google.maps.InfoWindow({
+                        content: `<strong>${title}</strong><br>位置: (${lat}, ${lng})`
+                    });
 
-            
-    const existingData = JSON.parse(localStorage.getItem('carLocations') || '{}');
-    existingData[carNumber] = location;
+                    marker.addListener("click", function () {
+                        infowindow.open(map, marker);
+                    });
+                }
 
-    localStorage.setItem('carLocations', JSON.stringify(existingData));
+                // 預設標記
+                addMarker(24.8953731, 121.2110354, "二級廠");
+                addMarker(24.8955410, 121.2094455, "OK鋼棚");
+                addMarker(24.8940207, 121.2095940, "虎嶺大操場");
+            }
 
-    alert(`已指定車號 ${carNumber} 到 ${location} 區域`);
-}
+            window.onload = initMap;
+        }
 
         function clearCarNumbers() {
             localStorage.removeItem('carLocations');
             alert("所有車號已清除");
         }
-
-           // 使用 window.onload 初始化地圖
-        window.onload = initMap;
-        
     </script>
 </body>
 
