@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>車輛位置管理系統</title>
     <style>
-        /* 基本樣式 */
         body {
             font-family: 'Courier New', monospace;
             background-color: #2e2e2e;
@@ -15,9 +14,27 @@
             padding: 20px;
         }
 
-        h2, h3 {
+        #status-btn {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 1000;
+        }
+
+        #status-btn:hover {
+            background-color: #45a049;
+        }
+
+        h2 {
             text-align: center;
-            font-size: 1.8rem;
+            font-size: 24px;
         }
 
         table {
@@ -50,24 +67,17 @@
             background-color: #555;
         }
 
-        /* 表單選擇器 */
-        select, button {
-            font-size: 1rem;
-            padding: 10px;
-            margin: 10px 0;
-            width: 100%;
-            box-sizing: border-box;
+        button {
             background-color: #4CAF50;
             color: white;
+            padding: 10px 20px;
             border: none;
             cursor: pointer;
+            font-size: 16px;
+            width: 200px;
+            margin: 10px 0;
         }
 
-        select:focus, button:focus {
-            outline: none;
-        }
-
-        /* 按鈕樣式 */
         button:hover {
             background-color: #45a049;
         }
@@ -80,7 +90,6 @@
             background-color: #da190b;
         }
 
-        /* Modal樣式 */
         #modal {
             display: none;
             position: fixed;
@@ -117,7 +126,6 @@
             background-color: #da190b;
         }
 
-        /* Loading狀態 */
         #loading {
             position: fixed;
             top: 50%;
@@ -131,42 +139,8 @@
             height: 400px;
             margin-top: 20px;
         }
-
-        /* 響應式設計：針對手機和小螢幕的調整 */
-        @media screen and (max-width: 768px) {
-            h2 {
-                font-size: 1.6rem;
-            }
-
-            h3 {
-                font-size: 1.4rem;
-            }
-
-            select, button {
-                font-size: 0.9rem;
-                width: 100%;
-            }
-
-            #map {
-                height: 300px;
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            h2 {
-                font-size: 1.4rem;
-            }
-
-            h3 {
-                font-size: 1.2rem;
-            }
-
-            select, button {
-                font-size: 0.8rem;
-            }
-        }
-
     </style>
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbPe0HVpOt6UHD47PFyRaAqF1CIzK__2U&callback=initMap" async defer></script>
 </head>
 
@@ -251,14 +225,39 @@
 
         function initMap() {
             map = new google.maps.Map(document.getElementById("map"), {
-                center: { lat: 24.8940207, lng: 121.2095940 },
-                zoom: 17,
-                mapTypeId: google.maps.MapTypeId.SATELLITE
+                center: { lat: 24.8940207, lng: 121.2095940 }, // 地圖中心 (經度, 緯度)
+                zoom: 17, // 初始縮放級別
+                mapTypeId: google.maps.MapTypeId.SATELLITE // 衛星圖層
             });
-
-            // 不再添加預設標記
         }
 
+        // 新增標記函式
+        function addMarker(lat, lng, title) {
+        function addMarker(lat, lng, title) {
+    const marker = new google.maps.Marker({
+        position: { lat: lat, lng: lng },
+        map: map,
+        title: title,
+        label: {
+            text: title, // 設定文字內容
+            color: "black", // 設定文字顏色
+            fontSize: "16px", // 設定文字大小
+            fontWeight: "bold" // 設定文字粗體
+        }
+    });
+
+    // 為標記設定資訊視窗
+    const infowindow = new google.maps.InfoWindow({
+        content: `<strong>${title}</strong><br>位置: (${lat}, ${lng})`
+    });
+
+    // 當標記被點擊時，顯示資訊視窗
+    marker.addListener("click", function () {
+        infowindow.open(map, marker);
+    });
+}
+
+        // 提交車輛位置
         function submitCarLocation() {
             const carNumber = document.getElementById('carNumbers').value;
             const location = document.getElementById('locations').value;
@@ -277,10 +276,13 @@
 
             alert(`已指定車號 ${carNumber} 到 ${location} 區域`);
 
+            // 更新地圖
             updateMap();
         }
 
+        // 更新地圖標記
         function updateMap() {
+            // 清除所有舊的標記
             markers.forEach(marker => marker.setMap(null));
             markers = [];
 
@@ -289,48 +291,24 @@
                 const location = carData[carNumber];
                 let lat, lng;
 
-                switch (location) {
-                    case "二級廠":
-                        lat = 24.8953731; lng = 121.2110354;
-                        break;
-                    case "OK鋼棚":
-                        lat = 24.8955410; lng = 121.2094455;
-                        break;
-                    case "虎嶺大操場":
-                        lat = 24.8940207; lng = 121.2095940;
-                        break;
-                    default:
-                        continue;
-                }
+                // 根據車輛所選的位置，設定經緯度
+                const carNumbers = []; // 車號清單，從伺服器獲取
+    const locations = {
+      "二級廠": { lat: 24.8953731, lng: 121.2110354 },
+      "OK鋼棚": { lat: 24.8955410, lng: 121.2094455 },
+      "連側鋼棚": { lat: 24.8955352, lng: 121.2088128 },
+      "無線電鋼棚": { lat: 24.8942494, lng: 121.2084913 },
+      "陸區鋼棚": { lat: 24.8936913, lng: 121.2085201 },
+      "玄捷鋼棚": { lat: 24.8933285, lng: 121.2084722 },
+      "風雨走廊": { lat: 24.8926953, lng: 121.2099437 },
+      "待安置車號": { lat: 24.8950000, lng: 121.2090000 }
+    };
 
                 addMarker(lat, lng, `${carNumber} - ${location}`);
             }
         }
 
-        function addMarker(lat, lng, title) {
-            const marker = new google.maps.Marker({
-                position: { lat: lat, lng: lng },
-                map: map,
-                title: title,
-                label: {
-                    text: title,
-                    color: "black",
-                    fontSize: "16px",
-                    fontWeight: "bold"
-                }
-            });
-
-            const infowindow = new google.maps.InfoWindow({
-                content: `<strong>${title}</strong><br>位置: (${lat}, ${lng})`
-            });
-
-            marker.addListener("click", function () {
-                infowindow.open(map, marker);
-            });
-
-            markers.push(marker);
-        }
-
+        // 顯示車輛狀況
         function showStatus() {
             document.getElementById('modal').style.display = 'flex';
             loadCarStatus();
@@ -342,7 +320,7 @@
 
         function loadCarStatus() {
             const statusTable = document.getElementById('statusTable');
-            statusTable.innerHTML = '';
+            statusTable.innerHTML = ''; // 清空表格內容
 
             const carData = JSON.parse(localStorage.getItem('carLocations') || '{}');
             const locationCounts = {};
@@ -372,19 +350,20 @@
             }
         }
 
-        function clearCarNumbers() {
-            const password = prompt("請輸入密碼");
-            const correctPassword = "348362";
+        // 清除車號資料
+function clearCarNumbers() {
+    const password = prompt("請輸入密碼");
+    const correctPassword = "348362";
 
-            if (password !== correctPassword) {
-                alert("密碼錯誤，無法清除車號資料。");
-                return;
-            }
+    if (password !== correctPassword) {
+        alert("密碼錯誤，無法清除車號資料。");
+        return;
+    }
 
-            localStorage.removeItem('carLocations');
-            alert('所有車號資料已清除');
-            updateMap();
-        }
+    localStorage.removeItem('carLocations');
+    alert('所有車號資料已清除');
+    updateMap();
+}
     </script>
 </body>
 
