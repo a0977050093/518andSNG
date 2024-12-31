@@ -18,11 +18,13 @@ document.querySelectorAll('.tab').forEach(tab => {
   });
 });
 
-// 2. 切換側邊欄顯示功能
-// 當用戶點擊側邊欄圖標時，顯示/隱藏側邊欄
-document.getElementById('sidebarToggle').addEventListener('click', function() {
-  const sidebar = document.getElementById('sidebar');
-  sidebar.classList.toggle('open'); // 切換側邊欄的 open 類別
+// 2. // 取得側邊欄和切換按鈕
+const sidebar = document.getElementById('sidebar');
+const sidebarToggle = document.getElementById('sidebarToggle');
+
+// 切換側邊欄顯示狀態
+sidebarToggle.addEventListener('click', () => {
+    sidebar.classList.toggle('open'); // 當按鈕被點擊時，切換 'open' 類別
 });
 
 // 3. 護瞳模式切換功能
