@@ -26,8 +26,10 @@ body, html {
 
 .content-wrapper {
   min-height: calc(100vh - 50px); /* 確保內容至少填滿一屏高度 */
+  margin-left: 0;
   padding: 20px;
   box-sizing: border-box;
+  transition: margin-left 0.3s ease; /* 過渡動畫 */
 }
 
 .app-container {
@@ -57,7 +59,9 @@ body, html {
   opacity: 0; /* 設置側邊欄的透明度 */
   transition: opacity 0.3s width 0.3s ease; /* 設置過渡動畫效果 */
   overflow-x: hidden; /* 防止側邊欄內容橫向溢出 */
+  overflow-y: auto;
 }
+
 
 .sidebar.open {
   width: 250px; 
@@ -73,6 +77,10 @@ body, html {
 
 .sidebar.open .sidebar-content {
   display: block; /* 當側邊欄打開時，顯示內容 */
+}
+
+.sidebar.open + .content-wrapper {
+  margin-left: 250px; /* 側邊欄寬度 */
 }
 
 .sidebar-toggle {
@@ -151,6 +159,18 @@ body, html {
     padding: 20px;
     margin: 0 auto;
   }
+
+  @media screen and (orientation: portrait) {
+  .sidebar {
+    width: 200px; /* 豎屏模式下調整寬度 */
+  }
+}
+
+@media screen and (orientation: landscape) {
+  .sidebar {
+    width: 250px; /* 橫屏模式下保持寬度 */
+  }
+}
 
   iframe {
     height: 70vh; /* 設置 iframe 高度為視窗高度的 70% */
