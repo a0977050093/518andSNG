@@ -58,27 +58,22 @@
         
 
         <!-- 車輛狀況表 -->
-        <button onclick="showStatus()">車輛狀況</button>
- 
-</form>
-            
-        <div id="modal" class="modal">
-            <div class="modal-content">
-                <h3>車輛狀況</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>位置</th>
-                            <th>車號</th>
-                            <th>總數</th>
-                        </tr>
-                    </thead>
-                    <tbody id="statusTable"></tbody>
-                </table>
-                   <button onclick="closeModal()" class="close-btn">關閉</button>
-                
-            </div>
-        </div>
+        <div id="modal">
+    <div id="modal-content">
+        <h3>車輛狀況</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>位置</th>
+                    <th>車號</th>
+                    <th>總數</th>
+                </tr>
+            </thead>
+            <tbody id="statusTable"></tbody>
+        </table>
+        <button onclick="closeModal()" class="close-btn">關閉</button>
+    </div>
+</div>
 
         <!-- 地圖顯示區域 -->
         <div id="map"></div>
