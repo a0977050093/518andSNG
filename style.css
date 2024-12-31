@@ -147,8 +147,8 @@ body, html {
 
 @media screen and (orientation: portrait) {
   .content-wrapper {
-    height: auto; /* 根據內容自適應高度 */
-    padding: 10px;
+    min-height: 100vh; /* 根據內容自適應高度 */
+    padding: 20px;
     margin: 0 auto;
   }
 
@@ -159,7 +159,9 @@ body, html {
 
   .content-wrapper {
     width: 90vw; /* 橫屏時設置寬度為 90% 視窗寬度 */
+    min-height: calc(100vh -footerHeight);
     margin: 0 auto; /* 置中 */
+    overflow-y:visible;
   }
 
   iframe {
