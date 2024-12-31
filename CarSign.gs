@@ -1,6 +1,6 @@
 let map;
 let markers = {}; // 用來儲存標記
-let carLocations = {}; // 用來儲存車號位置
+const carLocations = {}; // 用來儲存車號位置
 
 // 初始化地圖
 function initMap() {
@@ -41,8 +41,15 @@ function submitCarLocation() {
         return;
     }
 
+    // 在地圖上添加標記
     addMarker(carLocation.lat, carLocation.lng, carNumber);
-    carLocations[carNumber] = carLocation;
+
+    // 儲存車號及其位置
+    carLocations[carNumber] = {
+        locationName: location, // 儲存名稱
+        lat: carLocation.lat,
+        lng: carLocation.lng
+    };
 
     updateStatusTable();
 }
@@ -82,20 +89,24 @@ document.getElementById("modal").addEventListener("click", function (event) {
 // 更新狀況表
 function updateStatusTable() {
     const tableBody = document.getElementById("statusTable");
-    tableBody.innerHTML = "";
+    tableBody.innerHTML = ""; // 清空表格內容
 
     Object.keys(carLocations).forEach(carNumber => {
-        const carLocation = carLocations[carNumber];
+        const carInfo = carLocations[carNumber];
+
         const row = document.createElement("tr");
 
+        // 顯示位置名稱
         const locationCell = document.createElement("td");
-        locationCell.textContent = `${carLocation.lat}, ${carLocation.lng}`;
+        locationCell.textContent = carInfo.locationName;
         row.appendChild(locationCell);
 
+        // 顯示車號
         const carNumberCell = document.createElement("td");
         carNumberCell.textContent = carNumber;
         row.appendChild(carNumberCell);
 
+        // 顯示總數（固定為1，此處可以根據需求調整）
         const totalCell = document.createElement("td");
         totalCell.textContent = "1";
         row.appendChild(totalCell);
