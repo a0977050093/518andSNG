@@ -8,6 +8,20 @@
      const darkModeToggle = document.getElementById('darkModeToggle');
      let isDarkMode = localStorage.getItem('darkMode') === 'enabled';
 
+     // 選取按鈕和相關元素
+const toggleButton = document.querySelector('.toggle-button');
+const body = document.body;
+const sidebar = document.querySelector('.sidebar');
+
+// 點擊按鈕切換護眼模式和側邊欄
+toggleButton.addEventListener('click', () => {
+  // 切換護眼模式
+  body.classList.toggle('dark-mode');
+  // 切換側邊欄顯示狀態
+  sidebar.classList.toggle('open');
+});
+
+      
      // 初始設定夜間模式狀態
       if (isDarkMode) {
          document.body.classList.add('dark-mode');
