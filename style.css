@@ -52,9 +52,12 @@ body {
   background: none; /* 按鈕背景為透明 */
   color: white; /* 按鈕文字顏色為白色 */
   border: none; /* 去除按鈕邊框 */
-  font-size: 24px; /* 設定圖標的大小 */
+  font-size: 30px; /* 設定圖標的大小 */
   cursor: pointer; /* 鼠標顯示為手形 */
   padding: 10px; /* 按鈕內邊距 */
+  top: 10px;
+  left: 10px;
+  z-index: 100;
 }
 
 .sidebar a {
