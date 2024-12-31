@@ -252,9 +252,10 @@
     background: none;
     border: none;
     font-size: 24px;
-    color: white;
+    color: blue;
     cursor: pointer;
     padding: 10px;
+    z-index: 1001;
 }
 
 .sidebar-content {
