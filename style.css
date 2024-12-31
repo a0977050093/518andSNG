@@ -1,186 +1,218 @@
-/* 基本排版 */
+/* 基本排版設定 */
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: white;
+  font-family: Arial, sans-serif; /* 設定字型 */
+  margin: 0; /* 移除預設邊距 */
+  padding: 0; /* 移除預設內邊距 */
+  background-color: white; /* 預設背景色為白色 */
 }
 
 .app-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh; /* 設置容器高度為全螢幕 */
   background-color: #fff;
 }
 
 .app-title {
-  text-align: center;
-  font-size: 2rem;
-  margin: 20px;
+  text-align: center; /* 標題置中 */
+  font-size: 2rem; /* 標題字型大小 */
+  margin: 20px; /* 頂部和底部邊距 */
 }
 
 /* 側邊欄樣式 */
 .sidebar {
-  width: 250px;
-  background-color: #222;
-  color: white;
-  position: fixed;
+  width: 50px; /* 側邊欄寬度 */
+  background-color: #222; /* 側邊欄背景色 */
+  color: white; /* 文字顏色為白色 */
+  position: fixed; /* 固定位置 */
   top: 0;
   bottom: 0;
   left: 0;
-  padding-top: 20px;
-}
-
-.sidebar .sidebar-toggle {
-  display: none;
+  padding-top: 20px; /* 側邊欄內邊距 */
+  opacity: 0.9; /* 半透明效果 */
+  transition: 0.3s; /* 動畫過渡效果 */
 }
 
 .sidebar-content {
-  margin-top: 40px;
+  display: none; /* 初始隱藏側邊欄內容 */
+  margin-top: 20px;
+  padding-left: 10px;
 }
 
-.sidebar h2 {
-  margin-left: 10px;
-}
-
-.sidebar a {
+.sidebar-toggle {
+  background: none;
   color: white;
-  text-decoration: none;
-  display: block;
-  margin: 10px 0;
-}
-
-.sidebar a:hover {
-  background-color: #444;
-}
-
-/* Tab導航樣式 */
-.tabs {
-  display: flex;
-  justify-content: center;
-  background-color: #333;
+  border: none;
+  font-size: 24px;
+  cursor: pointer; /* 鼠標變成手形 */
   padding: 10px;
 }
 
+.sidebar.open .sidebar-content {
+  display: block; /* 顯示側邊欄內容 */
+}
+
+.sidebar a {
+  display: block;
+  color: white; /* 文字顏色 */
+  text-decoration: none; /* 移除下劃線 */
+  margin-bottom: 10px; /* 連結間距 */
+}
+
+.sidebar a:hover {
+  color: #FFD700; /* 滑鼠懸停時變色 */
+}
+
+.tabs {
+  display: flex;
+  justify-content: center; /* 標籤置中 */
+  background-color: #f1f1f1; /* 頁籤背景顏色 */
+}
+
 .tab {
-  padding: 10px 20px;
-  margin: 0 10px;
-  background-color: #444;
-  cursor: pointer;
+  background: #eaeaea; /* 預設背景顏色 */
+  padding: 10px 20px; /* 內邊距 */
   border: none;
-  color: white;
-  transition: background-color 0.3s;
+  cursor: pointer; /* 鼠標變成手形 */
+  transition: background 0.3s; /* 背景顏色過渡動畫 */
+}
+
+.tab:hover {
+  background: #ddd; /* 滑鼠懸停時顏色 */
 }
 
 .tab.active {
-  background-color: #4CAF50;
+  background: #2196F3; /* 激活標籤背景 */
+  color: white; /* 激活標籤文字顏色 */
 }
 
-/* Tab內容樣式 */
 .tab-contents {
-  margin-left: 250px;
   padding: 20px;
+  flex-grow: 1; /* 讓內容區域彈性增長 */
+  display: flex;
+  justify-content: center; /* 內容置中 */
+  align-items: center; /* 內容垂直置中 */
+  background-color: #fff;
 }
 
 .tab-content {
-  display: none;
+  display: none; /* 預設隱藏內容 */
 }
 
 .tab-content.active {
-  display: block;
+  display: block; /* 顯示激活的內容 */
 }
 
 .content-wrapper {
+  width: 100%;
+  max-width: 1000px; /* 最大寬度 */
+  height: 80vh; /* 高度為螢幕的 80% */
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 iframe {
-  width: 80%;
-  height: 500px;
-  border: none;
-  display: block;
+  width: 100%; /* iframe 寬度 100% */
+  height: 100%; /* iframe 高度 100% */
+  border: none; /* 去除邊框 */
 }
 
 .expand-button {
   position: absolute;
-  bottom: 20px;
-  background-color: #4CAF50;
+  bottom: 10px; /* 位於底部 */
+  left: 50%; /* 水平置中 */
+  transform: translateX(-50%); /* 精確置中 */
+  background-color: #2196F3;
   color: white;
   border: none;
-  padding: 10px 20px;
+  padding: 10px;
   cursor: pointer;
-  margin: 0 auto;
-  left: 50%;
-  transform: translateX(-50%);
+  display: none; /* 初始隱藏 */
 }
 
 .expand-button:hover {
-  background-color: #45a049;
+  background-color: #1e88e5; /* 滑鼠懸停時變色 */
 }
 
-/* 暗黑模式樣式 */
-.dark-mode {
-  background-color: #121212;
+.content-wrapper:hover .expand-button {
+  display: block; /* 滑鼠懸停時顯示全螢幕按鈕 */
+}
+
+.dark-mode-container {
+  position: fixed;
+  top: 20px;
+  right: 20px; /* 右上角 */
+}
+
+.dark-mode-button {
+  background-color: #222;
   color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px; /* 圓角 */
 }
 
-.dark-mode .tabs {
-  background-color: #222;
+.dark-mode-button i {
+  margin-right: 5px; /* 圖示與文字間距 */
 }
 
-.dark-mode .tab {
-  background-color: #333;
+button {
+  cursor: pointer; /* 鼠標變成手形 */
 }
 
-.dark-mode .tab.active {
-  background-color: #4CAF50;
-}
-
-.dark-mode .sidebar {
-  background-color: #222;
-}
-
-.dark-mode .expand-button {
-  background-color: #4CAF50;
-}
-
-.dark-mode .expand-button:hover {
-  background-color: #45a049;
-}
-
-/* 加入我們按鈕 */
+/* 按鈕樣式 */
 .button-container {
-  text-align: center;
-  margin: 20px 0;
+  display: flex;
+  justify-content: center; /* 中央對齊 */
+  margin-top: 20px;
 }
 
 .button {
-  padding: 10px 20px;
-  background-color: #4CAF50;
+  padding: 12px 24px;
+  background-color: #2196F3;
   color: white;
   border: none;
+  border-radius: 5px;
+  font-size: 16px;
   cursor: pointer;
 }
 
 .button:hover {
-  background-color: #45a049;
+  background-color: #1976D2; /* 滑鼠懸停時變色 */
 }
 
-/* 護瞳按鈕 */
-.dark-mode-button {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background-color: #4CAF50;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  cursor: pointer;
+button:focus {
+  outline: none; /* 去除按鈕焦點外框 */
 }
 
-.dark-mode-button:hover {
-  background-color: #45a049;
+/* 暗黑模式樣式 */
+body.dark-mode {
+  background-color: #121212; /* 暗黑模式背景 */
+  color: white; /* 文字顏色為白色 */
+}
+
+.sidebar.dark-mode {
+  background-color: #333; /* 側邊欄背景色 */
+}
+
+.tabs.dark-mode {
+  background-color: #333; /* 頁籤背景色 */
+}
+
+.tab.dark-mode {
+  background: #555; /* 頁籤預設背景色 */
+}
+
+.tab.dark-mode.active {
+  background: #2196F3; /* 激活標籤背景 */
+  color: white; /* 激活標籤文字顏色 */
+}
+
+.expand-button.dark-mode {
+  background-color: #1e88e5; /* 全螢幕按鈕顏色 */
+}
+
+.button-container .button.dark-mode {
+  background-color: #2196F3; /* 按鈕顏色 */
+  color: white; /* 文字顏色 */
 }
