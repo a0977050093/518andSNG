@@ -138,3 +138,31 @@ button:hover {
             height: 400px;
             margin-top: 20px;
         }
+
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 兩欄等寬 */
+    gap: 10px; /* 欄間距 */
+    margin-bottom: 20px;
+}
+
+form select,
+form button {
+    width: 100%; /* 寬度等於父容器 */
+    padding: 10px; /* 內邊距 */
+    font-size: 16px; /* 統一字體大小 */
+    box-sizing: border-box; /* 包含邊框與內距 */
+    border: 1px solid #ddd; /* 統一邊框樣式 */
+    border-radius: 5px; /* 統一圓角 */
+    background-color: #444; /* 統一背景色 */
+    color: white; /* 白色文字 */
+}
+
+form button {
+    cursor: pointer;
+    font-weight: bold; /* 按鈕字體加粗 */
+}
+
+form button:hover {
+    background-color: #555; /* 懸停時稍微加深顏色 */
+}
