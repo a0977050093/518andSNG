@@ -22,15 +22,16 @@ body {
 /* 側邊欄樣式 */
 .sidebar {
   width: 0; /* 預設寬度為0，隱藏側邊欄 */
-  background-color: #222; /* 側邊欄背景顏色 */
+  background-color: #333; /* 側邊欄背景顏色 */
   color: white; /* 側邊欄文字顏色 */
   position: fixed; /* 固定定位 */
   top: 0; /* 頂部對齊 */
   bottom: 0; /* 底部對齊 */
   left: 0; /* 左側對齊 */
+  height: 100%
   padding-top: 20px; /* 側邊欄的內邊距 */
   opacity: 0.9; /* 設置側邊欄的透明度 */
-  transition: 0.3s; /* 設置過渡動畫效果 */
+  transition: width 0.3s ease; /* 設置過渡動畫效果 */
   overflow-x: hidden; /* 防止側邊欄內容橫向溢出 */
 }
 
@@ -68,6 +69,7 @@ body {
 }
 
 .sidebar a:hover {
+  width: 200px;
   color: #FFD700; /* 滑鼠懸停時文字顏色改變 */
 }
 
