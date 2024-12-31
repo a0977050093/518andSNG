@@ -73,9 +73,10 @@ function closeModal() {
 
 // 點擊模態框外部時不關閉
 document.getElementById("modal").addEventListener("click", function (event) {
-    if (event.target === this) {
-        closeModal();
+    if (event.target === document.getElementById("modal-content")) {
+        return; // 避免誤觸背景時關閉模態框
     }
+    closeModal(); // 點擊背景以外的地方才執行關閉
 });
 
 // 更新狀況表
