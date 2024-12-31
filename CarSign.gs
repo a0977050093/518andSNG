@@ -60,10 +60,10 @@ function addMarker(lat, lng, title) {
     });
 }
 
-// 顯示車輛位置
 function showStatus() {
-    document.getElementById("modal").style.display = "flex";
-    updateStatusTable();
+    const modal = document.getElementById("modal");
+    modal.style.display = "flex"; // 顯示模態框
+    updateStatusTable(); // 確保狀態表正確更新
 }
 
 function closeModal() {
