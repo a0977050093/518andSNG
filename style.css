@@ -3,12 +3,14 @@ body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  background-color: white;
 }
 
 .app-container {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  background-color: #fff;
 }
 
 .app-title {
@@ -20,7 +22,7 @@ body {
 /* 側邊欄樣式 */
 .sidebar {
   width: 250px;
-  background-color: #333;
+  background-color: #222;
   color: white;
   position: fixed;
   top: 0;
@@ -56,21 +58,22 @@ body {
 .tabs {
   display: flex;
   justify-content: center;
-  background-color: #f4f4f4;
+  background-color: #333;
   padding: 10px;
 }
 
 .tab {
   padding: 10px 20px;
   margin: 0 10px;
-  background-color: #ddd;
+  background-color: #444;
   cursor: pointer;
   border: none;
+  color: white;
+  transition: background-color 0.3s;
 }
 
 .tab.active {
   background-color: #4CAF50;
-  color: white;
 }
 
 /* Tab內容樣式 */
@@ -89,23 +92,29 @@ body {
 
 .content-wrapper {
   position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 iframe {
-  width: 100%;
+  width: 80%;
   height: 500px;
   border: none;
+  display: block;
 }
 
 .expand-button {
   position: absolute;
   bottom: 20px;
-  right: 20px;
   background-color: #4CAF50;
   color: white;
   border: none;
-  padding: 10px;
+  padding: 10px 20px;
   cursor: pointer;
+  margin: 0 auto;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .expand-button:hover {
@@ -119,11 +128,11 @@ iframe {
 }
 
 .dark-mode .tabs {
-  background-color: #333;
+  background-color: #222;
 }
 
 .dark-mode .tab {
-  background-color: #444;
+  background-color: #333;
 }
 
 .dark-mode .tab.active {
@@ -157,5 +166,21 @@ iframe {
 }
 
 .button:hover {
+  background-color: #45a049;
+}
+
+/* 護瞳按鈕 */
+.dark-mode-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.dark-mode-button:hover {
   background-color: #45a049;
 }
