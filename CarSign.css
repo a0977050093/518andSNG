@@ -90,7 +90,7 @@ button:hover {
 }
 
         #modal {
-    display: none; /* 預設隱藏 */
+    display: none;
     position: fixed;
     top: 0;
     left: 0;
@@ -108,23 +108,23 @@ button:hover {
     max-width: 800px;
     width: 90%;
     overflow-y: auto;
-    position: relative; /* 防止內部浮動錯誤 */
+    position: relative;
 }
 
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #f44336;
-            color: white;
-            padding: 10px;
-            border: none;
-            cursor: pointer;
-        }
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #f44336;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+}
 
-        .close-btn:hover {
-            background-color: #da190b;
-        }
+.close-btn:hover {
+    background-color: #da190b;
+}
 
         #loading {
             position: fixed;
