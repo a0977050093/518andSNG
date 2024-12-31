@@ -19,7 +19,7 @@ body {
 }
 
 body, html {
-  height: 100%;
+  min-height: calc(100vh - footerHeight);
   margin: 0;
   padding: 0;
 }
@@ -53,14 +53,16 @@ body, html {
   bottom: 0; /* 底部對齊 */
   left: 0; /* 左側對齊 */
   height: 100%
-  padding-top: 20px; /* 側邊欄的內邊距 */
-  opacity: 0.9; /* 設置側邊欄的透明度 */
-  transition: width 0.3s ease; /* 設置過渡動畫效果 */
+  padding-top: 0; /* 側邊欄的內邊距 */
+  opacity: 0; /* 設置側邊欄的透明度 */
+  transition: opacity 0.3s width 0.3s ease; /* 設置過渡動畫效果 */
   overflow-x: hidden; /* 防止側邊欄內容橫向溢出 */
 }
 
 .sidebar.open {
-  width: 250px; /* 側邊欄打開時設置固定寬度 */
+  width: 250px; 
+  padding-top:20px;
+  opacity:0.9;/* 側邊欄打開時設置固定寬度 */
 }
 
 .sidebar-content {
@@ -246,11 +248,11 @@ body.dark-mode {
 }
 
 .tabs.dark-mode {
-  background-color: #333; /* 頁籤背景色 */
+  background-color: #444; /* 頁籤背景色 */
 }
 
 .tab.dark-mode {
-  background: #555; /* 頁籤預設背景色 */
+  background: #444; /* 頁籤預設背景色 */
 }
 
 .tab.dark-mode.active {
@@ -259,7 +261,8 @@ body.dark-mode {
 }
 
 .expand-button.dark-mode {
-  background-color: #1e88e5; /* 全螢幕按鈕顏色 */
+  background-color: #1e88e5; 
+  color: white;/* 全螢幕按鈕顏色 */
 }
 
 .button-container .button.dark-mode {
@@ -269,6 +272,7 @@ body.dark-mode {
 
 body.landscape .content-wrapper {
   width: 90vw;
+  min-height: 80vh;
 }
 
 body.portrait .content-wrapper {
