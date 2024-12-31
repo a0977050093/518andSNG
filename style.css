@@ -19,13 +19,13 @@ body {
 }
 
 body, html {
-  min-height: calc(100vh - footerHeight);
+  height: 100%;
   margin: 0;
   padding: 0;
 }
 
 .content-wrapper {
-  min-height: 100vh; /* 確保內容至少填滿一屏高度 */
+  min-height: calc(100vh - 50px); /* 確保內容至少填滿一屏高度 */
   padding: 20px;
   box-sizing: border-box;
 }
