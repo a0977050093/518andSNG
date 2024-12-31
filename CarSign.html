@@ -136,8 +136,8 @@
         }
 
         #map {
-            height: 400px;
-            margin-top: 20px;
+            height: 500px;
+            width: 100%;
         }
     </style>
 
@@ -219,96 +219,71 @@
     <div id="map"></div>
 
     <script>
-        // 初始化地圖
         let map;
         let markers = [];
+        const locations = {
+            "二級廠": { lat: 24.8953731, lng: 121.2110354 },
+            "OK鋼棚": { lat: 24.8955410, lng: 121.2094455 },
+            "連側鋼棚": { lat: 24.8955352, lng: 121.2088128 },
+            "無線電鋼棚": { lat: 24.8942494, lng: 121.2084913 },
+            "陸區鋼棚": { lat: 24.8936913, lng: 121.2085201 },
+            "玄捷鋼棚": { lat: 24.8933285, lng: 121.2084722 },
+            "風雨走廊": { lat: 24.8926953, lng: 121.2099437 },
+            "待安置車號": { lat: 24.8950000, lng: 121.2090000 }
+        };
 
         function initMap() {
-            map = new google.maps.Map(document.getElementById("map"), {
-                center: { lat: 24.8940207, lng: 121.2095940 }, // 地圖中心 (經度, 緯度)
-                zoom: 17, // 初始縮放級別
-                mapTypeId: google.maps.MapTypeId.SATELLITE // 衛星圖層
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 24.8953731, lng: 121.2110354 },
+                zoom: 16,
             });
-
-            // 新增預設標記
-            addMarker(24.8953731, 121.2110354, "二級廠");
-            addMarker(24.8955410, 121.2094455, "OK鋼棚");
-            addMarker(24.8940207, 121.2095940, "虎嶺大操場");
         }
 
-        // 新增標記函式
-        function addMarker(lat, lng, title) {
-            const marker = new google.maps.Marker({
-                position: { lat: lat, lng: lng },
-                map: map,
-                title: title
-            });
-
-            const infowindow = new google.maps.InfoWindow({
-                content: `<strong>${title}</strong><br>位置: (${lat}, ${lng})`
-            });
-
-            marker.addListener("click", function () {
-                infowindow.open(map, marker);
-            });
-
-            markers.push(marker); // 儲存標記
-        }
-
-        // 提交車輛位置
+        // 新增車號的標記
         function submitCarLocation() {
             const carNumber = document.getElementById('carNumbers').value;
             const location = document.getElementById('locations').value;
 
+            // 提示用戶輸入密碼
             const password = prompt("請輸入密碼");
+
+            // 預設密碼
             const correctPassword = "348362";
 
+            // 驗證密碼是否正確
             if (password !== correctPassword) {
                 alert("密碼錯誤，無法提交車輛位置。");
-                return;
+                return; // 結束函式執行
             }
 
-            const existingData = JSON.parse(localStorage.getItem('carLocations') || '{}');
-            existingData[carNumber] = location;
-            localStorage.setItem('carLocations', JSON.stringify(existingData));
+            const carLocation = locations[location];
 
-            alert(`已指定車號 ${carNumber} 到 ${location} 區域`);
+            if (carLocation) {
+                addMarker(carLocation.lat, carLocation.lng, carNumber);
+                saveCarLocation(carNumber, location);
+            } else {
+                alert("選擇的地點無效！");
+            }
+        }
 
-            // 更新地圖
-            updateMap();
+        // 儲存車號位置
+        function saveCarLocation(carNumber, location) {
+            const carData = JSON.parse(localStorage.getItem('carLocations') || '{}');
+            carData[carNumber] = location;
+            localStorage.setItem('carLocations', JSON.stringify(carData));
         }
 
         // 更新地圖標記
-        function updateMap() {
-            // 清除所有舊的標記
-            markers.forEach(marker => marker.setMap(null));
-            markers = [];
-
-            const carData = JSON.parse(localStorage.getItem('carLocations') || '{}');
-            for (const carNumber in carData) {
-                const location = carData[carNumber];
-                let lat, lng;
-
-                // 根據車輛所選的位置，設定經緯度
-                switch (location) {
-                    case "二級廠":
-                        lat = 24.8953731; lng = 121.2110354;
-                        break;
-                    case "OK鋼棚":
-                        lat = 24.8955410; lng = 121.2094455;
-                        break;
-                    case "虎嶺大操場":
-                        lat = 24.8940207; lng = 121.2095940;
-                        break;
-                    default:
-                        continue;
-                }
-
-                addMarker(lat, lng, `${carNumber} - ${location}`);
-            }
+        function addMarker(lat, lng, label) {
+            const marker = new google.maps.Marker({
+                position: { lat, lng },
+                map: map,
+                title: label
+            });
+            markers.push(marker);
         }
 
-        // 顯示車輛狀況
+        // 顯示所有車輛位置
         function showStatus() {
             document.getElementById('modal').style.display = 'flex';
             loadCarStatus();
@@ -340,31 +315,25 @@
 
             for (const location in locationCounts) {
                 const row = document.createElement('tr');
-                const count = locationCounts[location].count;
                 row.innerHTML = `
                     <td>${location}</td>
-                    <td>${locationCounts[location].cars.join(", ")}</td>
-                    <td>${count}</td>
+                    <td>${locationCounts[location].cars.join(', ')}</td>
+                    <td>${locationCounts[location].count}</td>
                 `;
                 statusTable.appendChild(row);
             }
         }
 
-        // 清除車號資料
-function clearCarNumbers() {
-    const password = prompt("請輸入密碼");
-    const correctPassword = "348362";
-
-    if (password !== correctPassword) {
-        alert("密碼錯誤，無法清除車號資料。");
-        return;
-    }
-
-    localStorage.removeItem('carLocations');
-    alert('所有車號資料已清除');
-    updateMap();
-}
+        // 清除所有車號
+        function clearCarNumbers() {
+            if (confirm("確定要清除所有車號？")) {
+                localStorage.removeItem('carLocations');
+                alert("所有車號已清除！");
+                window.location.reload();
+            }
+        }
     </script>
+
 </body>
 
 </html>
