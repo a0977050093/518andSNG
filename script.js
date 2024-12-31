@@ -38,3 +38,21 @@ document.getElementById('darkModeToggle').addEventListener('click', function() {
   document.body.style.backgroundColor = isDarkMode ? '#121212' : 'white';
   document.body.style.color = isDarkMode ? 'white' : 'black';
 });
+
+  function adjustLayout() {
+  if (window.innerWidth > window.innerHeight) {
+    // 橫屏
+    document.body.classList.add("landscape");
+    document.body.classList.remove("portrait");
+  } else {
+    // 直屏
+    document.body.classList.add("portrait");
+    document.body.classList.remove("landscape");
+  }
+}
+
+// 初始化時調整
+adjustLayout();
+
+// 偵測螢幕方向變化
+window.addEventListener("resize", adjustLayout);
