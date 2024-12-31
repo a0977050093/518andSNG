@@ -135,6 +135,8 @@
             display: none;
         }
     </style>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbPe0HVpOt6UHD47PFyRaAqF1CIzK__2U&callback=initMap" async defer></script>
 </head>
 
 <body>
@@ -209,6 +211,8 @@
         </div>
     </div>
 
+  <div id="map"></div>
+    
     <script>
         function showStatus() {
             document.getElementById('modal').style.display = 'flex';
@@ -266,6 +270,42 @@
         return; // 結束函式執行
     }
 
+    // 初始化地圖
+    function initMap() {
+      // 建立地圖，並設定中心位置與縮放級別
+      const map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 24.8940207, lng: 121.2095940 }, // 地圖中心 (經度, 緯度)
+        zoom: 17, // 初始縮放級別
+        mapTypeId: google.maps.MapTypeId.SATELLITE // 衛星圖層
+      });
+
+      // 新增標記函式
+      function addMarker(lat, lng, title) {
+        const marker = new google.maps.Marker({
+          position: { lat: lat, lng: lng },
+          map: map,
+          title: title
+        });
+
+        // 為標記設定資訊視窗
+        const infowindow = new google.maps.InfoWindow({
+          content: `<strong>${title}</strong><br>位置: (${lat}, ${lng})`
+        });
+
+        // 當標記被點擊時，顯示資訊視窗
+        marker.addListener("click", function () {
+          infowindow.open(map, marker);
+        });
+      }
+
+      // 新增預設標記
+      addMarker(24.8953731, 121.2110354, "二級廠");
+      addMarker(24.8955410, 121.2094455, "OK鋼棚");
+      addMarker(24.8940207, 121.2095940, "虎嶺大操場");
+    }
+
+
+            
     const existingData = JSON.parse(localStorage.getItem('carLocations') || '{}');
     existingData[carNumber] = location;
 
@@ -278,6 +318,10 @@
             localStorage.removeItem('carLocations');
             alert("所有車號已清除");
         }
+
+           // 使用 window.onload 初始化地圖
+        window.onload = initMap;
+        
     </script>
 </body>
 
