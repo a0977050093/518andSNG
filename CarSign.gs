@@ -63,15 +63,15 @@ function addMarker(lat, lng, title) {
 function showStatus() {
     const modal = document.getElementById("modal");
     modal.style.display = "flex"; // 顯示模態框
-    updateStatusTable(); // 確保狀態表正確更新
+    updateStatusTable(); // 更新狀態表
 }
 
 function closeModal() {
     const modal = document.getElementById("modal");
-    modal.style.display = "none";
+    modal.style.display = "none"; // 隱藏模態框
 }
 
-// 避免點擊模態框外部時關閉
+// 點擊模態框外部時不關閉
 document.getElementById("modal").addEventListener("click", function (event) {
     if (event.target === this) {
         closeModal();
