@@ -56,3 +56,24 @@ adjustLayout();
 
 // 偵測螢幕方向變化
 window.addEventListener("resize", adjustLayout);
+
+function adjustHeight() {
+  const viewportHeight = window.innerHeight;
+  document.querySelector('.content-wrapper').style.minHeight = viewportHeight + 'px';
+}
+
+// 初始化時執行
+adjustHeight();
+
+// 確保在窗口大小變化時也適用
+window.addEventListener('resize', adjustHeight);
+
+function isPortrait() {
+  return window.innerHeight > window.innerWidth;
+}
+
+if (isPortrait()) {
+  document.body.classList.add('portrait');
+} else {
+  document.body.classList.remove('portrait');
+}
