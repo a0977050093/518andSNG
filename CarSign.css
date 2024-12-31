@@ -1,4 +1,4 @@
-body {
+        body {
             font-family: 'Courier New', monospace;
             background-color: #2e2e2e;
             color: white;
@@ -6,9 +6,27 @@ body {
             padding: 20px;
         }
 
-        h2, h3 {
+        #status-btn {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            z-index: 1000;
+        }
+
+        #status-btn:hover {
+            background-color: #45a049;
+        }
+
+        h2 {
             text-align: center;
-            font-size: 1.8rem;
+            font-size: 24px;
         }
 
         table {
@@ -41,24 +59,17 @@ body {
             background-color: #555;
         }
 
-        /* 表單選擇器 */
-        select, button {
-            font-size: 1rem;
-            padding: 10px;
-            margin: 10px 0;
-            width: 100%;
-            box-sizing: border-box;
+        button {
             background-color: #4CAF50;
             color: white;
+            padding: 10px 20px;
             border: none;
             cursor: pointer;
+            font-size: 16px;
+            width: 200px;
+            margin: 10px 0;
         }
 
-        select:focus, button:focus {
-            outline: none;
-        }
-
-        /* 按鈕樣式 */
         button:hover {
             background-color: #45a049;
         }
@@ -71,7 +82,6 @@ body {
             background-color: #da190b;
         }
 
-        /* Modal樣式 */
         #modal {
             display: none;
             position: fixed;
@@ -108,7 +118,6 @@ body {
             background-color: #da190b;
         }
 
-        /* Loading狀態 */
         #loading {
             position: fixed;
             top: 50%;
@@ -121,38 +130,4 @@ body {
         #map {
             height: 400px;
             margin-top: 20px;
-        }
-
-        /* 響應式設計：針對手機和小螢幕的調整 */
-        @media screen and (max-width: 768px) {
-            h2 {
-                font-size: 1.6rem;
-            }
-
-            h3 {
-                font-size: 1.4rem;
-            }
-
-            select, button {
-                font-size: 0.9rem;
-                width: 100%;
-            }
-
-            #map {
-                height: 300px;
-            }
-        }
-
-        @media screen and (max-width: 480px) {
-            h2 {
-                font-size: 1.4rem;
-            }
-
-            h3 {
-                font-size: 1.2rem;
-            }
-
-            select, button {
-                font-size: 0.8rem;
-            }
         }
