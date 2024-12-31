@@ -15,17 +15,22 @@
 <body>
   <div class="app-container">
     <!-- 側邊欄開始 -->
-    <div class="sidebar">
-        <button class="sidebar-toggle" id="sidebarToggle">
-        <i class="fas fa-bars"></i>
-        </button>
-        <div class="sidebar-content">
-            <a href="https://example1.com" target="_blank"><i class="fas fa-link"></i> 連結一</a>  <!-- 替換成你的連結 -->
-            <a href="https://example2.com" target="_blank"><i class="fas fa-link"></i> 連結二</a>  <!-- 替換成你的連結 -->
-            <a href="https://example3.com" target="_blank"><i class="fas fa-link"></i> 連結三</a>  <!-- 替換成你的連結 -->
-            <!-- 你可以繼續加入更多連結 -->
-        </div>
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>功能選單</h2>
     </div>
+    <ul class="sidebar-menu">
+      <li><a href="#home"><i class="fas fa-home"></i> 首頁</a></li>
+      <li><a href="#about"><i class="fas fa-user"></i> 關於我們</a></li>
+      <li><a href="#services"><i class="fas fa-cogs"></i> 服務</a></li>
+      <li><a href="#contact"><i class="fas fa-envelope"></i> 聯絡我們</a></li>
+    </ul>
+  </div>
+
+  <!-- 切換按鈕 -->
+  <button id="sidebarToggle" class="sidebar-toggle">
+    <i class="fas fa-bars"></i> 菜單
+  </button>
     <!-- 側邊欄結束 -->
 
     <h1 class="app-title">微波一排大秘寶</h1>
