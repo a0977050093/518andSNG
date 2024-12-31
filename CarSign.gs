@@ -7,7 +7,7 @@ function initMap() {
     // 初始化地圖，設為衛星地圖
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 24.8953731, lng: 121.2110354 }, // 初始位置
-        zoom: 15,
+        zoom: 18,
         mapTypeId: google.maps.MapTypeId.SATELLITE // 設為衛星地圖
     });
 }
