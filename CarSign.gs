@@ -66,10 +66,17 @@ function showStatus() {
     updateStatusTable();
 }
 
-// 關閉視窗
 function closeModal() {
-    document.getElementById("modal").style.display = "none";
+    const modal = document.getElementById("modal");
+    modal.style.display = "none";
 }
+
+// 避免點擊模態框外部時關閉
+document.getElementById("modal").addEventListener("click", function (event) {
+    if (event.target === this) {
+        closeModal();
+    }
+});
 
 // 更新狀況表
 function updateStatusTable() {
