@@ -182,3 +182,33 @@ h1.app-title {
   font-size: 2rem;
   cursor: pointer;
 }
+/* 設置 .iframe-container 來包裝 iframe */
+.iframe-container {
+    width: 100%;      /* 設定為100%寬度，讓其自適應父容器 */
+    height: 600px;    /* 設定高度為600px，您可以根據需要調整 */
+    overflow: hidden; /* 隱藏多餘的內容 */
+    position: relative;
+    margin: 0 auto;   /* 中央對齊 */
+}
+
+/* iframe 設置 */
+.iframe-container iframe {
+    width: 100%;      /* 讓 iframe 寬度填滿父容器 */
+    height: 100%;     /* 讓 iframe 高度填滿父容器 */
+    border: none;     /* 去掉 iframe 邊框 */
+}
+
+/* 全螢幕按鈕的樣式 */
+.expand-button {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.expand-button i {
+    margin-right: 5px;
+}
