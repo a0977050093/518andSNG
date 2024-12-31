@@ -230,3 +230,17 @@ body.dark-mode {
   background-color: #2196F3; /* 按鈕顏色 */
   color: white; /* 文字顏色 */
 }
+
+body.landscape .content-wrapper {
+  width: 90vw;
+}
+
+body.portrait .content-wrapper {
+  width: 100%;
+}
+
+.container {
+  width: 100%; /* 或者使用百分比或 vw 單位 */
+  max-width: 1200px; /* 避免過大 */
+  margin: 0 auto; /* 置中 */
+}
