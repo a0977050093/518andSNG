@@ -4,139 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>微波一排大秘寶</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #2e3d44; /* 深色背景 */
-            color: #f1f1f1; /* 淺色文字 */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding: 20px;
-        }
-
-        h1 {
-            font-size: 3rem;
-            color: #c3e9a4; /* 軍事綠色 */
-            font-weight: bold;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* 文字陰影 */
-        }
-
-        .grid-container {
-            display: grid;
-            grid-template-areas:
-                "left-top right-top"
-                "center center"
-                "left-bottom right-bottom";
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr auto 1fr;
-            gap: 15px;
-            width: 100%;
-            max-width: 1200px;
-        }
-
-        .iframe-container {
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* 陰影效果 */
-            background-color: #4c5b60; /* 深卡其色背景 */
-            border: 3px solid #c3e9a4; /* 軍事風格邊框 */
-        }
-
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .left-top {
-            grid-area: left-top;
-        }
-
-        .right-top {
-            grid-area: right-top;
-        }
-
-        .center {
-            grid-area: center;
-        }
-
-        .left-bottom {
-            grid-area: left-bottom;
-        }
-
-        .right-bottom {
-            grid-area: right-bottom;
-        }
-
-        @media (max-width: 768px) {
-            .grid-container {
-                grid-template-areas:
-                    "center"
-                    "left-top"
-                    "right-top"
-                    "left-bottom"
-                    "right-bottom";
-                grid-template-columns: 1fr;
-                grid-template-rows: auto;
-            }
-        }
-
-        /* 為按鈕設置軍事風格 */
-        .button {
-            background-color: #4c5b60;
-            color: #c3e9a4;
-            padding: 15px 30px;
-            border: 2px solid #c3e9a4;
-            border-radius: 5px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s, transform 0.3s;
-        }
-
-        .button:hover {
-            background-color: #c3e9a4;
-            color: #2e3d44;
-            transform: scale(1.05); /* 按鈕放大效果 */
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
-    <h1>微波一排大秘寶</h1>
+    <div class="container">
+        <h1>微波一排大秘寶</h1>
 
-    <div class="grid-container">
-        <div class="iframe-container left-top">
-            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=188349276&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-        </div><!-- 提早假 -->
+        <nav class="tabs">
+            <button class="tab active" data-tab="1"><i class="fas fa-calendar-check"></i> 提早假</button>
+            <button class="tab" data-tab="2"><i class="fas fa-tools"></i> 保養編組</button>
+            <button class="tab" data-tab="3"><i class="fas fa-calendar-alt"></i> 休假假表</button>
+            <button class="tab" data-tab="4"><i class="fas fa-gem"></i> 年度三寶</button>
+            <button class="tab" data-tab="5"><i class="fas fa-tshirt"></i> 慰勞服裝</button>
+        </nav>
 
-        <div class="iframe-container right-top">
-            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=1117875532&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-        </div><!-- 保養編組 -->
+        <div class="tab-contents">
+            <div class="tab-content active" id="tab-1">
+                <div class="content-wrapper">
+                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=188349276&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+                    <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
+                </div>
+            </div>
+            <div class="tab-content" id="tab-2">
+               <div class="content-wrapper">
+                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=1117875532&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+                    <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
+               </div>
+            </div>
+            <div class="tab-content" id="tab-3">
+                <div class="content-wrapper">
+                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=84635788&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+                    <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
+                </div>
+            </div>
+            <div class="tab-content" id="tab-4">
+                <div class="content-wrapper">
+                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=2128671677&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+                    <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
+                </div>
+            </div>
+            <div class="tab-content" id="tab-5">
+               <div class="content-wrapper">
+                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=982598890&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+                    <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
+               </div>
+            </div>
+        </div>
 
-        <div class="iframe-container center">
-            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=84635788&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-        </div><!-- 假表 -->
+        <button class="button" onclick="window.location.href='https://line.me/R/ti/g/-DCpAZvFkb'">加入我們</button>
 
-        <div class="iframe-container left-bottom">
-            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=2128671677&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-        </div><!-- 年度三寶 -->
-
-        <div class="iframe-container right-bottom">
-            <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=982598890&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-        </div><!-- 慰勞APP -->
+        <button id="darkModeToggle" class="dark-mode-button">
+            <i class="fas fa-moon"></i> 夜間模式
+        </button>
     </div>
 
-    <button class="button" onclick="window.location.href='https://line.me/R/ti/g/-DCpAZvFkb'">千萬不要點擊我</button>
+    <!-- 全螢幕彈出視窗 -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <iframe id="modal-iframe" src="" frameborder="0"></iframe>
+        </div>
+    </div>
+    <script src="script.js"></script>
 </body>
 </html>
