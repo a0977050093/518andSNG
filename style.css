@@ -49,9 +49,9 @@ body {
 }
 
 .sidebar-toggle {
-  background: none; /* 按鈕背景為透明 */
+  background-color: #333; /* 按鈕背景為透明 */
   color: white; /* 按鈕文字顏色為白色 */
-  border: none; /* 去除按鈕邊框 */
+  border-radius: 50%; /* 去除按鈕邊框 */
   font-size: 30px; /* 設定圖標的大小 */
   cursor: pointer; /* 鼠標顯示為手形 */
   padding: 10px; /* 按鈕內邊距 */
@@ -147,8 +147,8 @@ iframe {
 
 .dark-mode-container {
   position: fixed;
-  top: 20px;
-  right: 20px; /* 右上角 */
+  top: 10px;
+  right: 10px; /* 右上角 */
 }
 
 .dark-mode-button {
