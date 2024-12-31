@@ -1,73 +1,100 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>微波一排大秘寶</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-        integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>微波一排大秘寶</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="sidebar.css"> <!-- 引入側邊欄 CSS -->
 </head>
+
 <body>
-    <div class="container">
-        <h1>微波一排大秘寶</h1>
-
-        <nav class="tabs">
-            <button class="tab active" data-tab="1"><i class="fas fa-calendar-check"></i> 提早假</button>
-            <button class="tab" data-tab="2"><i class="fas fa-tools"></i> 保養編組</button>
-            <button class="tab" data-tab="3"><i class="fas fa-calendar-alt"></i> 休假假表</button>
-            <button class="tab" data-tab="4"><i class="fas fa-gem"></i> 年度三寶</button>
-            <button class="tab" data-tab="5"><i class="fas fa-tshirt"></i> 慰勞服裝</button>
-        </nav>
-
-        <div class="tab-contents">
-            <div class="tab-content active" id="tab-1">
-                <div class="content-wrapper">
-                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=188349276&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-                    <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
-                </div>
-            </div>
-            <div class="tab-content" id="tab-2">
-               <div class="content-wrapper">
-                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=1117875532&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-                    <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
-               </div>
-            </div>
-            <div class="tab-content" id="tab-3">
-                <div class="content-wrapper">
-                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=84635788&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-                    <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
-                </div>
-            </div>
-            <div class="tab-content" id="tab-4">
-                <div class="content-wrapper">
-                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=2128671677&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-                    <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
-                </div>
-            </div>
-            <div class="tab-content" id="tab-5">
-               <div class="content-wrapper">
-                    <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=982598890&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
-                    <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
-               </div>
-            </div>
-        </div>
-
-        <button class="button" onclick="window.location.href='https://line.me/R/ti/g/-DCpAZvFkb'">加入我們</button>
-
-        <button id="darkModeToggle" class="dark-mode-button">
-            <i class="fas fa-moon"></i> 夜間模式
+  <div class="app-container">
+    <!-- 側邊欄開始 -->
+    <div class="sidebar">
+        <button class="sidebar-toggle" id="sidebarToggle">
+        <i class="fas fa-bars"></i>
         </button>
-    </div>
-
-    <!-- 全螢幕彈出視窗 -->
-    <div id="modal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <iframe id="modal-iframe" src="" frameborder="0"></iframe>
+        <div class="sidebar-content">
+            <a href="https://example1.com" target="_blank"><i class="fas fa-link"></i> 連結一</a>  <!-- 替換成你的連結 -->
+            <a href="https://example2.com" target="_blank"><i class="fas fa-link"></i> 連結二</a>  <!-- 替換成你的連結 -->
+            <a href="https://example3.com" target="_blank"><i class="fas fa-link"></i> 連結三</a>  <!-- 替換成你的連結 -->
+            <!-- 你可以繼續加入更多連結 -->
         </div>
     </div>
-    <script src="script.js"></script>
+    <!-- 側邊欄結束 -->
+
+    <h1 class="app-title">微波一排大秘寶</h1>
+
+    <nav class="tabs">
+      <button class="tab active" data-tab="1"><i class="fas fa-calendar-check"></i> 提早假別</button>
+      <button class="tab" data-tab="2"><i class="fas fa-tools"></i> 保養編組</button>
+      <button class="tab" data-tab="3"><i class="fas fa-calendar-alt"></i> 休假假表</button>
+      <button class="tab" data-tab="4"><i class="fas fa-gem"></i> 年度三寶</button>
+      <button class="tab" data-tab="5"><i class="fas fa-tshirt"></i> 慰勞服裝</button>
+    </nav>
+
+    <div class="tab-contents">
+      <div class="tab-content active" id="tab-1">
+        <div class="content-wrapper">
+          <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
+          <iframe
+            src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=188349276&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+        </div>
+      </div>
+      <div class="tab-content" id="tab-2">
+        <div class="content-wrapper">
+          <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
+          <iframe
+            src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=1117875532&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+        </div>
+      </div>
+      <div class="tab-content" id="tab-3">
+        <div class="content-wrapper">
+          <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
+          <iframe
+            src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=84635788&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+        </div>
+      </div>
+      <div class="tab-content" id="tab-4">
+        <div class="content-wrapper">
+          <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
+          <iframe
+            src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=2128671677&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+        </div>
+      </div>
+      <div class="tab-content" id="tab-5">
+        <div class="content-wrapper">
+          <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
+          <iframe
+            src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=982598890&amp;single=true&amp;widget=true&amp;headers=false"></iframe>
+        </div>
+      </div>
+    </div>
+    <div class="button-container">
+      <button class="button" onclick="window.location.href='https://line.me/ti/g2/dBA4pHk1zV_2QpeI30FK8OUsqQ-RzXksCa1L8Q?utm_source=invitation&utm_medium=link_copy&utm_campaign=default'">加入我們</button>
+    </div>
+    <div class="dark-mode-container">
+      <button id="darkModeToggle" class="dark-mode-button">
+        <i class="fas fa-moon"></i> 夜間模式
+      </button>
+    </div>
+  </div>
+
+  <!-- 全螢幕彈出視窗 -->
+  <div id="modal" class="modal">
+    <div class="modal-content">
+      <span class="close-button">&times;</span>
+      <iframe id="modal-iframe" src="" frameborder="0"></iframe>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+  <script src="sidebar.js"></script>  <!-- 引入側邊欄 JavaScript -->
 </body>
+
 </html>
