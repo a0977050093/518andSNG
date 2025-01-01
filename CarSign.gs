@@ -91,6 +91,12 @@ function updateStatusTable() {
     const tableBody = document.getElementById("statusTable");
     tableBody.innerHTML = ""; // 清空表格內容
 
+    // 嘗試從 localStorage 讀取儲存的車輛位置資料
+    const savedCarLocations = JSON.parse(localStorage.getItem("carLocations"));
+
+    // 如果有保存的資料，就使用它，否則使用空物件
+    const carLocations = savedCarLocations || {};
+
     Object.keys(carLocations).forEach(carNumber => {
         const carInfo = carLocations[carNumber];
 
@@ -113,6 +119,11 @@ function updateStatusTable() {
 
         tableBody.appendChild(row);
     });
+}
+
+// 在某個事件或操作後保存資料到 localStorage
+function saveCarLocations(carLocations) {
+    localStorage.setItem("carLocations", JSON.stringify(carLocations));
 }
 
 // 清除車號
