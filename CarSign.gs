@@ -134,3 +134,28 @@ function clearCarNumbers() {
 
     updateStatusTable();
 }
+
+
+// Firebase 配置
+const firebaseConfig = {
+    apiKey: "vpwQNOHFQ4hKIybaE-MiMqpUZ7l4-_2vucbMiH7zxw0",
+    authDomain: "carsign-423fc.firebaseapp.com",
+    databaseURL: "https:k.firebaseio.com",
+    projectId: "carsign-423fc",
+    storageBucket: "carsign-423fc.appspot.com",
+    messagingSenderId: "carsign-423fc",
+    appId: "carsign-423fc"
+};
+
+// 初始化 Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// 匿名登入
+firebase.auth().signInAnonymously()
+    .then(() => {
+        console.log("匿名登入成功");
+    })
+    .catch((error) => {
+        console.error("登入失敗", error.code, error.message);
+    });
