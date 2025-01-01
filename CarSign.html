@@ -55,10 +55,11 @@
             </select>
 
             <button type="button" onclick="submitCarLocation()">提交車號</button>
+            <button type="button" onclick="showStatus()">車況顯示</button>
         </form>
 
         <!-- 車輛狀況表 -->
-        <button type="button" onclick="showStatus()">車況顯示</button>
+        
 
         <div id="modal" class="modal">
             <div class="modal-content">
@@ -73,8 +74,8 @@
                     </thead>
                     <tbody id="statusTable"></tbody>
                 </table>
-                <button onclick="closeModal()">關閉</button>
-                <button onclick="clearCarNumbers()">清除所有車號</button>
+                <button type="button" onclick="closeModal()">關閉</button>
+                <button type="button" onclick="clearCarNumbers()">清除所有車號</button>
             </div>
         </div>
 
