@@ -41,8 +41,11 @@ function submitCarLocation() {
         return;
     }
 
+    // 將位置名稱儲存到 carLocations
+    carLocations[carNumber] = location;
+
+    // 在地圖上顯示標記
     addMarker(carLocation.lat, carLocation.lng, carNumber);
-    carLocations[carNumber] = carLocation;
 
     updateStatusTable();
 }
@@ -84,11 +87,12 @@ function updateStatusTable() {
     tableBody.innerHTML = "";
 
     Object.keys(carLocations).forEach(carNumber => {
-        const carLocation = carLocations[carNumber];
+        const location = carLocations[carNumber];  // 直接使用位置名稱
+
         const row = document.createElement("tr");
 
         const locationCell = document.createElement("td");
-        locationCell.textContent = `${carLocation.lat}, ${carLocation.lng}`;
+        locationCell.textContent = location;  // 顯示位置名稱
         row.appendChild(locationCell);
 
         const carNumberCell = document.createElement("td");
