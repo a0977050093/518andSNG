@@ -1,28 +1,42 @@
+// Firebase 配置
+const firebaseConfig = {
+    apiKey: "vpwQNOHFQ4hKIybaE-MiMqpUZ7l4-_2vucbMiH7zxw0",
+    authDomain: "carsign-423fc.firebaseapp.com",
+    databaseURL: "https://carsign-423fc.firebaseio.com",
+    projectId: "carsign-423fc",
+    storageBucket: "carsign-423fc.appspot.com",
+    messagingSenderId: "carsign-423fc",
+    appId: "1:348362:web:xxxxxxxx"
+};
+
+// 初始化 Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// 匿名登入
+firebase.auth().signInAnonymously()
+    .then(() => console.log("匿名登入成功"))
+    .catch((error) => console.error("登入失敗", error.code, error.message));
+
 let map;
-let markers = {}; // 用來儲存標記
-const carLocations = {}; // 用來儲存車號位置
+let markers = {};
+const carLocations = {};
 
 // 初始化地圖
 function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: 24.8940207, lng: 121.2095940 },
         zoom: 17,
-        mapTypeId: google.maps.MapTypeId.SATELLITE
+        mapTypeId: google.maps.MapTypeId.SATELLITE,
     });
+
+    loadCarLocations();
 }
 
 // 提交車輛位置
 function submitCarLocation() {
-    const carNumber = document.getElementById('carNumbers').value;
-    const location = document.getElementById('locations').value;
-
-    const password = prompt("請輸入密碼");
-    const correctPassword = "348362";
-
-    if (password !== correctPassword) {
-        alert("密碼錯誤，無法提交車輛位置。");
-        return;
-    }
+    const carNumber = document.getElementById("carNumbers").value;
+    const location = document.getElementById("locations").value;
 
     const locations = {
         "二級廠": { lat: 24.8953731, lng: 121.2110354 },
@@ -37,125 +51,91 @@ function submitCarLocation() {
 
     const carLocation = locations[location];
     if (!carLocation) {
-        alert("指定位置無效。");
+        alert("指定位置無效");
         return;
     }
 
-    // 在地圖上添加標記
-    addMarker(carLocation.lat, carLocation.lng, carNumber);
+    const password = prompt("請輸入密碼");
+    if (password !== "348362") {
+        alert("密碼錯誤");
+        return;
+    }
 
-    // 儲存車號及其位置
-    carLocations[carNumber] = {
-        locationName: location, // 儲存名稱
+    // 儲存到 Firebase
+    firebase.database().ref(`carLocations/${carNumber}`).set({
+        carNumber,
+        locationName: location,
         lat: carLocation.lat,
-        lng: carLocation.lng
-    };
+        lng: carLocation.lng,
+    });
 
-    updateStatusTable();
+    alert("車輛位置已更新");
+}
+
+// 載入車輛位置
+function loadCarLocations() {
+    const ref = firebase.database().ref("carLocations");
+
+    ref.on("value", (snapshot) => {
+        const data = snapshot.val() || {};
+
+        // 清除舊標記
+        Object.values(markers).forEach(marker => marker.setMap(null));
+        markers = {};
+
+        Object.keys(data).forEach(carNumber => {
+            const carInfo = data[carNumber];
+            addMarker(carInfo.lat, carInfo.lng, carNumber);
+            carLocations[carNumber] = carInfo;
+        });
+
+        updateStatusTable();
+    });
 }
 
 // 添加標記
 function addMarker(lat, lng, title) {
-    if (markers[title]) {
-        markers[title].setMap(null);
-    }
-
     markers[title] = new google.maps.Marker({
         position: { lat, lng },
         map: map,
-        title: title
+        title,
     });
 }
-
-function showStatus() {
-    const modal = document.getElementById("modal");
-    modal.style.display = "flex"; // 顯示模態框
-    updateStatusTable(); // 更新狀態表
-}
-
-function closeModal() {
-    const modal = document.getElementById("modal");
-    modal.style.display = "none"; // 隱藏模態框
-}
-
-// 點擊模態框外部時不關閉
-document.getElementById("modal").addEventListener("click", function (event) {
-    if (event.target === document.getElementById("modal-content")) {
-        return; // 避免誤觸背景時關閉模態框
-    }
-    closeModal(); // 點擊背景以外的地方才執行關閉
-});
 
 // 更新狀況表
 function updateStatusTable() {
     const tableBody = document.getElementById("statusTable");
-    tableBody.innerHTML = ""; // 清空表格內容
+    tableBody.innerHTML = "";
 
     Object.keys(carLocations).forEach(carNumber => {
         const carInfo = carLocations[carNumber];
-
-        const row = document.createElement("tr");
-
-        // 顯示位置名稱
-        const locationCell = document.createElement("td");
-        locationCell.textContent = carInfo.locationName;
-        row.appendChild(locationCell);
-
-        // 顯示車號
-        const carNumberCell = document.createElement("td");
-        carNumberCell.textContent = carNumber;
-        row.appendChild(carNumberCell);
-
-        // 顯示總數（固定為1，此處可以根據需求調整）
-        const totalCell = document.createElement("td");
-        totalCell.textContent = "1";
-        row.appendChild(totalCell);
-
-        tableBody.appendChild(row);
+        const row = `<tr>
+            <td>${carInfo.locationName}</td>
+            <td>${carNumber}</td>
+            <td>1</td>
+        </tr>`;
+        tableBody.innerHTML += row;
     });
 }
 
 // 清除車號
 function clearCarNumbers() {
     const password = prompt("請輸入密碼以清除所有車號");
-    const correctPassword = "348362";
-
-    if (password !== correctPassword) {
-        alert("密碼錯誤，無法清除車號。");
+    if (password !== "348362") {
+        alert("密碼錯誤");
         return;
     }
 
-    Object.keys(markers).forEach(carNumber => {
-        markers[carNumber].setMap(null);
-    });
-
-    markers = {};
-    carLocations = {};
-
-    updateStatusTable();
+    firebase.database().ref("carLocations").remove();
+    alert("所有車號已清除");
 }
 
+// 顯示車輛狀態
+function showStatus() {
+    document.getElementById("modal").style.display = "block";
+}
 
-// Firebase 配置
-const firebaseConfig = {
-    apiKey: "vpwQNOHFQ4hKIybaE-MiMqpUZ7l4-_2vucbMiH7zxw0",
-    authDomain: "carsign-423fc.firebaseapp.com",
-    databaseURL: "https:k.firebaseio.com",
-    projectId: "carsign-423fc",
-    storageBucket: "carsign-423fc.appspot.com",
-    messagingSenderId: "carsign-423fc",
-    appId: "carsign-423fc"
-};
-
-// 初始化 Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
-
-// 匿名登入
-firebase.auth().signInAnonymously()
-    .then(() => {
-        console.log("匿名登入成功");
-    })
-    .catch((error) => {
-        console.error("登入失敗", error.code, error.message);
-    });
+// 關閉模態框
+function closeModal() {
+    document.getElementById("modal").style.display = "none";
+}
