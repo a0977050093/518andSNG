@@ -15,8 +15,8 @@
 </head>
 <body>
 
-<!-- 地圖顯示區域 -->
-        <div id="map"></div>
+   <div id="map" style="height: 400px;"></div> 
+    <!-- 地圖顯示區域 -->
     
       <div id="app">
         <!-- 車輛選擇表單 -->
@@ -66,8 +66,8 @@
                 <option value="待安置車號">待安置車號</option>
             </select>
 
-            <button onclick="submitCarLocation()">提交車號</button>
-            <button onclick="showStatus()">車況顯示</button>
+             <button type="button" onclick="submitCarLocation()">提交車號</button>
+            <button type="button" onclick="showStatus()">車況顯示</button>
         </form>
 
         <!-- 車輛狀況表 -->
@@ -86,12 +86,10 @@
                     </thead>
                     <tbody id="statusTable"></tbody>
                 </table>
-                <button type="button" onclick="closeModal()">關閉</button>
-                <button type="button" onclick="clearCarNumbers()">清除所有車號</button>
+                <button type="button" onclick="closeModal()">關閉視窗</button>
+                <button type="button" onclick="clearCarNumbers()">清除車號</button>
             </div>
         </div>
-
-        
     </div>
 
     <div id="loading" style="display: none;">載入中...</div>
