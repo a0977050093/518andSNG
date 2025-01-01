@@ -145,3 +145,96 @@ function clearCarNumbers() {
 
     updateStatusTable();
 }
+
+
+
+
+
+
+
+
+
+// Firebase 配置
+const firebaseConfig = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  databaseURL: "YOUR_DATABASE_URL",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+// 初始化 Firebase
+const app = firebase.initializeApp(firebaseConfig);
+const database = firebase.database(app);
+
+// 儲存車輛資料
+function saveCarLocations(carLocations) {
+  const carLocationsRef = firebase.database().ref('carLocations');
+  carLocationsRef.set(carLocations)
+    .then(() => {
+      console.log("Car locations saved successfully.");
+    })
+    .catch((error) => {
+      console.error("Error saving car locations: ", error);
+    });
+}
+
+// 讀取車輛資料並顯示
+function loadCarLocations() {
+  const carLocationsRef = firebase.database().ref('carLocations');
+  carLocationsRef.get()
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const carLocations = snapshot.val();
+        updateStatusTable(carLocations); // 更新表格顯示
+      } else {
+        console.log("No car locations found.");
+      }
+    })
+    .catch((error) => {
+      console.error("Error loading car locations: ", error);
+    });
+}
+
+// 更新表格顯示
+function updateStatusTable(carLocations) {
+  const tableBody = document.getElementById("statusTable");
+  tableBody.innerHTML = ""; // 清空表格內容
+
+  Object.keys(carLocations).forEach(carNumber => {
+    const carInfo = carLocations[carNumber];
+
+    const row = document.createElement("tr");
+
+    // 顯示位置名稱
+    const locationCell = document.createElement("td");
+    locationCell.textContent = carInfo.locationName;
+    row.appendChild(locationCell);
+
+    // 顯示車號
+    const carNumberCell = document.createElement("td");
+    carNumberCell.textContent = carNumber;
+    row.appendChild(carNumberCell);
+
+    // 顯示總數（固定為1，此處可以根據需求調整）
+    const totalCell = document.createElement("td");
+    totalCell.textContent = "1";
+    row.appendChild(totalCell);
+
+    tableBody.appendChild(row);
+  });
+}
+
+// 假設 carLocations 是要儲存的資料
+const carLocations = {
+  "車號1": { locationName: "位置A" },
+  "車號2": { locationName: "位置B" }
+};
+
+// 儲存資料
+saveCarLocations(carLocations);
+
+// 讀取資料並更新表格
+loadCarLocations();
