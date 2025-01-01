@@ -1,96 +1,552 @@
 <!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>車輛位置管理系統</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #2e2e2e;
+      color: white;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h2 {
+      text-align: center;
+      font-size: 24px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid #ddd;
+    }
+
+    th,
+    td {
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #444;
+    }
+
+    tr:nth-child(even) {
+      background-color: #333;
+    }
+
+    tr:nth-child(odd) {
+      background-color: #555;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      width: 200px;
+      margin: 10px 0;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .btn-danger {
+      background-color: #f44336;
+    }
+
+    .btn-danger:hover {
+      background-color: #da190b;
+    }
+
+    #modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+    }
+
+    #modal-content {
+      background-color: #333;
+      padding: 20px;
+      max-width: 800px;
+      width: 90%;
+      overflow-y: auto;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #f44336;
+      color: white;
+      padding: 10px;
+      border: none;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      background-color: #da190b;
+    }
+
+    #map {
+      height: 500px;
+      width: 100%;
+      max-width: 900px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>第二連軍車位置管理系統</h2>
+
+  <div>
+    <h3>車號選擇並指定位置</h3>
+    <label for="carNumbers">車號選擇：</label>
+    <select id="carNumbers">
+      <option value="軍E-21137">軍E-21137</option>
+      <option value="軍E-21188">軍E-21188</option>
+      <option value="軍2-20004">軍2-20004</option>
+      <option value="軍2-26681">軍2-26681</option>
+      <option value="軍2-20094">軍2-20094</option>
+      <option value="軍2-20096">軍2-20096</option>
+      <option value="軍2-20097">軍2-20097</option>
+      <option value="軍2-20895">軍2-20895</option>
+      <option value="軍2-23113">軍2-23113</option>
+      <option value="軍2-20001">軍2-20001</option>
+      <option value="軍2-20002">軍2-20002</option>
+      <option value="軍2-20009">軍2-20009</option>
+      <option value="軍2-20010">軍2-20010</option>
+      <option value="軍2-20090">軍2-20090</option>
+      <option value="軍2-20092">軍2-20092</option>
+      <option value="軍2-22705">軍2-22705</option>
+      <option value="軍2-22717">軍2-22717</option>
+      <option value="軍2-22740">軍2-22740</option>
+      <option value="軍2-22834">軍2-22834</option>
+      <option value="軍2-23836">軍2-23836</option>
+      <option value="軍2-24507">軍2-24507</option>
+      <option value="軍2-24629">軍2-24629</option>
+      <option value="軍2-24630">軍2-24630</option>
+      <option value="軍2-24631">軍2-24631</option>
+      <option value="軍3-25088">軍3-25088</option>
+      <option value="軍3-24053">軍3-24053</option>
+      <option value="軍1-23534">軍1-23534</option>
+      <option value="軍K-20456">軍K-20456</option>
+    </select>
+
+    <label for="locations">位置選擇：</label>
+    <select id="locations">
+      <option value="二級廠">二級廠</option>
+      <option value="OK鋼棚">OK鋼棚</option>
+      <option value="連側鋼棚">連側鋼棚</option>
+      <option value="無線電鋼棚">無線電鋼棚</option>
+      <option value="陸區鋼棚">陸區鋼棚</option>
+      <option value="玄捷鋼棚">玄捷鋼棚</option>
+      <option value="風雨走廊">風雨走廊</option>
+      <option value="待安置車號">待安置車號</option>
+    </select>
+
+    <button onclick="submitCarLocation()">車輛提交</button>
+  </div>
+
+  <button onclick="showStatus()">查看所有車輛位置</button>
+  <button class="btn-danger" onclick="clearcarNumbers()">清除所有車號</button>
+
+  <div id="modal">
+    <div id="modal-content">
+      <button class="close-btn" onclick="closeModal()">關閉視窗</button>
+      <h3>軍車停放狀況表</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>區域</th>
+            <th>車號</th>
+            <th>總數</th>
+          </tr>
+        </thead>
+        <tbody id="statusTable">
+          <!-- 車輛位置資訊將由 JavaScript 動態加載 -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="map"></div>
+
+  <script>
+    const carNumbers = []; // 車號清單，從伺服器獲取
+    const locations = {
+      "二級廠": { lat: 24.8953731, lng: 121.2110354 },
+      "OK鋼棚": { lat: 24.8955410, lng: 121.2094455 },
+      "連側鋼棚": { lat: 24.8955352, lng: 121.2088128 },
+      "無線電鋼棚": { lat: 24.8942494, lng: 121.2084913 },
+      "陸區鋼棚": { lat: 24.8936913, lng: 121.2085201 },
+      "玄捷鋼棚": { lat: 24.8933285, lng: 121.2084722 },
+      "風雨走廊": { lat: 24.8926953, lng: 121.2099437 },
+      "待安置車號": { lat: 24.8950000, lng: 121.2090000 }
+    };
+
+    function closeModal() {
+      document.getElementById("modal").style.display = "none";
+    }
+
+    function submitCarLocation() {
+      const carNumber = document.getElementById("carNumbers").value;
+      const location = document.getElementById("locations").value;
+
+      if (!carNumber || !location) {
+        alert("請選擇車號和位置！");
+        return;
+      }
+
+      google.script.run.assignCarToLocation(carNumber, location);
+      alert(`${carNumber} 已提交至 ${location}`);
+    }
+
+    function showStatus() {
+      google.script.run.withSuccessHandler(function (status) {
+        const statusTable = document.getElementById("statusTable");
+        statusTable.innerHTML = "";
+
+        for (const area in status) {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${area}</td>
+            <td>${status[area].join(", ")}</td>
+            <td>${status[area].length}</td>
+          `;
+          statusTable.appendChild(row);
+        }
+
+        document.getElementById("modal").style.display = "flex";
+      }).getStatus();
+    }
+
+    function clearcarNumbers() {
+      if (confirm("確定要清除所有車號嗎？")) {
+        google.script.run.clearAllcarNumbers();
+        alert("所有車號已清除！");
+      }
+    }
+
+    function initMap() {
+      const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 17,
+        center: { lat: 24.8940, lng: 121.2093 },
+        mapTypeId: "satellite"
+      });
+
+      for (const location in locations) {
+        new google.maps.Marker({
+          position: locations[location],
+          map: map,
+          title: location
+        });
+      }
+    }
+  </script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbPe0HVpOt6UHD47PFyRaAqF1CIzK__2U&callback=initMap" async defer></script>
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
 <html lang="zh-tw">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>第二連車輛位置管理</title>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"></script>
-     <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbPe0HVpOt6UHD47PFyRaAqF1CIzK__2U&callback=initMap">
-    </script>
-     <link rel="stylesheet" href="CarSign.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbPe0HVpOt6UHD47PFyRaAqF1CIzK__2U"></script>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #2e2e2e;
+            color: white;
+            margin: 0;
+            padding: 20px;
+        }
+        #map { height: 400px; margin: 20px 0; }
+        select, button {
+            padding: 10px;
+            margin: 5px;
+            background-color: #444;
+            color: white;
+            border: 1px solid #666;
+        }
+        button { cursor: pointer; }
+        button:hover { background-color: #555; }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+        }
+        .modal-content {
+            background: #333;
+            margin: 50px auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 800px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #666;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-
-    <h2>選擇車號與位置</h2>
-    <div id="map" style="height: 400px;"></div>
-    <!-- 地圖顯示區域 -->
+    <h2>車輛位置管理系統</h2>
     
-    <div id="app">
-        <form><!-- 車輛選擇表單 -->
-            <label for="carNumbers">選擇車號:</label>
-                <select id="carNumbers">
-					<option value="軍E-21137">軍E-21137</option>
-					<option value="軍E-21188">軍E-21188</option>
-					<option value="軍2-20004">軍2-20004</option>
-					<option value="軍2-26681">軍2-26681</option>
-					<option value="軍2-20094">軍2-20094</option>
-					<option value="軍2-20096">軍2-20096</option>
-					<option value="軍2-20097">軍2-20097</option>
-					<option value="軍2-20895">軍2-20895</option>
-					<option value="軍2-23113">軍2-23113</option>
-					<option value="軍2-20001">軍2-20001</option>
-					<option value="軍2-20002">軍2-20002</option>
-					<option value="軍2-20009">軍2-20009</option>
-					<option value="軍2-20010">軍2-20010</option>
-					<option value="軍2-20090">軍2-20090</option>
-					<option value="軍2-20092">軍2-20092</option>
-					<option value="軍2-22705">軍2-22705</option>
-					<option value="軍2-22717">軍2-22717</option>
-					<option value="軍2-22740">軍2-22740</option>
-					<option value="軍2-22834">軍2-22834</option>
-					<option value="軍2-23836">軍2-23836</option>
-					<option value="軍2-24507">軍2-24507</option>
-					<option value="軍2-24629">軍2-24629</option>
-					<option value="軍2-24630">軍2-24630</option>
-					<option value="軍2-24631">軍2-24631</option>
-					<option value="軍3-25088">軍3-25088</option>
-					<option value="軍3-24053">軍3-24053</option>
-					<option value="軍1-23534">軍1-23534</option>
-					<option value="軍K-20456">軍K-20456</option>
-				</select>
+    <div id="map"></div>
+    
+    <div>
+        <select id="carNumbers">
+             <option value="軍E-21137">軍E-21137</option>
+      <option value="軍E-21188">軍E-21188</option>
+      <option value="軍2-20004">軍2-20004</option>
+      <option value="軍2-26681">軍2-26681</option>
+      <option value="軍2-20094">軍2-20094</option>
+      <option value="軍2-20096">軍2-20096</option>
+      <option value="軍2-20097">軍2-20097</option>
+      <option value="軍2-20895">軍2-20895</option>
+      <option value="軍2-23113">軍2-23113</option>
+      <option value="軍2-20001">軍2-20001</option>
+      <option value="軍2-20002">軍2-20002</option>
+      <option value="軍2-20009">軍2-20009</option>
+      <option value="軍2-20010">軍2-20010</option>
+      <option value="軍2-20090">軍2-20090</option>
+      <option value="軍2-20092">軍2-20092</option>
+      <option value="軍2-22705">軍2-22705</option>
+      <option value="軍2-22717">軍2-22717</option>
+      <option value="軍2-22740">軍2-22740</option>
+      <option value="軍2-22834">軍2-22834</option>
+      <option value="軍2-23836">軍2-23836</option>
+      <option value="軍2-24507">軍2-24507</option>
+      <option value="軍2-24629">軍2-24629</option>
+      <option value="軍2-24630">軍2-24630</option>
+      <option value="軍2-24631">軍2-24631</option>
+      <option value="軍3-25088">軍3-25088</option>
+      <option value="軍3-24053">軍3-24053</option>
+      <option value="軍1-23534">軍1-23534</option>
+      <option value="軍K-20456">軍K-20456</option>
+            <!-- 添加其他車號 -->
+        </select>
 
-            <label for="locations">選擇位置:</label>
-            <select id="locations">
-                <option value="二級廠">二級廠</option>
-                <option value="OK鋼棚">OK鋼棚</option>
-                <option value="連側鋼棚">連側鋼棚</option>
-                <option value="無線電鋼棚">無線電鋼棚</option>
-                <option value="陸區鋼棚">陸區鋼棚</option>
-                <option value="玄捷鋼棚">玄捷鋼棚</option>
-                <option value="風雨走廊">風雨走廊</option>
-                <option value="待安置車號">待安置車號</option>
-            </select>
+        <select id="locations">
+            <option value="二級廠">二級廠</option>
+            <option value="OK鋼棚">OK鋼棚</option>
+            <option value="連側鋼棚">連側鋼棚</option>
+            <option value="無線電鋼棚">無線電鋼棚</option>
+            <option value="陸區鋼棚">陸區鋼棚</option>
+            <option value="玄捷鋼棚">玄捷鋼棚</option>
+            <option value="風雨走廊">風雨走廊</option>
+            <option value="待安置車號">待安置車號</option>
+        </select>
 
-            <button type="button" onclick="submitCarLocation()">提交車號</button>
-            <button type="button" onclick="showStatus()">車況顯示</button>
-        </form>
+        <button onclick="submitLocation()">提交位置</button>
+        <button onclick="showStatus()">顯示狀態</button>
+    </div>
 
-        <!-- 車輛狀況表 -->
-        
-
-        <div id="modal" class="modal">
-            <div class="modal-content">
-                <h3>車輛狀況</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>位置</th>
-                            <th>車號</th>
-                            <th>總數</th>
-                        </tr>
-                    </thead>
-                    <tbody id="statusTable"></tbody>
-                </table>
-                <button type="button" onclick="closeModal()">關閉視窗</button>
-                <button type="button" onclick="clearCarNumbers()">清除車號</button>
-            </div>
+    <div id="statusModal" class="modal">
+        <div class="modal-content">
+            <h3>車輛狀態</h3>
+            <table id="statusTable">
+                <tr>
+                    <th>位置</th>
+                    <th>車號</th>
+                    <th>數量</th>
+                </tr>
+            </table>
+            <button onclick="document.getElementById('statusModal').style.display='none'">關閉視窗</button>
+            <button onclick="clearAll()" style="background-color: #f44336;">清除所有</button>
         </div>
     </div>
 
-    <div id="loading" style="display: none;">載入中...</div>
-	<script type="module" src="CarSign.gs"></script>
+    <script>
+        // Firebase 設定
+        // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyBv-DYm4c4l9Dn-o7ME4TnI92YsCpss1nM",
+  authDomain: "carsign-423fc.firebaseapp.com",
+  databaseURL: "https://carsign-423fc-default-rtdb.firebaseio.com",
+  projectId: "carsign-423fc",
+  storageBucket: "carsign-423fc.firebasestorage.app",
+  messagingSenderId: "219688439999",
+  appId: "1:219688439999:web:2d4f8646c98bcb76e4360a",
+  measurementId: "G-7FRW6JPXBJ"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+
+        // 初始化 Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // 位置坐標
+        const locations = {
+            '二級廠': { lat: 24.8940207, lng: 121.2095940 },
+            'OK鋼棚': { lat: 24.8945207, lng: 121.2095940 },
+            '連側鋼棚': { lat: 24.8942207, lng: 121.2095940 },
+            '無線電鋼棚': { lat: 24.8943207, lng: 121.2095940 },
+            '陸區鋼棚': { lat: 24.8944207, lng: 121.2095940 },
+            '玄捷鋼棚': { lat: 24.8946207, lng: 121.2095940 },
+            '風雨走廊': { lat: 24.8947207, lng: 121.2095940 },
+            '待安置車號': { lat: 24.8948207, lng: 121.2095940 }
+        };
+
+        let map;
+        let markers = {};
+
+        // 初始化地圖
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 24.8940207, lng: 121.2095940 },
+                zoom: 17,
+                mapTypeId: google.maps.MapTypeId.SATELLITE
+            });
+            loadMarkers();
+        }
+
+        // 載入標記
+        function loadMarkers() {
+            db.ref('vehicles').on('value', (snapshot) => {
+                // 清除現有標記
+                Object.values(markers).forEach(marker => marker.setMap(null));
+                markers = {};
+                
+                // 添加新標記
+                const data = snapshot.val() || {};
+                Object.entries(data).forEach(([carNumber, info]) => {
+                    const position = locations[info.location];
+                    if (position) {
+                        markers[carNumber] = new google.maps.Marker({
+                            position: position,
+                            map: map,
+                            title: `${carNumber} - ${info.location}`
+                        });
+                    }
+                });
+            });
+        }
+
+        // 提交位置
+        function submitLocation() {
+            const carNumber = document.getElementById('carNumbers').value;
+            const location = document.getElementById('locations').value;
+            
+            db.ref('vehicles/' + carNumber).set({
+                location: location,
+                timestamp: Date.now()
+            })
+            .then(() => alert('位置已更新'))
+            .catch(error => alert('錯誤：' + error.message));
+        }
+
+        // 顯示狀態
+        function showStatus() {
+            const modal = document.getElementById('statusModal');
+            const table = document.getElementById('statusTable');
+            
+            // 清除現有行（保留表頭）
+            while (table.rows.length > 1) {
+                table.deleteRow(1);
+            }
+
+            db.ref('vehicles').once('value')
+                .then(snapshot => {
+                    const data = snapshot.val() || {};
+                    const locationCount = {};
+                    
+                    // 計算每個位置的車輛數量
+                    Object.entries(data).forEach(([carNumber, info]) => {
+                        if (!locationCount[info.location]) {
+                            locationCount[info.location] = {
+                                cars: [],
+                                count: 0
+                            };
+                        }
+                        locationCount[info.location].cars.push(carNumber);
+                        locationCount[info.location].count++;
+                    });
+
+                    // 填充表格
+                    Object.entries(locationCount).forEach(([location, info]) => {
+                        info.cars.forEach(carNumber => {
+                            const row = table.insertRow();
+                            row.insertCell(0).textContent = location;
+                            row.insertCell(1).textContent = carNumber;
+                            row.insertCell(2).textContent = info.count;
+                        });
+                    });
+
+                    modal.style.display = 'block';
+                });
+        }
+
+        // 清除所有數據
+        function clearAll() {
+            if (confirm('確定要清除所有車輛位置嗎？')) {
+                db.ref('vehicles').remove()
+                    .then(() => {
+                        alert('已清除所有數據');
+                        document.getElementById('statusModal').style.display = 'none';
+                    })
+                    .catch(error => alert('錯誤：' + error.message));
+            }
+        }
+
+        // 初始化地圖
+        initMap();
+    </script>
 </body>
 </html>
