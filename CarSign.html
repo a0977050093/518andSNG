@@ -1,99 +1,74 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>通資歐u車輛管理系統</title>
+    <title>第二連車輛位置管理</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbPe0HVpOt6UHD47PFyRaAqF1CIzK__2U&callback=initMap">
+    </script>
     <link rel="stylesheet" href="CarSign.css">
+    <style>
+        /* 地圖容器 */
+        #map {
+            height: 400px;
+            width: 100%;
+        }
+
+        /* 狀態表格 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #444;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <div id="app">
-        <!-- 車輛選擇表單 -->
-        <h2>選擇車號與位置</h2>
-        <form>
-            <label for="carNumbers">選擇車號:</label>
-            <select id="carNumbers">
-                <option value="軍E-21188">軍E-21188</option>
-                <option value="軍2-20004">軍2-20004</option>
-                <option value="軍2-26681">軍2-26681</option>
-                <option value="軍2-20094">軍2-20094</option>
-                <option value="軍2-20096">軍2-20096</option>
-                <option value="軍2-20097">軍2-20097</option>
-                <option value="軍2-20895">軍2-20895</option>
-                <option value="軍2-23113">軍2-23113</option>
-                <option value="軍2-20001">軍2-20001</option>
-                <option value="軍2-20002">軍2-20002</option>
-                <option value="軍2-20009">軍2-20009</option>
-                <option value="軍2-20010">軍2-20010</option>
-                <option value="軍2-20090">軍2-20090</option>
-                <option value="軍2-20092">軍2-20092</option>
-                <option value="軍2-22705">軍2-22705</option>
-                <option value="軍2-22717">軍2-22717</option>
-                <option value="軍2-22740">軍2-22740</option>
-                <option value="軍2-22834">軍2-22834</option>
-                <option value="軍2-23836">軍2-23836</option>
-                <option value="軍2-24507">軍2-24507</option>
-                <option value="軍2-24629">軍2-24629</option>
-                <option value="軍2-24630">軍2-24630</option>
-                <option value="軍2-24631">軍2-24631</option>
-                <option value="軍3-25088">軍3-25088</option>
-                <option value="軍3-24053">軍3-24053</option>
-                <option value="軍1-23534">軍1-23534</option>
-                <option value="軍K-20456">軍K-20456</option>
-            </select>
+    <h2>車輛位置管理系統</h2>
+    <div id="map"></div>
 
-            <label for="locations">選擇位置:</label>
-            <select id="locations">
-                <option value="二級廠">二級廠</option>
-                <option value="OK鋼棚">OK鋼棚</option>
-                <option value="連側鋼棚">連側鋼棚</option>
-                <option value="無線電鋼棚">無線電鋼棚</option>
-                <option value="陸區鋼棚">陸區鋼棚</option>
-                <option value="玄捷鋼棚">玄捷鋼棚</option>
-                <option value="風雨走廊">風雨走廊</option>
-                <option value="待安置車號">待安置車號</option>
-            </select>
+    <form onsubmit="event.preventDefault(); submitCarLocation();">
+        <label for="carNumbers">車號：</label>
+        <input type="text" id="carNumbers" required>
+        <label for="locations">位置：</label>
+        <select id="locations" required>
+            <option value="二級廠">二級廠</option>
+            <option value="OK鋼棚">OK鋼棚</option>
+            <option value="連側鋼棚">連側鋼棚</option>
+            <option value="無線電鋼棚">無線電鋼棚</option>
+            <option value="陸區鋼棚">陸區鋼棚</option>
+            <option value="玄捷鋼棚">玄捷鋼棚</option>
+            <option value="風雨走廊">風雨走廊</option>
+            <option value="待安置車號">待安置車號</option>
+        </select>
+        <button type="submit">提交位置</button>
+    </form>
 
-            <button type="button" onclick="submitCarLocation()">提交車號</button>
-            <button type="button" onclick="showStatus()">車況顯示</button>
-        </form>
+    <button onclick="showStatus()">顯示車輛狀態</button>
+    <button onclick="clearCarNumbers()">清除所有車輛位置</button>
 
-        <!-- 車輛狀況表 -->
-        
-
-        <div id="modal" class="modal">
-            <div class="modal-content">
-                <h3>車輛狀況</h3>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>位置</th>
-                            <th>車號</th>
-                            <th>總數</th>
-                        </tr>
-                    </thead>
-                    <tbody id="statusTable"></tbody>
-                </table>
-                <button type="button" onclick="closeModal()">關閉</button>
-                <button type="button" onclick="clearCarNumbers()">清除所有車號</button>
-            </div>
+    <div id="modal" style="display: none;">
+        <div id="modal-content">
+            <button onclick="closeModal()">關閉</button>
+            <table id="statusTable"></table>
         </div>
-
-        <!-- 地圖顯示區域 -->
-        <div id="map"></div>
     </div>
 
-      <!-- 引入 Firebase 和主要 JS -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
+    <div id="loading" style="display: none;">載入中...</div>
 
-    
-    <script srex="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
-    
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbPe0HVpOt6UHD47PFyRaAqF1CIzK__2U&callback=initMap" async defer></script>
     <script src="CarSign.gs"></script>
 </body>
 </html>
