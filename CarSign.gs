@@ -1,6 +1,6 @@
 let map;
 let markers = {}; // 用來儲存標記
-const carLocations = {}; // 用來儲存車號位置
+let carLocations = {}; // 用來儲存車號位置
 
 // 初始化地圖
 function initMap() {
@@ -41,15 +41,8 @@ function submitCarLocation() {
         return;
     }
 
-    // 在地圖上添加標記
     addMarker(carLocation.lat, carLocation.lng, carNumber);
-
-    // 儲存車號及其位置
-    carLocations[carNumber] = {
-        locationName: location, // 儲存名稱
-        lat: carLocation.lat,
-        lng: carLocation.lng
-    };
+    carLocations[carNumber] = carLocation;
 
     updateStatusTable();
 }
@@ -67,63 +60,47 @@ function addMarker(lat, lng, title) {
     });
 }
 
+// 顯示車輛位置
 function showStatus() {
-    const modal = document.getElementById("modal");
-    modal.style.display = "flex"; // 顯示模態框
-    updateStatusTable(); // 更新狀態表
+    document.getElementById("modal").style.display = "flex";
+    updateStatusTable();
 }
 
 function closeModal() {
     const modal = document.getElementById("modal");
-    modal.style.display = "none"; // 隱藏模態框
+    modal.style.display = "none";
 }
 
-// 點擊模態框外部時不關閉
+// 避免點擊模態框外部時關閉
 document.getElementById("modal").addEventListener("click", function (event) {
-    if (event.target === document.getElementById("modal-content")) {
-        return; // 避免誤觸背景時關閉模態框
+    if (event.target === this) {
+        closeModal();
     }
-    closeModal(); // 點擊背景以外的地方才執行關閉
 });
 
 // 更新狀況表
 function updateStatusTable() {
     const tableBody = document.getElementById("statusTable");
-    tableBody.innerHTML = ""; // 清空表格內容
-
-    // 嘗試從 localStorage 讀取儲存的車輛位置資料
-    const savedCarLocations = JSON.parse(localStorage.getItem("carLocations"));
-
-    // 如果有保存的資料，就使用它，否則使用空物件
-    const carLocations = savedCarLocations || {};
+    tableBody.innerHTML = "";
 
     Object.keys(carLocations).forEach(carNumber => {
-        const carInfo = carLocations[carNumber];
-
+        const carLocation = carLocations[carNumber];
         const row = document.createElement("tr");
 
-        // 顯示位置名稱
         const locationCell = document.createElement("td");
-        locationCell.textContent = carInfo.locationName;
+        locationCell.textContent = `${carLocation.lat}, ${carLocation.lng}`;
         row.appendChild(locationCell);
 
-        // 顯示車號
         const carNumberCell = document.createElement("td");
         carNumberCell.textContent = carNumber;
         row.appendChild(carNumberCell);
 
-        // 顯示總數（固定為1，此處可以根據需求調整）
         const totalCell = document.createElement("td");
         totalCell.textContent = "1";
         row.appendChild(totalCell);
 
         tableBody.appendChild(row);
     });
-}
-
-// 在某個事件或操作後保存資料到 localStorage
-function saveCarLocations(carLocations) {
-    localStorage.setItem("carLocations", JSON.stringify(carLocations));
 }
 
 // 清除車號
@@ -145,98 +122,3 @@ function clearCarNumbers() {
 
     updateStatusTable();
 }
-
-
-
-
-
-
-
-
-
-// Firebase 配置
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBv-DYm4c4l9Dn-o7ME4TnI92YsCpss1nM",
-  authDomain: "carsign-423fc.firebaseapp.com",
-  databaseURL: "https://carsign-423fc-default-rtdb.firebaseio.com",
-  projectId: "carsign-423fc",
-  storageBucket: "carsign-423fc.firebasestorage.app",
-  messagingSenderId: "219688439999",
-  appId: "1:219688439999:web:2d4f8646c98bcb76e4360a",
-  measurementId: "G-7FRW6JPXBJ"
-};
-
-// 初始化 Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const database = firebase.database(app);
-
-// 儲存車輛資料
-function saveCarLocations(carLocations) {
-  const carLocationsRef = firebase.database().ref('carLocations');
-  carLocationsRef.set(carLocations)
-    .then(() => {
-      console.log("Car locations saved successfully.");
-    })
-    .catch((error) => {
-      console.error("Error saving car locations: ", error);
-    });
-}
-
-// 讀取車輛資料並顯示
-function loadCarLocations() {
-  const carLocationsRef = firebase.database().ref('carLocations');
-  carLocationsRef.get()
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        const carLocations = snapshot.val();
-        updateStatusTable(carLocations); // 更新表格顯示
-      } else {
-        console.log("No car locations found.");
-      }
-    })
-    .catch((error) => {
-      console.error("Error loading car locations: ", error);
-    });
-}
-
-// 更新表格顯示
-function updateStatusTable(carLocations) {
-  const tableBody = document.getElementById("statusTable");
-  tableBody.innerHTML = ""; // 清空表格內容
-
-  Object.keys(carLocations).forEach(carNumber => {
-    const carInfo = carLocations[carNumber];
-
-    const row = document.createElement("tr");
-
-    // 顯示位置名稱
-    const locationCell = document.createElement("td");
-    locationCell.textContent = carInfo.locationName;
-    row.appendChild(locationCell);
-
-    // 顯示車號
-    const carNumberCell = document.createElement("td");
-    carNumberCell.textContent = carNumber;
-    row.appendChild(carNumberCell);
-
-    // 顯示總數（固定為1，此處可以根據需求調整）
-    const totalCell = document.createElement("td");
-    totalCell.textContent = "1";
-    row.appendChild(totalCell);
-
-    tableBody.appendChild(row);
-  });
-}
-
-// 假設 carLocations 是要儲存的資料
-const carLocations = {
-  "車號1": { locationName: "位置A" },
-  "車號2": { locationName: "位置B" }
-};
-
-// 儲存資料
-saveCarLocations(carLocations);
-
-// 讀取資料並更新表格
-loadCarLocations();
