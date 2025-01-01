@@ -8,133 +8,95 @@ import { getDatabase, ref, set, onValue, remove } from "firebase/database";
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
+// 地圖相關變數
 let map;
 let markers = {};
-const carLocations = {};
 
+// 初始化地圖
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: 24.8940207, lng: 121.2095940 },
+        center: { lat: 24.8940207, lng: 121.2095940 }, // 預設位置
         zoom: 17,
         mapTypeId: google.maps.MapTypeId.SATELLITE,
     });
-    // 加載車輛位置
-    loadCarLocations();
+
+    loadCarLocations(); // 加載車輛位置
 }
 
-// 提交車輛位置
-function submitCarLocation() {
-    const carNumber = document.getElementById("carNumbers").value;
-    const location = document.getElementById("locations").value;
-
-    const locations = {
-        "二級廠": { lat: 24.8953731, lng: 121.2110354 },
-        "OK鋼棚": { lat: 24.8955410, lng: 121.2094455 },
-        "連側鋼棚": { lat: 24.8955352, lng: 121.2088128 },
-        "無線電鋼棚": { lat: 24.8942494, lng: 121.2084913 },
-        "陸區鋼棚": { lat: 24.8936913, lng: 121.2085201 },
-        "玄捷鋼棚": { lat: 24.8933285, lng: 121.2084722 },
-        "風雨走廊": { lat: 24.8926953, lng: 121.2099437 },
-        "待安置車號": { lat: 24.8950000, lng: 121.2090000 }
-    };
-
-    const carLocation = locations[location];
-    if (!carLocation) {
-        alert("指定位置無效");
-        return;
-    }
-
-    const password = prompt("請輸入密碼");
-    if (password !== "348362") {
-        alert("密碼錯誤");
-        return;
-    }
-
-    // 儲存到 Firebase
-    set(ref(database, `carLocations/${carNumber}`), {
-        carNumber,
-        locationName: location,
-        lat: carLocation.lat,
-        lng: carLocation.lng,
-    });
-
-    alert("車輛位置已更新");
-}
-
-// 載入車輛位置並更新地圖
+// 加載車輛位置
 function loadCarLocations() {
-    const ref = ref(database, "carLocations");
+    const carLocationsRef = firebase.database().ref('carLocations');
 
-    onValue(ref, (snapshot) => {
-        const data = snapshot.val() || {};
+    carLocationsRef.on('value', (snapshot) => {
+        const data = snapshot.val();
+        Object.values(markers).forEach(marker => marker.setMap(null)); // 清除舊標記
+        markers = {}; // 清空標記
 
-        // 清除舊標記
-        Object.values(markers).forEach(marker => marker.setMap(null));
-        markers = {};
-
-        // 新增每個車輛標記
-        Object.keys(data).forEach(carNumber => {
+        for (const carNumber in data) {
             const carInfo = data[carNumber];
             addMarker(carInfo.lat, carInfo.lng, carNumber);
-            carLocations[carNumber] = carInfo;
-        });
-
-        // 更新車輛狀況表
-        updateStatusTable();
+        }
     });
 }
 
-// 添加標記並顯示車號
-function addMarker(lat, lng, title) {
-    const marker = new google.maps.Marker({
+// 添加車輛標記
+function addMarker(lat, lng, carNumber) {
+    markers[carNumber] = new google.maps.Marker({
         position: { lat, lng },
         map: map,
-        title: title,
-    });
-
-    // 儲存標記
-    markers[title] = marker;
-
-    // 點擊標記顯示車輛資訊
-    marker.addListener("click", function() {
-        alert("車號: " + title);
+        title: carNumber,
     });
 }
 
-// 更新車輛狀況表
-function updateStatusTable() {
-    const tableBody = document.getElementById("statusTable");
-    tableBody.innerHTML = "";
+// 提交車號與位置
+function submitCarLocation() {
+    const carNumber = document.getElementById('carNumbers').value;
+    const location = document.getElementById('locations').value;
 
-    Object.keys(carLocations).forEach(carNumber => {
-        const carInfo = carLocations[carNumber];
-        const row = `<tr>
-            <td>${carInfo.locationName}</td>
-            <td>${carNumber}</td>
-            <td>1</td>
-        </tr>`;
-        tableBody.innerHTML += row;
+    const carRef = firebase.database().ref('carLocations/' + carNumber);
+    carRef.set({
+        location: location,
+        lat: 24.8940207, // 根據實際情況修改
+        lng: 121.2095940 // 根據實際情況修改
+    }).then(() => {
+        alert("車號已提交");
+    }).catch(error => {
+        console.error("提交車號錯誤：", error);
     });
 }
 
-// 清除所有車號
-function clearCarNumbers() {
-    const password = prompt("請輸入密碼以清除所有車號");
-    if (password !== "348362") {
-        alert("密碼錯誤");
-        return;
-    }
-
-    remove(ref(database, "carLocations"));
-    alert("所有車號已清除");
-}
-
-// 顯示車輛狀況
+// 顯示車況
 function showStatus() {
     document.getElementById("modal").style.display = "block";
+    const statusTable = document.getElementById("statusTable");
+
+    const carLocationsRef = firebase.database().ref('carLocations');
+    carLocationsRef.once('value').then((snapshot) => {
+        const data = snapshot.val();
+        statusTable.innerHTML = ''; // 清空表格
+
+        for (const carNumber in data) {
+            const carInfo = data[carNumber];
+            const row = statusTable.insertRow();
+            row.insertCell(0).textContent = carInfo.location;
+            row.insertCell(1).textContent = carNumber;
+            row.insertCell(2).textContent = "1"; // 可以根據需求修改總數
+        }
+    });
 }
 
 // 關閉模態框
 function closeModal() {
     document.getElementById("modal").style.display = "none";
+}
+
+// 清除所有車號
+function clearCarNumbers() {
+    firebase.database().ref('carLocations').remove()
+        .then(() => {
+            alert("所有車號已清除");
+        })
+        .catch(error => {
+            console.error("清除車號錯誤：", error);
+        });
 }
