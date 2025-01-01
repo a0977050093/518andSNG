@@ -55,10 +55,9 @@
             </select>
 
             <button type="button" onclick="submitCarLocation()">提交車號</button>
-        
 
-        <!-- 車輛狀況表 -->
-        <div id="modal">
+<!-- 車輛狀況表 -->
+<div id="modal" style="display: none;">
     <div id="modal-content">
         <h3>車輛狀況</h3>
         <table>
@@ -74,6 +73,60 @@
         <button onclick="closeModal()" class="close-btn">關閉</button>
     </div>
 </div>
+
+<script>
+// 模擬車輛位置資料
+const carLocations = {};
+
+// 顯示車輛狀況
+function showStatus() {
+    const modal = document.getElementById("modal");
+    modal.style.display = "flex";
+    updateStatusTable();
+}
+
+// 關閉模態窗口
+function closeModal() {
+    const modal = document.getElementById("modal");
+    modal.style.display = "none";
+}
+
+// 更新車輛狀況表
+function updateStatusTable() {
+    const tableBody = document.getElementById("statusTable");
+    tableBody.innerHTML = "";
+
+    Object.keys(carLocations).forEach(carNumber => {
+        const carLocation = carLocations[carNumber];
+
+        const row = document.createElement("tr");
+
+        const locationCell = document.createElement("td");
+        locationCell.textContent = carLocation.name;
+        row.appendChild(locationCell);
+
+        const carNumberCell = document.createElement("td");
+        carNumberCell.textContent = carNumber;
+        row.appendChild(carNumberCell);
+
+        const totalCell = document.createElement("td");
+        totalCell.textContent = "1"; // 車輛數量
+        row.appendChild(totalCell);
+
+        tableBody.appendChild(row);
+    });
+}
+
+// 提交車輛位置
+function submitCarLocation() {
+    const carNumber = "軍E-21188"; // 示例車號
+    const location = "二級廠"; // 示例位置
+
+    carLocations[carNumber] = { name: location };
+
+    showStatus(); // 顯示車輛狀況
+}
+</script>
 
         <!-- 地圖顯示區域 -->
         <div id="map"></div>
