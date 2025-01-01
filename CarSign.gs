@@ -6,7 +6,7 @@ const carLocations = {}; // 用來儲存車號位置
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 24.8940207, lng: 121.2095940 },
-        zoom: 17,
+        zoom: 18,
         mapTypeId: google.maps.MapTypeId.SATELLITE
     });
 }
