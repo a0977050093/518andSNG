@@ -1,30 +1,12 @@
-// Import the functions you need from the SDKs you need
+// 引入 Firebase 配置 (firebase-config.js)
+import { firebaseConfig } from './firebase-config.js';
+
+// 初始化 Firebase
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { getDatabase, ref, set, onValue, remove } from "firebase/database";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyBv-DYm4c4l9Dn-o7ME4TnI92YsCpss1nM",
-  authDomain: "carsign-423fc.firebaseapp.com",
-  databaseURL: "https://carsign-423fc-default-rtdb.firebaseio.com",
-  projectId: "carsign-423fc",
-  storageBucket: "carsign-423fc.firebasestorage.app",
-  messagingSenderId: "219688439999",
-  appId: "1:219688439999:web:2d4f8646c98bcb76e4360a",
-  measurementId: "G-7FRW6JPXBJ"
-};
-
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-// 匿名登入
-firebase.auth().signInAnonymously()
-    .then(() => console.log("匿名登入成功"))
-    .catch((error) => console.error("登入失敗", error.code, error.message));
+const database = getDatabase(app);
 
 let map;
 let markers = {};
@@ -70,7 +52,7 @@ function submitCarLocation() {
     }
 
     // 儲存到 Firebase
-    firebase.database().ref(`carLocations/${carNumber}`).set({
+    set(ref(database, `carLocations/${carNumber}`), {
         carNumber,
         locationName: location,
         lat: carLocation.lat,
@@ -80,37 +62,47 @@ function submitCarLocation() {
     alert("車輛位置已更新");
 }
 
-// 載入車輛位置
+// 載入車輛位置並更新地圖
 function loadCarLocations() {
-    const ref = firebase.database().ref("carLocations");
+    const ref = ref(database, "carLocations");
 
-    ref.on("value", (snapshot) => {
+    onValue(ref, (snapshot) => {
         const data = snapshot.val() || {};
 
         // 清除舊標記
         Object.values(markers).forEach(marker => marker.setMap(null));
         markers = {};
 
+        // 新增每個車輛標記
         Object.keys(data).forEach(carNumber => {
             const carInfo = data[carNumber];
             addMarker(carInfo.lat, carInfo.lng, carNumber);
             carLocations[carNumber] = carInfo;
         });
 
+        // 更新車輛狀況表
         updateStatusTable();
     });
 }
 
-// 添加標記
+// 添加標記並顯示車號
 function addMarker(lat, lng, title) {
-    markers[title] = new google.maps.Marker({
+    const marker = new google.maps.Marker({
         position: { lat, lng },
         map: map,
-        title,
+        title: title,
+    });
+
+    // 儲存標記
+    markers[title] = marker;
+
+    // 點擊標記顯示車輛資訊
+    marker.addListener("click", function() {
+        alert("車號: " + title);
     });
 }
 
-// 更新狀況表
+// 更新車輛狀況表
 function updateStatusTable() {
     const tableBody = document.getElementById("statusTable");
     tableBody.innerHTML = "";
@@ -126,7 +118,7 @@ function updateStatusTable() {
     });
 }
 
-// 清除車號
+// 清除所有車號
 function clearCarNumbers() {
     const password = prompt("請輸入密碼以清除所有車號");
     if (password !== "348362") {
@@ -134,11 +126,11 @@ function clearCarNumbers() {
         return;
     }
 
-    firebase.database().ref("carLocations").remove();
+    remove(ref(database, "carLocations"));
     alert("所有車號已清除");
 }
 
-// 顯示車輛狀態
+// 顯示車輛狀況
 function showStatus() {
     document.getElementById("modal").style.display = "block";
 }
