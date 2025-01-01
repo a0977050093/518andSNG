@@ -5,14 +5,14 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebas
 import { getDatabase, ref, set, onValue, remove } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBv-DYm4c4l9Dn-o7ME4TnI92YsCpss1nM",
-  authDomain: "carsign-423fc.firebaseapp.com",
-  databaseURL: "https://carsign-423fc-default-rtdb.firebaseio.com",
-  projectId: "carsign-423fc",
-  storageBucket: "carsign-423fc.firebasestorage.app",
-  messagingSenderId: "219688439999",
-  appId: "1:219688439999:web:2d4f8646c98bcb76e4360a",
-  measurementId: "G-7FRW6JPXBJ"
+    apiKey: "vpwQNOHFQ4hKIybaE-MiMqpUZ7l4-_2vucbMiH7zxw0", // 將 YOUR_API_KEY 換成你的 Firebase API 金鑰
+    authDomain: "carsign-423fc.firebaseapp.com",
+    databaseURL: "https://carsign-423fc-default-rtdb.firebaseio.com",
+    projectId: "carsign-423fc",
+    storageBucket: "carsign-423fc.firebasestorage.app",
+    messagingSenderId: "219688439999",
+    appId: "1:219688439999:web:2d4f8646c98bcb76e4360a",
+    measurementId: "G-7FRW6JPXBJ"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -32,7 +32,7 @@ function initMap() {
 
     loadCarLocations(); // 加載車輛位置
 }
-window.initMap = initMap;
+
 
 // 加載車輛位置
 function loadCarLocations() {
@@ -77,7 +77,7 @@ function submitCarLocation() {
         console.error("提交車號錯誤：", error);
     });
 }
-window.submitCarLocation = submitCarLocation;
+
 
 // 顯示車況
 function showStatus() {
@@ -99,13 +99,11 @@ function showStatus() {
         }
     });
 }
-window.showStatus = showStatus;
 
 // 關閉模態框
 function closeModal() {
     document.getElementById("modal").style.display = "none";
 }
-window.closeModal = closeModal;
 
 // 清除所有車號
 function clearCarNumbers() {
@@ -117,4 +115,3 @@ function clearCarNumbers() {
             console.error("清除車號錯誤：", error);
         });
 }
-window.clearCarNumbers = clearCarNumbers;
