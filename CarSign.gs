@@ -12,14 +12,13 @@ let map;
 let markers = {};
 const carLocations = {};
 
-// 初始化地圖
 function initMap() {
-    map = new google.maps.Map(document.getElementById("map"), {
+    map = new google.maps.Map(document.getElementById('map'), {
         center: { lat: 24.8940207, lng: 121.2095940 },
         zoom: 17,
         mapTypeId: google.maps.MapTypeId.SATELLITE,
     });
-
+    // 加載車輛位置
     loadCarLocations();
 }
 
