@@ -4,11 +4,10 @@ const carLocations = {}; // 用來儲存車號位置
 
 // 初始化地圖
 function initMap() {
-    // 初始化地圖，設為衛星地圖
     map = new google.maps.Map(document.getElementById('map'), {
-        center: { 24.8940207, lng: 121.2095940 }, // 初始位置
+        center: { lat: 24.8940207, lng: 121.2095940 },
         zoom: 17,
-        mapTypeId: google.maps.MapTypeId.SATELLITE // 設為衛星地圖
+        mapTypeId: google.maps.MapTypeId.SATELLITE
     });
 }
 
@@ -17,19 +16,14 @@ function submitCarLocation() {
     const carNumber = document.getElementById('carNumbers').value;
     const location = document.getElementById('locations').value;
 
-    // 提示用戶輸入密碼
     const password = prompt("請輸入密碼");
-
-    // 預設密碼
     const correctPassword = "348362";
 
-    // 驗證密碼是否正確
     if (password !== correctPassword) {
         alert("密碼錯誤，無法提交車輛位置。");
         return;
     }
 
-    // 取得當前車號與位置
     const locations = {
         "二級廠": { lat: 24.8953731, lng: 121.2110354 },
         "OK鋼棚": { lat: 24.8955410, lng: 121.2094455 },
@@ -41,10 +35,7 @@ function submitCarLocation() {
         "待安置車號": { lat: 24.8950000, lng: 121.2090000 }
     };
 
-    // 獲得車號位置
     const carLocation = locations[location];
-
-    // 檢查車號位置是否有效
     if (!carLocation) {
         alert("指定位置無效。");
         return;
@@ -54,62 +45,68 @@ function submitCarLocation() {
     addMarker(carLocation.lat, carLocation.lng, carNumber);
 
     // 儲存車號及其位置
-    carLocations[carNumber] = carLocation;
+    carLocations[carNumber] = {
+        locationName: location, // 儲存名稱
+        lat: carLocation.lat,
+        lng: carLocation.lng
+    };
 
-    // 更新顯示的車輛位置
     updateStatusTable();
 }
 
 // 添加標記
 function addMarker(lat, lng, title) {
     if (markers[title]) {
-        markers[title].setMap(null); // 如果標記已經存在，先移除
+        markers[title].setMap(null);
     }
 
-    const marker = new google.maps.Marker({
+    markers[title] = new google.maps.Marker({
         position: { lat, lng },
         map: map,
         title: title
     });
-
-    // 儲存標記
-    markers[title] = marker;
 }
 
-// 顯示所有車輛位置
 function showStatus() {
-    // 顯示車輛位置狀況視窗
     const modal = document.getElementById("modal");
-    modal.style.display = "flex";
-
-    // 更新狀況表
-    updateStatusTable();
+    modal.style.display = "flex"; // 顯示模態框
+    updateStatusTable(); // 更新狀態表
 }
 
-// 關閉視窗
 function closeModal() {
     const modal = document.getElementById("modal");
-    modal.style.display = "none";
+    modal.style.display = "none"; // 隱藏模態框
 }
 
-// 更新車輛狀況表
+// 點擊模態框外部時不關閉
+document.getElementById("modal").addEventListener("click", function (event) {
+    if (event.target === document.getElementById("modal-content")) {
+        return; // 避免誤觸背景時關閉模態框
+    }
+    closeModal(); // 點擊背景以外的地方才執行關閉
+});
+
+// 更新狀況表
 function updateStatusTable() {
     const tableBody = document.getElementById("statusTable");
     tableBody.innerHTML = ""; // 清空表格內容
 
     Object.keys(carLocations).forEach(carNumber => {
-        const carLocation = carLocations[carNumber];
+        const carInfo = carLocations[carNumber];
 
         const row = document.createElement("tr");
 
+        // 顯示位置名稱
         const locationCell = document.createElement("td");
-        locationCell.textContent = `${carLocation.lat}, ${carLocation.lng}`;
+        locationCell.textContent = carInfo.locationName;
         row.appendChild(locationCell);
 
+        // 顯示車號
         const carNumberCell = document.createElement("td");
         carNumberCell.textContent = carNumber;
         row.appendChild(carNumberCell);
 
+        // 顯示總數（固定為1，此處可以根據需求調整）
         const totalCell = document.createElement("td");
         totalCell.textContent = "1";
         row.appendChild(totalCell);
@@ -120,7 +117,6 @@ function updateStatusTable() {
 
 // 清除車號
 function clearCarNumbers() {
-    // 確認是否清除
     const password = prompt("請輸入密碼以清除所有車號");
     const correctPassword = "348362";
 
@@ -129,14 +125,12 @@ function clearCarNumbers() {
         return;
     }
 
-    // 清空地圖上的標記
     Object.keys(markers).forEach(carNumber => {
         markers[carNumber].setMap(null);
     });
 
-    // 清空車輛位置資料
+    markers = {};
     carLocations = {};
 
-    // 更新顯示
     updateStatusTable();
 }
