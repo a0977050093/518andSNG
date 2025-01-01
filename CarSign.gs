@@ -16,7 +16,7 @@ function submitCarLocation() {
     const carNumber = document.getElementById('carNumbers').value;
     const location = document.getElementById('locations').value;
 
-    const password = prompt("請輸入密碼");
+    const password = prompt("請輸入密碼，系統測試中348362");
     const correctPassword = "348362";
 
     if (password !== correctPassword) {
