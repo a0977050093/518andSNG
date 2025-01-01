@@ -1,48 +1,4 @@
-// 引入所需模組
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
 
-// Firebase 配置
-const firebaseConfig = {
-  apiKey: "您的API金鑰",
-  authDomain: "您的專案ID.firebaseapp.com",
-  projectId: "您的專案ID",
-  storageBucket: "您的專案ID.appspot.com",
-  messagingSenderId: "發送ID",
-  appId: "應用ID"
-};
-
-// 初始化 Firebase
-const app = initializeApp(firebaseConfig);
-
-// 初始化 Firestore
-const db = getFirestore(app);
-
-// 儲存資料到 Firestore
-const saveCarData = async (carNumber, location) => {
-  try {
-    await addDoc(collection(db, "car_records"), {
-      carNumber: carNumber,
-      location: location,
-      timestamp: new Date()
-    });
-    console.log("資料已儲存");
-  } catch (e) {
-    console.error("儲存失敗", e);
-  }
-};
-
-// 讀取資料
-const getCarRecords = async () => {
-  const querySnapshot = await getDocs(collection(db, "car_records"));
-  querySnapshot.forEach((doc) => {
-    console.log(doc.id, " => ", doc.data());
-  });
-};
-
-// 呼叫儲存和讀取資料的函數
-saveCarData("ABC123", "Location A");
-getCarRecords();
 
 
 
