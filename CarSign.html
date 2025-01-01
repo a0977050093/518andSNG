@@ -6,52 +6,50 @@
     <title>第二連車輛位置管理</title>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js"></script>
-    <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbPe0HVpOt6UHD47PFyRaAqF1CIzK__2U&callback=initMap">
+     <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap">
     </script>
-    <link rel="stylesheet" href="CarSign.css">
-    
+     <link rel="stylesheet" href="CarSign.css">
 </head>
 <body>
 
     <h2>選擇車號與位置</h2>
-   <div id="map" style="height: 400px;"></div> 
+    <div id="map" style="height: 400px;"></div>
     <!-- 地圖顯示區域 -->
     
-      <div id="app">
+    <div id="app">
         <form><!-- 車輛選擇表單 -->
             <label for="carNumbers">選擇車號:</label>
                 <select id="carNumbers">
-    <option value="軍E-21137">軍E-21137</option>
-    <option value="軍E-21188">軍E-21188</option>
-    <option value="軍2-20004">軍2-20004</option>
-    <option value="軍2-26681">軍2-26681</option>
-    <option value="軍2-20094">軍2-20094</option>
-    <option value="軍2-20096">軍2-20096</option>
-    <option value="軍2-20097">軍2-20097</option>
-    <option value="軍2-20895">軍2-20895</option>
-    <option value="軍2-23113">軍2-23113</option>
-    <option value="軍2-20001">軍2-20001</option>
-    <option value="軍2-20002">軍2-20002</option>
-    <option value="軍2-20009">軍2-20009</option>
-    <option value="軍2-20010">軍2-20010</option>
-    <option value="軍2-20090">軍2-20090</option>
-    <option value="軍2-20092">軍2-20092</option>
-    <option value="軍2-22705">軍2-22705</option>
-    <option value="軍2-22717">軍2-22717</option>
-    <option value="軍2-22740">軍2-22740</option>
-    <option value="軍2-22834">軍2-22834</option>
-    <option value="軍2-23836">軍2-23836</option>
-    <option value="軍2-24507">軍2-24507</option>
-    <option value="軍2-24629">軍2-24629</option>
-    <option value="軍2-24630">軍2-24630</option>
-    <option value="軍2-24631">軍2-24631</option>
-    <option value="軍3-25088">軍3-25088</option>
-    <option value="軍3-24053">軍3-24053</option>
-    <option value="軍1-23534">軍1-23534</option>
-    <option value="軍K-20456">軍K-20456</option>
-</select>
+					<option value="軍E-21137">軍E-21137</option>
+					<option value="軍E-21188">軍E-21188</option>
+					<option value="軍2-20004">軍2-20004</option>
+					<option value="軍2-26681">軍2-26681</option>
+					<option value="軍2-20094">軍2-20094</option>
+					<option value="軍2-20096">軍2-20096</option>
+					<option value="軍2-20097">軍2-20097</option>
+					<option value="軍2-20895">軍2-20895</option>
+					<option value="軍2-23113">軍2-23113</option>
+					<option value="軍2-20001">軍2-20001</option>
+					<option value="軍2-20002">軍2-20002</option>
+					<option value="軍2-20009">軍2-20009</option>
+					<option value="軍2-20010">軍2-20010</option>
+					<option value="軍2-20090">軍2-20090</option>
+					<option value="軍2-20092">軍2-20092</option>
+					<option value="軍2-22705">軍2-22705</option>
+					<option value="軍2-22717">軍2-22717</option>
+					<option value="軍2-22740">軍2-22740</option>
+					<option value="軍2-22834">軍2-22834</option>
+					<option value="軍2-23836">軍2-23836</option>
+					<option value="軍2-24507">軍2-24507</option>
+					<option value="軍2-24629">軍2-24629</option>
+					<option value="軍2-24630">軍2-24630</option>
+					<option value="軍2-24631">軍2-24631</option>
+					<option value="軍3-25088">軍3-25088</option>
+					<option value="軍3-24053">軍3-24053</option>
+					<option value="軍1-23534">軍1-23534</option>
+					<option value="軍K-20456">軍K-20456</option>
+				</select>
 
             <label for="locations">選擇位置:</label>
             <select id="locations">
@@ -65,7 +63,7 @@
                 <option value="待安置車號">待安置車號</option>
             </select>
 
-             <button type="button" onclick="submitCarLocation()">提交車號</button>
+            <button type="button" onclick="submitCarLocation()">提交車號</button>
             <button type="button" onclick="showStatus()">車況顯示</button>
         </form>
 
@@ -92,11 +90,7 @@
     </div>
 
     <div id="loading" style="display: none;">載入中...</div>
+	<script type="module" src="CarSign.gs"></script>
 
-
-
-    <script>
-    <script src="CarSign.gs"></script>
-    </script>
 </body>
 </html>
