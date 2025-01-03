@@ -1,6 +1,6 @@
 let map;
-let markers = {}; // 用來儲存標記
-const carLocations = {}; // 用來儲存車號位置
+let markers = {}; // 儲存標記
+const carLocations = {}; // 儲存車號位置
 
 // 初始化地圖
 function initMap() {
@@ -25,14 +25,14 @@ function submitCarLocation() {
     }
 
     const locations = {
-        "二級廠": { lat: 24.8953731, lng: 121.2110354 },
-        "OK鋼棚": { lat: 24.8955410, lng: 121.2094455 },
-        "連側鋼棚": { lat: 24.8955352, lng: 121.2088128 },
-        "無線電鋼棚": { lat: 24.8942494, lng: 121.2084913 },
-        "陸區鋼棚": { lat: 24.8936913, lng: 121.2085201 },
-        "玄捷鋼棚": { lat: 24.8933285, lng: 121.2084722 },
-        "風雨走廊": { lat: 24.8926953, lng: 121.2099437 },
-        "待安置車號": { lat: 24.8950000, lng: 121.2090000 }
+        "二級廠": { lat: 24.8953731, lng: 121.2110354, range: 'B6' },
+        "OK鋼棚": { lat: 24.8955410, lng: 121.2094455, range: 'B7' },
+        "連側鋼棚": { lat: 24.8955352, lng: 121.2088128, range: 'B8' },
+        "無線電鋼棚": { lat: 24.8942494, lng: 121.2084913, range: 'B9' },
+        "陸區鋼棚": { lat: 24.8936913, lng: 121.2085201, range: 'B10' },
+        "玄捷鋼棚": { lat: 24.8933285, lng: 121.2084722, range: 'B11' },
+        "風雨走廊": { lat: 24.8926953, lng: 121.2099437, range: 'B12' },
+        "待安置車號": { lat: 24.8950000, lng: 121.2090000, range: 'B13' }
     };
 
     const carLocation = locations[location];
@@ -46,10 +46,15 @@ function submitCarLocation() {
 
     // 儲存車號及其位置
     carLocations[carNumber] = {
-        locationName: location, // 儲存名稱
+        locationName: location,
         lat: carLocation.lat,
         lng: carLocation.lng
     };
+
+    // 儲存車號到試算表對應的範圍
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('locastatus');
+    const range = sheet.getRange(carLocation.range);  // 定位範圍
+    range.setValue(carNumber);  // 設置車號
 
     updateStatusTable();
 }
@@ -66,25 +71,6 @@ function addMarker(lat, lng, title) {
         title: title
     });
 }
-
-function showStatus() {
-    const modal = document.getElementById("modal");
-    modal.style.display = "flex"; // 顯示模態框
-    updateStatusTable(); // 更新狀態表
-}
-
-function closeModal() {
-    const modal = document.getElementById("modal");
-    modal.style.display = "none"; // 隱藏模態框
-}
-
-// 點擊模態框外部時不關閉
-document.getElementById("modal").addEventListener("click", function (event) {
-    if (event.target === document.getElementById("modal-content")) {
-        return; // 避免誤觸背景時關閉模態框
-    }
-    closeModal(); // 點擊背景以外的地方才執行關閉
-});
 
 // 更新狀況表
 function updateStatusTable() {
@@ -122,5 +108,5 @@ function clearCarNumbers() {
     for (const key in carLocations) {
         delete carLocations[key]; // 清空車號資料
     }
-    updateStatusTable(); // 更新狀態表
+    updateStatusTable(); // 更新狀況表
 }
