@@ -336,7 +336,7 @@ function saveCarLocationToSheet(carNumber, location, lat, lng) {
 }
 
 // 設定試算表ID與工作表名稱
-const SPREADSHEET_ID = '102931833145714831502'; // 試算表 ID
+const SPREADSHEET_ID = '1p36pF9vC5jz0cHoY6AlTQRm-bvBuDuaz4xO_2UFrdiA'; // 試算表 ID
 const SHEET_NAME = 'locastatus'; // 試算表名稱
 
 // 讀取車號位置
