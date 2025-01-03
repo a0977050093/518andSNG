@@ -1,5 +1,122 @@
 // 初始化 Google Map
 function initMap() {
+  const map = new google.maps.Map(document.getElementById('map'), {
+    center: { lat: 24.8940207, lng: 121.2095940 },
+    zoom: 17,
+    mapTypeId: google.maps.MapTypeId.SATELLITE
+  });
+
+  // 載入試算表車號資料
+  loadCarLocationsFromSheet();
+}
+
+// 步驟二：把車號丟至初始放置區（這個部分會改用 Google Apps Script）
+// function loadCarNumbersToInitialArea() { ... }
+
+function submitCarLocation() {
+  const carNumber = document.getElementById('carNumbers').value;
+  const location = document.getElementById('locations').value;
+
+  // 密碼檢查
+  const password = prompt("請輸入密碼，系統測試中348362");
+  const correctPassword = "348362";
+
+  if (password !== correctPassword) {
+    alert("密碼錯誤，無法提交車輛位置。");
+    return; // 密碼錯誤則停止執行
+  }
+
+  // 預設位置資料
+  const locations = {
+    "二級廠": { lat: 24.8953731, lng: 121.2110354 },
+    "OK鋼棚": { lat: 24.8955410, lng: 121.2094455 },
+    "連側鋼棚": { lat: 24.8955352, lng: 121.2088128 },
+    "無線電鋼棚": { lat: 24.8942494, lng: 121.2084913 },
+    "陸區鋼棚": { lat: 24.8936913, lng: 121.2085201 },
+    "玄捷鋼棚": { lat: 24.8933285, lng: 121.2084722 },
+    "風雨走廊": { lat: 24.8926953, lng: 121.2099437 },
+    "待安置車號": { lat: 24.8950000, lng: 121.2090000 }
+  };
+
+  // 檢查選擇的地點是否有效
+  const carLocation = locations[location];
+  if (!carLocation) {
+    alert("指定位置無效。");
+    return; // 位置無效則停止執行
+  }
+
+  // 顯示選擇的車號與位置（用來確認資料是否正確）
+  console.log(`車號: $, 位置: $, 經度: ${carLocation.lng}, 緯度: ${carLocation.lat}`);
+
+  // 儲存車號與位置到試算表（呼叫 Google Apps Script）
+  google.script.run.saveCarLocation(carNumber, location, carLocation.lat, carLocation.lng);
+
+  // 更新車況顯示
+  getStatus();
+}
+
+// 顯示車況狀態
+function showStatus() {
+  const modal = document.getElementById("modal");
+  modal.style.display = "flex"; // 顯示模態框
+  updateStatusTable(); // 更新狀態表
+}
+
+// 關閉模態框
+function closeModal() {
+  const modal = document.getElementById("modal");
+  modal.style.display = "none"; // 隱藏模態框
+}
+
+// 更新車輛狀況表
+function updateStatusTable() {
+  const tableBody = document.getElementById("statusTable");
+  tableBody.innerHTML = ""; // 清空表格內容
+
+  // 從試算表載入資料並更新表格
+  const carLocations = loadCarLocationsFromSheet();
+  Object.keys(carLocations).forEach(carNumber => {
+    const carInfo = carLocations[carNumber];
+
+    const row = document.createElement("tr");
+
+    // 顯示位置名稱
+    const locationCell = document.createElement("td");
+    locationCell.textContent = carInfo.locationName;
+    row.appendChild(locationCell);
+
+    // 顯示車號
+    const carNumberCell = document.createElement("td");
+    carNumberCell.textContent = carNumber;
+    row.appendChild(carNumberCell);
+
+    // 顯示總數（固定為1）
+    const totalCell = document.createElement("td");
+    totalCell.textContent = "1";
+    row.appendChild(totalCell);
+
+    tableBody.appendChild(row);
+  });
+}
+
+// 清除所有車號
+function clearCarNumbers() {
+  const tableBody = document.getElementById("statusTable");
+  tableBody.innerHTML = ""; // 清空所有表格資料
+}
+
+
+// 讀取試算表的車號資料範圍並返回位置資料
+// 這部分改用 Google Apps Script 載入，這裡只需發送請求
+function loadCarLocationsFromSheet() {
+  let carLocations;
+
+  google.script.run.withSuccessHandler(function(data){
+    carLocations = data;
+  }).getCarLocations();
+  return carLocations
+}// 初始化 Google Map
+function initMap() {
     const map = new google.maps.Map(document.getElementById('map'), {
                 center: { lat: 24.8940207, lng: 121.2095940 },
                 zoom: 17,
