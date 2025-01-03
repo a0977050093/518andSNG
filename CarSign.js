@@ -48,7 +48,6 @@ function loadCarNumbersToInitialArea() {
   return carNumbers; // 返回車號列表
 }
 
-// 提交車號與位置資料
 function submitCarLocation() {
     const carNumber = document.getElementById('carNumbers').value;
     const location = document.getElementById('locations').value;
@@ -78,13 +77,9 @@ function submitCarLocation() {
         return;
     }
 
-    // 在地圖上添加標記
-    addMarker(carLocation.lat, carLocation.lng, carNumber);
-
-    // 儲存車號及其位置
-    saveCarLocationToSheet(carNumber, location, carLocation.lat, carLocation.lng);
-
-    updateStatusTable(); // 更新狀態表
+    // 儲存車號與位置到試算表
+    google.script.run.saveCarLocation(carNumber, location, carLocation.lat, carLocation.lng);
+    getStatus();  // 更新車況顯示
 }
 
 // 顯示車況狀態
