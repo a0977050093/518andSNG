@@ -175,3 +175,33 @@ function saveCarLocationToSheet(carNumber, location, lat, lng) {
         }
     }
 }
+
+// 設定試算表ID與工作表名稱
+const SPREADSHEET_ID = '102931833145714831502'; // 試算表 ID
+const SHEET_NAME = 'locastatus'; // 試算表名稱
+
+// 讀取車號位置
+function getCarLocations() {
+  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
+  const data = sheet.getDataRange().getValues();
+  
+  const locations = {};
+  data.forEach(row => {
+    const location = row[0]; // 假設位置在第一列
+    const carNumber = row[1]; // 假設車號在第二列
+    if (!locations[location]) {
+      locations[location] = [];
+    }
+    locations[location].push(carNumber);
+  });
+  
+  return locations;
+}
+
+// 儲存車號與位置
+function saveCarLocation(carNumber, location, lat, lng) {
+  const sheet = SpreadsheetApp.openById(SPREADSHEET_ID).getSheetByName(SHEET_NAME);
+  
+  // 儲存車號資料到試算表
+  sheet.appendRow([location, carNumber, lat, lng]);
+}
