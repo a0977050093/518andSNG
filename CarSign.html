@@ -84,7 +84,11 @@
     </div>
 
     <script>
-    
+      // 確保在頁面加載完成後執行
+    window.onload = function() {
+      loadCarNumbersToInitialArea();  // 在頁面加載時執行步驟二
+    };
+        
   document.addEventListener("DOMContentLoaded", () => {
     initMap(); // 確保在 DOM 準備好後執行初始化
   });
