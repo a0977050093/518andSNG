@@ -1,6 +1,17 @@
 let map;
 let markers = {}; // 用來儲存標記
-const carLocations = {}; // 用來儲存車號位置
+let carLocations = {}; // 用來儲存車號位置
+const locationsRanges = {
+    '二級廠': 'E6:G13',
+    'OK鋼棚': 'B26:D33',
+    '連側鋼棚': 'B37:D44',
+    '無線電鋼棚': 'G50:I57',
+    '陸區鋼棚': 'J50:L57',
+    '風雨走廊': 'M28:O35',
+    '玄捷鋼棚': 'M44:O51',
+    '待安置車號': 'N5:P19',
+    '初始車號區域': 'B54:D68'
+};
 
 // 初始化地圖
 function initMap() {
@@ -9,6 +20,43 @@ function initMap() {
         zoom: 17,
         mapTypeId: google.maps.MapTypeId.SATELLITE
     });
+
+    // 加載之前的車號資料
+    loadCarLocationsFromSheet();
+}
+
+// 從試算表中加載車號位置
+function loadCarLocationsFromSheet() {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('locastatus');
+    
+    // 遍歷每個區域
+    for (let location in locationsRanges) {
+        const range = locationsRanges[location];
+        const locationRange = sheet.getRange(range);
+        const values = locationRange.getValues();
+
+        // 讀取每個車號位置
+        for (let i = 0; i < values.length; i++) {
+            const carNumber = values[i][0];
+            const lat = values[i][1];
+            const lng = values[i][2];
+
+            if (carNumber && lat && lng) {
+                // 儲存車號位置
+                carLocations[carNumber] = {
+                    locationName: location,
+                    lat: lat,
+                    lng: lng
+                };
+
+                // 在地圖上添加標記
+                addMarker(lat, lng, carNumber);
+            }
+        }
+    }
+
+    // 更新狀態表
+    updateStatusTable();
 }
 
 // 提交車輛位置
@@ -50,6 +98,9 @@ function submitCarLocation() {
         lat: carLocation.lat,
         lng: carLocation.lng
     };
+
+    // 儲存到 Google 試算表
+    saveToSheet(carNumber, location, carLocation.lat, carLocation.lng);
 
     updateStatusTable();
 }
@@ -115,6 +166,27 @@ function updateStatusTable() {
     });
 }
 
+// 儲存車號資料到 Google 試算表
+function saveToSheet(carNumber, location, lat, lng) {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('locastatus'); // 使用 'locastatus' 試算表名稱
+    const range = locationsRanges[location];
+
+    if (range) {
+        const locationRange = sheet.getRange(range);
+        const values = locationRange.getValues();
+
+        // 尋找空位並將車號與位置資料寫入
+        for (let i = 0; i < values.length; i++) {
+            if (!values[i][0]) { // 找到第一個空位
+                locationRange.getCell(i + 1, 1).setValue(carNumber);
+                locationRange.getCell(i + 1, 2).setValue(lat);
+                locationRange.getCell(i + 1, 3).setValue(lng);
+                break;
+            }
+        }
+    }
+}
+
 // 清除車號
 function clearCarNumbers() {
     const password = prompt("請輸入密碼以清除所有車號");
@@ -132,5 +204,26 @@ function clearCarNumbers() {
     markers = {};
     carLocations = {};
 
+    // 清除 Google 試算表中的車號資料
+    clearCarNumbersInSheet();
+
     updateStatusTable();
+}
+
+// 清除 Google 試算表中的車號資料
+function clearCarNumbersInSheet() {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('locastatus');
+    for (let location in locationsRanges) {
+        const range = locationsRanges[location];
+        const locationRange = sheet.getRange(range);
+        const values = locationRange.getValues();
+
+        // 清除範圍內的所有車號資料
+        for (let i = 0; i < values.length; i++) {
+            locationRange.getCell(i + 1, 1).setValue(""); // 清空車號欄
+            locationRange.getCell(i + 1, 2).setValue(""); // 清空緯度
+            locationRange.getCell(i + 1, 3).setValue(""); // 清空經度
+        }
+    }
+    Logger.log("所有車號資料已清除。");
 }
