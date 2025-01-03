@@ -10,6 +10,44 @@ function initMap() {
     loadCarLocationsFromSheet();
 }
 
+// 步驟二：把車號丟至初始放置區
+function loadCarNumbersToInitialArea() {
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('locastatus');
+  const carRange = sheet.getRange('B54:D68'); // 目標範圍
+  const carNumbers = carRange.getValues().flat().filter(car => car !== ''); // 取得並過濾掉空白車號
+
+  Logger.log('從 carNumbers 取得的初始車號:');
+  Logger.log(carNumbers); // 顯示從 carNumbers 取得的車號
+
+  // 若沒有車號則記錄並結束函式
+  if (carNumbers.length === 0) {
+    Logger.log('範圍中沒有車號可處理');
+    carRange.clearContent(); // 清空範圍
+    return [];
+  }
+
+  const rows = Math.ceil(carNumbers.length / 3); // B、C、D欄分三列
+  const data = [];
+
+  // 將車號整理成符合範圍的陣列格式
+  for (let i = 0; i < rows; i++) {
+    const row = carNumbers.slice(i * 3, i * 3 + 3); // 每列最多 3 個車號
+    data.push(row);
+  }
+
+  Logger.log('準備插入的資料:');
+  Logger.log(data); // 顯示準備插入的資料
+
+  // 清空 B54:D68 範圍的資料
+  carRange.clearContent();
+
+  // 插入資料到 B54:D68
+  sheet.getRange(54, 2, data.length, 3).setValues(data);
+
+  Logger.log('資料成功插入至初始放置區');
+  return carNumbers; // 返回車號列表
+}
+
 // 提交車號與位置資料
 function submitCarLocation() {
     const carNumber = document.getElementById('carNumbers').value;
