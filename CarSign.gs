@@ -1,8 +1,9 @@
 // 初始化 Google Map
 function initMap() {
-    const map = new google.maps.Map(document.getElementById("map"), {
-        zoom: 16,
-        center: { lat: 24.8953731, lng: 121.2110354 },
+    const map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: 24.8940207, lng: 121.2095940 },
+                zoom: 17,
+                mapTypeId: google.maps.MapTypeId.SATELLITE
     });
 
     // 載入試算表車號資料
