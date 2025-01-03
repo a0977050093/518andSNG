@@ -83,7 +83,14 @@
         <div id="map"></div>
     </div>
 
-    <!-- 引入外部 JavaScript 文件 -->
+    <script>
+    
+  document.addEventListener("DOMContentLoaded", () => {
+    initMap(); // 確保在 DOM 準備好後執行初始化
+  });
+    
+</script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbPe0HVpOt6UHD47PFyRaAqF1CIzK__2U&callback=initMap" async defer></script>
     <script src="CarSign.gs"></script>
 </body>
 </html>
