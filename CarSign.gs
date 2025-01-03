@@ -1,17 +1,15 @@
-let map;
-let markers = {}; // 用來儲存標記
-const carLocations = {}; // 用來儲存車號位置
-
-// 初始化地圖
+// 初始化 Google Map
 function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: 24.8940207, lng: 121.2095940 },
-        zoom: 17,
-        mapTypeId: google.maps.MapTypeId.SATELLITE
+    const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 16,
+        center: { lat: 24.8953731, lng: 121.2110354 },
     });
+
+    // 載入試算表車號資料
+    loadCarLocationsFromSheet();
 }
 
-// 提交車輛位置
+// 提交車號與位置資料
 function submitCarLocation() {
     const carNumber = document.getElementById('carNumbers').value;
     const location = document.getElementById('locations').value;
@@ -24,7 +22,6 @@ function submitCarLocation() {
         return;
     }
 
-    // 定義車輛位置
     const locations = {
         "二級廠": { lat: 24.8953731, lng: 121.2110354 },
         "OK鋼棚": { lat: 24.8955410, lng: 121.2094455 },
@@ -42,39 +39,16 @@ function submitCarLocation() {
         return;
     }
 
-    // 檢查車號是否已存在
-    if (carLocations[carNumber]) {
-        alert("此車號已經存在於地圖上。");
-        return;
-    }
-
     // 在地圖上添加標記
     addMarker(carLocation.lat, carLocation.lng, carNumber);
 
     // 儲存車號及其位置
-    carLocations[carNumber] = {
-        locationName: location, // 儲存名稱
-        lat: carLocation.lat,
-        lng: carLocation.lng
-    };
+    saveCarLocationToSheet(carNumber, location, carLocation.lat, carLocation.lng);
 
-    updateStatusTable();
+    updateStatusTable(); // 更新狀態表
 }
 
-// 添加標記
-function addMarker(lat, lng, title) {
-    if (markers[title]) {
-        markers[title].setMap(null); // 移除已存在的標記
-    }
-
-    markers[title] = new google.maps.Marker({
-        position: { lat, lng },
-        map: map,
-        title: title
-    });
-}
-
-// 顯示狀況
+// 顯示車況狀態
 function showStatus() {
     const modal = document.getElementById("modal");
     modal.style.display = "flex"; // 顯示模態框
@@ -87,19 +61,13 @@ function closeModal() {
     modal.style.display = "none"; // 隱藏模態框
 }
 
-// 點擊模態框外部時不關閉
-document.getElementById("modal").addEventListener("click", function (event) {
-    if (event.target === document.getElementById("modal-content")) {
-        return; // 避免誤觸背景時關閉模態框
-    }
-    closeModal(); // 點擊背景以外的地方才執行關閉
-});
-
-// 更新狀況表
+// 更新車輛狀況表
 function updateStatusTable() {
     const tableBody = document.getElementById("statusTable");
     tableBody.innerHTML = ""; // 清空表格內容
 
+    // 從試算表載入資料並更新表格
+    const carLocations = loadCarLocationsFromSheet();
     Object.keys(carLocations).forEach(carNumber => {
         const carInfo = carLocations[carNumber];
 
@@ -115,7 +83,7 @@ function updateStatusTable() {
         carNumberCell.textContent = carNumber;
         row.appendChild(carNumberCell);
 
-        // 顯示總數（固定為1，此處可以根據需求調整）
+        // 顯示總數（固定為1）
         const totalCell = document.createElement("td");
         totalCell.textContent = "1";
         row.appendChild(totalCell);
@@ -124,61 +92,86 @@ function updateStatusTable() {
     });
 }
 
-// 清除車號
+// 清除所有車號
 function clearCarNumbers() {
-    const password = prompt("請輸入密碼以清除所有車號");
-    const correctPassword = "348362";
+    const tableBody = document.getElementById("statusTable");
+    tableBody.innerHTML = ""; // 清空所有表格資料
+}
 
-    if (password !== correctPassword) {
-        alert("密碼錯誤，無法清除車號。");
-        return;
+// 讀取試算表的車號資料範圍並返回位置資料
+function loadCarLocationsFromSheet() {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('locastatus');
+    const areas = {
+        '二級廠': 'E6:G13',
+        'OK鋼棚': 'B26:D33',
+        '連側鋼棚': 'B37:D44',
+        '無線電鋼棚': 'G50:I57',
+        '陸區鋼棚': 'J50:L57',
+        '風雨走廊': 'M28:O35',
+        '玄捷鋼棚': 'M44:O51',
+        '待安置車號': 'N5:P19',
+        '初始車號區域': 'B54:D68'
+    };
+
+    const carLocations = {};  // 儲存車號位置的物件
+
+    // 遍歷各個區域，讀取試算表資料
+    for (const [locationName, range] of Object.entries(areas)) {
+        const data = sheet.getRange(range).getValues();
+        
+        // 解析每個區域中的資料
+        data.forEach(row => {
+            const carNumber = row[0];  // 車號
+            if (carNumber) {
+                carLocations[carNumber] = {
+                    locationName: locationName, // 儲存位置名稱
+                    lat: row[1],  // 緯度
+                    lng: row[2]   // 經度
+                };
+            }
+        });
     }
 
-    Object.keys(markers).forEach(carNumber => {
-        markers[carNumber].setMap(null);
+    return carLocations;
+}
+
+// 儲存車號位置到試算表的對應區域
+function saveCarLocationToSheet(carNumber, location, lat, lng) {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('locastatus');
+    const areas = {
+        '二級廠': 'E6:G13',
+        'OK鋼棚': 'B26:D33',
+        '連側鋼棚': 'B37:D44',
+        '無線電鋼棚': 'G50:I57',
+        '陸區鋼棚': 'J50:L57',
+        '風雨走廊': 'M28:O35',
+        '玄捷鋼棚': 'M44:O51',
+        '待安置車號': 'N5:P19',
+        '初始車號區域': 'B54:D68'
+    };
+
+    const range = sheet.getRange(areas[location]);
+    let found = false;
+
+    // 查找車號並更新
+    const data = range.getValues();
+    data.forEach((row, i) => {
+        if (row[0] === carNumber) {
+            sheet.getRange(range.getRow() + i, 2).setValue(lat);
+            sheet.getRange(range.getRow() + i, 3).setValue(lng);
+            found = true;
+        }
     });
 
-    markers = {};
-    for (let carNumber in carLocations) {
-        delete carLocations[carNumber];
-    }
-
-    updateStatusTable();
-}
-
-// 清除指定車號
-function clearSpecificCarNumber() {
-    const carNumber = prompt("請輸入欲清除的車號");
-    if (carNumber && markers[carNumber]) {
-        markers[carNumber].setMap(null); // 移除標記
-        delete markers[carNumber]; // 刪除標記資料
-        delete carLocations[carNumber]; // 刪除車號資料
-        updateStatusTable();
-    } else {
-        alert("無此車號或車號不存在。");
-    }
-}
-
-// 儲存車號位置到 localStorage
-function saveCarLocations() {
-    localStorage.setItem('carLocations', JSON.stringify(carLocations));
-}
-
-// 從 localStorage 載入車號位置
-function loadCarLocations() {
-    const savedLocations = JSON.parse(localStorage.getItem('carLocations'));
-    if (savedLocations) {
-        for (const carNumber in savedLocations) {
-            addMarker(savedLocations[carNumber].lat, savedLocations[carNumber].lng, carNumber);
-            carLocations[carNumber] = savedLocations[carNumber]; // 載入車號位置資料
+    // 若車號未找到，則插入新資料
+    if (!found) {
+        for (let rowIndex = 0; rowIndex < data.length; rowIndex++) {
+            if (!data[rowIndex][0]) {
+                sheet.getRange(range.getRow() + rowIndex, 1).setValue(carNumber);
+                sheet.getRange(range.getRow() + rowIndex, 2).setValue(lat);
+                sheet.getRange(range.getRow() + rowIndex, 3).setValue(lng);
+                break;
+            }
         }
     }
-}
-
-// 透過地圖刷新車號位置
-function refreshCarLocationsOnMap() {
-    Object.keys(carLocations).forEach(carNumber => {
-        const carInfo = carLocations[carNumber];
-        addMarker(carInfo.lat, carInfo.lng, carNumber); // 重置地圖標記
-    });
 }
