@@ -52,14 +52,16 @@ function submitCarLocation() {
     const carNumber = document.getElementById('carNumbers').value;
     const location = document.getElementById('locations').value;
 
+    // 密碼檢查
     const password = prompt("請輸入密碼，系統測試中348362");
     const correctPassword = "348362";
 
     if (password !== correctPassword) {
         alert("密碼錯誤，無法提交車輛位置。");
-        return;
+        return; // 密碼錯誤則停止執行
     }
 
+    // 預設位置資料
     const locations = {
         "二級廠": { lat: 24.8953731, lng: 121.2110354 },
         "OK鋼棚": { lat: 24.8955410, lng: 121.2094455 },
@@ -71,15 +73,21 @@ function submitCarLocation() {
         "待安置車號": { lat: 24.8950000, lng: 121.2090000 }
     };
 
+    // 檢查選擇的地點是否有效
     const carLocation = locations[location];
     if (!carLocation) {
         alert("指定位置無效。");
-        return;
+        return; // 位置無效則停止執行
     }
 
-    // 儲存車號與位置到試算表
+    // 顯示選擇的車號與位置（用來確認資料是否正確）
+    console.log(`車號: ${carNumber}, 位置: ${location}, 經度: ${carLocation.lng}, 緯度: ${carLocation.lat}`);
+
+    // 儲存車號與位置到試算表（呼叫 Google Apps Script）
     google.script.run.saveCarLocation(carNumber, location, carLocation.lat, carLocation.lng);
-    getStatus();  // 更新車況顯示
+
+    // 更新車況顯示
+    getStatus();
 }
 
 // 顯示車況狀態
