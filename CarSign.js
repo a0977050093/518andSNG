@@ -103,24 +103,6 @@ function clearCarNumbers() {
   tableBody.innerHTML = ""; // 清空所有表格資料
 }
 
-// 讀取試算表的車號資料範圍並返回位置資料
-function loadCarLocationsFromSheet() {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("locastatus");
-  if (!sheet) throw new Error("無法找到 locastatus 工作表");
-
-  const dataRange = sheet.getDataRange();
-  const data = dataRange.getValues();
-
-  const carLocations = data.map(row => ({
-    carNumber: row[0], // 假設車號在第一列
-    location: row[1],  // 假設地點在第二列
-    lat: row[2],       // 假設緯度在第三列
-    lng: row[3],       // 假設經度在第四列
-  }));
-
-  return carLocations;
-}
-
 // 更新地圖標記
 function updateMapMarkers(carLocations) {
     // 在這裡實作如何根據 carLocations 資料在地圖上新增或更新標記
