@@ -116,12 +116,23 @@ function loadCarLocationsFromSheet() {
   }
 
 // 儲存車號位置到試算表的對應區域
-function saveCarLocationToSheet(carNumber, location, lat, lng) {
-    google.script.run.saveCarLocationToSheet(carNumber, location, lat, lng);
+function loadCarLocationsFromSheet() {
+  google.script.run
+    .withSuccessHandler(handleCarLocations) // 成功處理程序
+    .withFailureHandler(handleError)       // 錯誤處理程序
+    .loadCarLocationsFromSheet();          // 調用後端函式
 }
 
 // 更新地圖標記
 function updateMapMarkers(carLocations) {
     // 在這裡實作如何根據 carLocations 資料在地圖上新增或更新標記
     console.log("在地圖上更新標記:", carLocations);
+}
+
+function handleCarLocations(data) {
+  console.log("成功獲取車號數據：", data);
+}
+
+function handleError(error) {
+  console.error("發生錯誤：", error);
 }
