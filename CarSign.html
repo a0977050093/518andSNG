@@ -83,6 +83,14 @@
   </div>
 
   <script>
+  // 此處將初始化地圖或其他需要初始化的腳本
+  function initMap() {
+    // 確保這裡的 loadCarLocationsFromSheet 函式名稱與後端一致
+    loadCarLocationsFromSheet(); // 使用google.script.run調用後端函數
+  }
+</script>
+  
+  <script>
     // 確保在頁面加載完成後執行
     window.onload = function() {
       google.script.run
