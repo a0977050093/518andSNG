@@ -105,22 +105,20 @@ function clearCarNumbers() {
 
 // 讀取試算表的車號資料範圍並返回位置資料
 function loadCarLocationsFromSheet() {
-    // 呼叫 Google Apps Script 取得資料
-    google.script.run.withSuccessHandler(function(carLocations){
-      //處理從 Google Apps Script 返回的 carLocations 資料
-      updateMapMarkers(carLocations);
-      updateStatusTable(carLocations);
-      // 
-      console.log("從 Apps Script 返回的車輛資料:", carLocations);
-    }).loadCarLocationsFromSheet();
-  }
+  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("locastatus");
+  if (!sheet) throw new Error("無法找到 locastatus 工作表");
 
-// 儲存車號位置到試算表的對應區域
-function loadCarLocationsFromSheet() {
-  google.script.run
-    .withSuccessHandler(handleCarLocations) // 成功處理程序
-    .withFailureHandler(handleError)       // 錯誤處理程序
-    .loadCarLocationsFromSheet();          // 調用後端函式
+  const dataRange = sheet.getDataRange();
+  const data = dataRange.getValues();
+
+  const carLocations = data.map(row => ({
+    carNumber: row[0], // 假設車號在第一列
+    location: row[1],  // 假設地點在第二列
+    lat: row[2],       // 假設緯度在第三列
+    lng: row[3],       // 假設經度在第四列
+  }));
+
+  return carLocations;
 }
 
 // 更新地圖標記
