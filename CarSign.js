@@ -116,3 +116,18 @@ function handleCarLocations(data) {
 function handleError(error) {
   console.error("發生錯誤：", error);
 }
+
+function loadCarLocationsFromSheet() {
+  
+const locations = {
+        "二級廠": { lat: 24.8953731, lng: 121.2110354 },
+        "OK鋼棚": { lat: 24.8955410, lng: 121.2094455 },
+        "連側鋼棚": { lat: 24.8955352, lng: 121.2088128 },
+        "無線電鋼棚": { lat: 24.8942494, lng: 121.2084913 },
+        "陸區鋼棚": { lat: 24.8936913, lng: 121.2085201 },
+        "玄捷鋼棚": { lat: 24.8933285, lng: 121.2084722 },
+        "風雨走廊": { lat: 24.8926953, lng: 121.2099437 },
+        "待安置車號": { lat: 24.8950000, lng: 121.2090000 },
+    }; 
+  return ;
+}
