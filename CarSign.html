@@ -87,8 +87,9 @@
 <script type="module">
 // Firebase 初始化
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
-import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
+import { getFirestore, doc, setDoc, collection, getDocs, writeBatch, deleteDoc } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
 
+// Firebase 配置
 const firebaseConfig = {
   apiKey: "AIzaSyBv-DYm4c4l9Dn-o7ME4TnI92YsCpss1nM",
   authDomain: "carsign-423fc.firebaseapp.com",
@@ -103,11 +104,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// 初始化地圖
+// 地圖與標記儲存
 let map;
-let markers = {}; // 用來儲存標記
-const carLocations = {}; // 用來儲存車號位置
+let markers = {};  // 儲存地圖標記
+const carLocations = {}; // 儲存車輛位置
 
+// 初始化地圖
 window.initMap = function() {
   map = new google.maps.Map(document.getElementById('map'), {
     center: { lat: 24.8940207, lng: 121.2095940 },
@@ -116,8 +118,6 @@ window.initMap = function() {
   });
 }
 
-</script>
-<script type="module">
 // 提交車輛位置
 function submitCarLocation() {
   const carNumber = document.getElementById('carNumbers').value;
@@ -147,9 +147,7 @@ function submitCarLocation() {
     alert("指定位置無效。");
     return;
   }
-</script>
 
-<script type="module">
   // 儲存車號資料到 Firestore
   const carRef = doc(db, "carLocations", carNumber);
   setDoc(carRef, {
@@ -169,54 +167,7 @@ function submitCarLocation() {
       console.error(error);
     });
 }
-</script>
 
-<script type="module">
-// 顯示車況
-async function showStatus() {
-    const modal = document.getElementById("modal");
-    modal.style.display = "block"; // 顯示模態框
-
-    try {
-        const carRef = collection(db, "carLocations"); // Firestore 集合名稱
-        const snapshot = await getDocs(carRef);
-
-        let carLocations = {}; // 使用 let 讓它可以重新賦值
-
-        snapshot.forEach(doc => {
-            const data = doc.data();
-            // 把資料加入 carLocations 物件
-            carLocations[data.carNumber] = {
-                locationName: data.locationName,
-                lat: data.lat,
-                lng: data.lng
-            };
-        });
-
-        // 檢查 carLocations 是否為有效對象
-        if (carLocations && typeof carLocations === "object") {
-            updateStatusTable(carLocations); // 更新車況表格
-        } else {
-            alert("無法讀取車輛資料");
-        }
-
-    } catch (error) {
-        alert("無法讀取車輛資料，請檢查 Firebase 配置。");
-        console.error(error);
-    }
-}
-</script>
-
-<script type="module">
-// 更新車況顯示表格
-function updateStatusTable(carLocations) { // 改為傳入 carLocations 參數
-    const tableBody = document.getElementById("statusTable");
-    tableBody.innerHTML = ""; // 清空表格
-
-    const fragment = document.createDocumentFragment();
-    
-    // 確保 carLocations 物件存在且有資料
-    if (carLocations && Object.keys(carLocations).length === 0) {
 // 顯示車況
 async function showStatus() {
     const modal = document.getElementById("modal");
@@ -251,23 +202,35 @@ async function showStatus() {
         console.error(error);
     }
 }
-</script>
 
-<script type="module">
+// 更新車況顯示表格
+function updateStatusTable(carLocations) {
+    const tableBody = document.getElementById("statusTable");
+    tableBody.innerHTML = ""; // 清空表格
+
+    const fragment = document.createDocumentFragment();
+
+    if (carLocations) {
+        Object.entries(carLocations).forEach(([carNumber, { locationName, lat, lng }]) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${locationName}</td>
+                <td>${carNumber}</td>
+                <td>1</td>
+            `;
+            fragment.appendChild(row);
+        });
+    }
+
+    tableBody.appendChild(fragment);
+}
+
 // 關閉車況顯示
 function closeModal() {
   document.getElementById('modal').style.display = 'none';
 }
-</script>
 
-  
-<script type = "module">
 // 清除所有車號
-import { collection, getDocs, writeBatch, deleteDoc } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
-</script>
-
-
-<script type="module">
 function clearCarNumbers() {
     const password = prompt("請輸入密碼以清除所有車號");
     const correctPassword = "348362";
@@ -303,9 +266,7 @@ function clearCarNumbers() {
         console.error(error);
     });
 }
-</script>
 
-<script type="module">
 // 添加標記到地圖
 function addMarker(lat, lng, title) {
     if (markers[title]) {
@@ -325,27 +286,26 @@ function addMarker(lat, lng, title) {
     markers[title] = marker;
 }
 
-  // 掛載地圖初始化函數到全域範圍
+// 掛載地圖初始化函數到全域範圍
 window.initMap = initMap;
-
-// 掛載其他全域函數
 window.submitCarLocation = submitCarLocation;
 window.showStatus = showStatus;
 window.closeModal = closeModal;
 window.clearCarNumbers = clearCarNumbers;
-
 </script>
 
 <script type="module">
+  // 加載 Google 地圖 API
   document.addEventListener("DOMContentLoaded", () => {
     const script = document.createElement("script");
-    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAbPe0HVpOt6UHD47PFyRaAqF1CIzK__2U&callback=initMap";  // 用你的 API Key 替換
+    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyAbPe0HVpOt6UHD47PFyRaAqF1CIzK__2U&callback=initMap";  
     script.async = true;
     script.defer = true;
     document.body.appendChild(script);
   });
 </script>
-  <script type="module" src="CarSign.js"></script>
+
+<script type="module" src="CarSign.js"></script>
 
 </body>
 </html>
