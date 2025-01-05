@@ -210,7 +210,7 @@ function updateStatusTable(carLocations) {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${locationName}</td>
-                <td>--</td> <!-- 這裡顯示車號會是未來要補上的車號資料 -->
+                <td>${carNumber}</td> <!-- 這裡顯示車號會是未來要補上的車號資料 -->
                 <td>${carCount}</td> <!-- 顯示每個位置的車輛數量 -->
             `;
             fragment.appendChild(row);
