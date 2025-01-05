@@ -385,3 +385,9 @@ form button {
 form button:hover {
     background-color: #555; /* 懸停時稍微加深顏色 */
 }
+
+#statusTable {
+    max-height: 400px;
+    overflow-y: auto;
+    display: block;
+}
