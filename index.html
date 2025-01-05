@@ -13,6 +13,7 @@
     <div class="container">
         <h1>微波一排大秘寶</h1>
 
+        <!-- 標籤切換區 -->
         <nav class="tabs">
             <button class="tab active" data-tab="1"><i class="fas fa-calendar-check"></i> 提早假</button>
             <button class="tab" data-tab="2"><i class="fas fa-tools"></i> 保養編組</button>
@@ -21,31 +22,41 @@
             <button class="tab" data-tab="5"><i class="fas fa-tshirt"></i> 慰勞服裝</button>
         </nav>
 
+        <!-- 標籤內容區 -->
         <div class="tab-contents">
+            <!-- Tab 1 -->
             <div class="tab-content active" id="tab-1">
                 <div class="content-wrapper">
                     <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=188349276&single=true"></iframe>
                     <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
                 </div>
             </div>
+
+            <!-- Tab 2 -->
             <div class="tab-content" id="tab-2">
                <div class="content-wrapper">
                     <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=1117875532&single=true"></iframe>
                     <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
                </div>
             </div>
+
+            <!-- Tab 3 -->
             <div class="tab-content" id="tab-3">
                 <div class="content-wrapper">
                     <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vSjbB1aemn--nVrSMINmHeSWJCyVlN4bF-CNkdGhceg_KyZb04BNg7uyArO3DgmORvuqcGmSm-fRO0S/pubhtml?gid=1060859970&single=true"></iframe>
                     <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
                 </div>
             </div>
+
+            <!-- Tab 4 -->
             <div class="tab-content" id="tab-4">
                 <div class="content-wrapper">
                     <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=865756627&single=true"></iframe>
                     <button class="expand-button"><i class="fas fa-expand"></i> 全螢幕觀看</button>
                 </div>
             </div>
+
+            <!-- Tab 5 -->
             <div class="tab-content" id="tab-5">
                <div class="content-wrapper">
                     <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vT7lMjt7GXFmoftR8YwssRS9467I5uRdq64amyYrdZ94iGYbhE5NPeSzJcBVcTfEDUVEWJw1aGObpaE/pubhtml?gid=982598890&single=true"></iframe>
@@ -54,11 +65,9 @@
             </div>
         </div>
 
+        <!-- 其他按鈕 -->
         <button class="button" onclick="window.location.href='https://line.me/ti/g2/dBA4pHk1zV_2QpeI30FK8OUsqQ-RzXksCa1L8Q?utm_source=invitation&utm_medium=link_copy&utm_campaign=default'">加入我們</button>
-
-        <button id="darkModeToggle" class="dark-mode-button">
-            <i class="fas fa-moon"></i> 夜間模式
-        </button>
+        <button id="darkModeToggle" class="dark-mode-button"><i class="fas fa-moon"></i> 夜間模式</button>
     </div>
 
     <!-- 全螢幕彈出視窗 -->
@@ -68,6 +77,7 @@
             <iframe id="modal-iframe" src="" frameborder="0"></iframe>
         </div>
     </div>
+
     <script src="script.js"></script>
 </body>
 </html>
