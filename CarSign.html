@@ -75,7 +75,7 @@
           </thead>
           <tbody id="statusTable"></tbody>
         </table>
-        <button type="button" id="submitBtn">關閉</button>
+        <button type="button" onclick="closeModal()">關閉</button>
         <button type="button" onclick="clearCarNumbers()">清除所有車號</button>
       </div>
     </div>
@@ -169,35 +169,62 @@ function submitCarLocation() {
 // 更新車況顯示
 function updateStatusTable() {
     const tableBody = document.getElementById("statusTable");
-    tableBody.innerHTML = "";
+    tableBody.innerHTML = ""; // 清空表格內容
 
-    const fragment = document.createDocumentFragment();
+    const fragment = document.createDocumentFragment(); // 優化 DOM 操作
     Object.keys(carLocations).forEach(carNumber => {
         const carInfo = carLocations[carNumber];
 
         const row = document.createElement("tr");
 
+        // 顯示位置
         const locationCell = document.createElement("td");
-        locationCell.textContent = carInfo.locationName;
+        locationCell.textContent = carInfo.locationName || "未知";
         row.appendChild(locationCell);
 
+        // 顯示車號
         const carNumberCell = document.createElement("td");
         carNumberCell.textContent = carNumber;
         row.appendChild(carNumberCell);
 
+        // 顯示總數
         const totalCell = document.createElement("td");
-        totalCell.textContent = "1"; // 如果有需要可以更新總數
+        totalCell.textContent = "1"; // 如需累加，需額外處理
         row.appendChild(totalCell);
 
         fragment.appendChild(row);
     });
 
-    tableBody.appendChild(fragment);
+    tableBody.appendChild(fragment); // 一次性更新表格內容
 }
 
 // 顯示車況
-function showStatus() {
-  document.getElementById('modal').style.display = 'block';
+import { getDocs, collection } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
+
+async function showStatus() {
+    const modal = document.getElementById("modal");
+    modal.style.display = "block"; // 顯示模態框
+
+    try {
+        const carRef = collection(db, "carLocations"); // Firestore 集合名稱
+        const snapshot = await getDocs(carRef);
+
+        carLocations = {}; // 清空舊資料
+
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            carLocations[data.carNumber] = {
+                locationName: data.locationName,
+                lat: data.lat,
+                lng: data.lng
+            };
+        });
+
+        updateStatusTable(); // 更新車況表格
+    } catch (error) {
+        alert("無法讀取車輛資料，請檢查 Firebase 配置。");
+        console.error(error);
+    }
 }
 
 // 關閉車況顯示
