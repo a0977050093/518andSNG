@@ -187,7 +187,13 @@ async function showStatus() {
             };
         });
 
-        updateStatusTable(carLocations); // 更新車況表格
+        // 檢查 carLocations 是否為有效對象
+        if (carLocations && typeof carLocations === "object") {
+            updateStatusTable(carLocations); // 更新車況表格
+        } else {
+            alert("無法讀取車輛資料");
+        }
+
     } catch (error) {
         alert("無法讀取車輛資料，請檢查 Firebase 配置。");
         console.error(error);
@@ -202,7 +208,7 @@ function updateStatusTable(carLocations) { // 改為傳入 carLocations 參數
     const fragment = document.createDocumentFragment();
     
     // 確保 carLocations 物件存在且有資料
-    if (Object.keys(carLocations).length === 0) {
+    if (carLocations && Object.keys(carLocations).length === 0) {
         const row = document.createElement("tr");
         const emptyCell = document.createElement("td");
         emptyCell.setAttribute("colspan", "3");
