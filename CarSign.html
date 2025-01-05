@@ -84,24 +84,21 @@
     <div id="map"></div>
   </div>
 
-
 <script type="module">
 // 初始化地圖
 let map;
 let markers = {}; // 用來儲存標記
 const carLocations = {}; // 用來儲存車號位置
-  
-  window.initMap = function() {
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: { lat: 24.8940207, lng: 121.2095940 },
-        zoom: 17,
-        mapTypeId: google.maps.MapTypeId.SATELLITE
-    });
-  }
-</script>
 
-<script type="module">
-    // 提交車輛位置
+window.initMap = function() {
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: { lat: 24.8940207, lng: 121.2095940 },
+    zoom: 17,
+    mapTypeId: google.maps.MapTypeId.SATELLITE
+  });
+}
+
+// 提交車輛位置
 import { doc, setDoc, getFirestore } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
 
@@ -168,9 +165,53 @@ function submitCarLocation() {
       console.error(error);
     });
 }
+
+// 更新車況顯示
+function updateStatusTable() {
+  const table = document.getElementById('statusTable');
+  table.innerHTML = ''; // 清空當前內容
+
+  for (const carNumber in carLocations) {
+    const location = carLocations[carNumber];
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>${location.location}</td><td>${carNumber}</td><td>${location.count}</td>`;
+    table.appendChild(row);
+  }
+}
+
+// 顯示車況
+function showStatus() {
+  document.getElementById('modal').style.display = 'block';
+}
+
+// 關閉車況顯示
+function closeModal() {
+  document.getElementById('modal').style.display = 'none';
+}
+
+// 清除所有車號
+function clearCarNumbers() {
+  carLocations = {};
+  updateStatusTable();
+}
+
+// 添加標記到地圖
+function addMarker(lat, lng, carNumber) {
+  if (markers[carNumber]) {
+    markers[carNumber].setMap(null);
+  }
+
+  const marker = new google.maps.Marker({
+    position: { lat, lng },
+    map: map,
+    title: carNumber
+  });
+
+  markers[carNumber] = marker;
+}
+
 </script>
 
-    
 <script type="module">
   document.addEventListener("DOMContentLoaded", () => {
     const script = document.createElement("script");
@@ -180,30 +221,6 @@ function submitCarLocation() {
     document.body.appendChild(script);
   });
 </script>
-  
-  
-  
-  
-  <script type="module">
-  import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
-  import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
 
-  // Firebase 配置
-  const firebaseConfig = {
-    apiKey: "AIzaSyBv-DYm4c4l9Dn-o7ME4TnI92YsCpss1nM",
-    authDomain: "carsign-423fc.firebaseapp.com",
-    projectId: "carsign-423fc",
-    storageBucket: "carsign-423fc.appspot.com",
-    messagingSenderId: "219688439999",
-    appId: "1:219688439999:web:2d4f8646c98bcb76e4360a",
-    measurementId: "G-7FRW6JPXBJ"
-  };
-
-  // 初始化 Firebase
-  const app = initializeApp(firebaseConfig);
-  const db = getFirestore(app);
-</script>
-
-  
 </body>
 </html>
