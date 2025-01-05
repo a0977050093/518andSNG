@@ -208,28 +208,29 @@ function updateStatusTable(data) {
     const tableBody = document.getElementById('statusTable');
     tableBody.innerHTML = ''; // 清空表格
 
-    // 假設 data 是一個包含車號狀況的陣列
-    data.forEach(item => {
+    // 確保 data 是一個包含每個位置資料的物件
+    for (const locationName in data) {
+        const locationData = data[locationName];
         const row = document.createElement('tr');
         
         // 創建並填入位置欄位
         const locationCell = document.createElement('td');
-        locationCell.textContent = item.location; 
+        locationCell.textContent = locationName; 
         row.appendChild(locationCell);
         
         // 創建並填入車號欄位
         const carNumbersCell = document.createElement('td');
-        carNumbersCell.textContent = item.carNumbers.join(', '); // 顯示車號，以逗號分隔
+        carNumbersCell.textContent = locationData.carNumbers.join(', '); // 顯示車號，以逗號分隔
         row.appendChild(carNumbersCell);
         
         // 創建並填入總數欄位
         const totalCell = document.createElement('td');
-        totalCell.textContent = item.carNumbers.length; // 顯示車號總數
+        totalCell.textContent = locationData.count; // 顯示車號總數
         row.appendChild(totalCell);
         
         // 把行加入到表格中
         tableBody.appendChild(row);
-    });
+    }
 }
 
 
