@@ -209,7 +209,8 @@ async function showStatus() {
         const carRef = collection(db, "carLocations"); // Firestore 集合名稱
         const snapshot = await getDocs(carRef);
 
-        carLocations = {}; // 清空舊資料
+        // 清空 carLocations 的屬性，而不是重新賦值
+        Object.keys(carLocations).forEach(key => delete carLocations[key]);
 
         snapshot.forEach(doc => {
             const data = doc.data();
@@ -247,8 +248,10 @@ function clearCarNumbers() {
         markers[carNumber].setMap(null);
     });
 
+    // 清空標記物件
     markers = {}; // 清空標記
-    carLocations = {}; // 清空位置資料
+    // 清空 carLocations 物件的內容
+    Object.keys(carLocations).forEach(key => delete carLocations[key]); // 清空位置資料
 
     // 清空 Firestore 資料
     const carRef = collection(db, "carLocations");
@@ -260,7 +263,7 @@ function clearCarNumbers() {
         return batch.commit();
     }).then(() => {
         alert("所有車號已清除");
-        updateStatusTable();
+        updateStatusTable(); // 更新車況表格
     }).catch(error => {
         alert("清除失敗");
         console.error(error);
