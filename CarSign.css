@@ -40,12 +40,13 @@ table, th, td {
 }
 
 th, td {
-    padding: 10px;
-    text-align: center;
+  padding: 10px;
+  text-align: left; /* 設置文字對齊方式 */
+  border: 1px solid #ddd; /* 邊框設置 */
 }
 
 th {
-    background-color: #444; /* 標題欄背景色 */
+  background-color: #f2f2f2; /* 讓表頭有不同背景顏色 */
 }
 
 tr:nth-child(even) {
