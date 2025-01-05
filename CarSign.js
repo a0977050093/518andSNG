@@ -1,6 +1,6 @@
 let map;
-let markers = {}; // 用來儲存標記
-const carLocations = {}; // 用來儲存車號位置
+let markers = {}; // 儲存地圖標記
+let carLocations = {}; // 儲存車號位置
 
 // 初始化地圖
 function initMap() {
@@ -41,12 +41,12 @@ function submitCarLocation() {
         return;
     }
 
-    // 在地圖上添加標記
+    // 添加標記
     addMarker(carLocation.lat, carLocation.lng, carNumber);
 
-    // 儲存車號及其位置
+    // 儲存車號及位置
     carLocations[carNumber] = {
-        locationName: location, // 儲存名稱
+        locationName: location, 
         lat: carLocation.lat,
         lng: carLocation.lng
     };
@@ -67,46 +67,45 @@ function addMarker(lat, lng, title) {
     });
 }
 
+// 顯示狀況表
 function showStatus() {
     const modal = document.getElementById("modal");
     modal.style.display = "flex"; // 顯示模態框
-    updateStatusTable(); // 更新狀態表
+    updateStatusTable();
 }
 
+// 關閉模態框
 function closeModal() {
     const modal = document.getElementById("modal");
-    modal.style.display = "none"; // 隱藏模態框
+    modal.style.display = "none";
 }
 
-// 點擊模態框外部時不關閉
+// 避免誤觸背景關閉
 document.getElementById("modal").addEventListener("click", function (event) {
     if (event.target === document.getElementById("modal-content")) {
-        return; // 避免誤觸背景時關閉模態框
+        return;
     }
-    closeModal(); // 點擊背景以外的地方才執行關閉
+    closeModal();
 });
 
-// 更新狀況表
+// 更新車輛狀況表
 function updateStatusTable() {
     const tableBody = document.getElementById("statusTable");
-    tableBody.innerHTML = ""; // 清空表格內容
+    tableBody.innerHTML = "";
 
     Object.keys(carLocations).forEach(carNumber => {
         const carInfo = carLocations[carNumber];
 
         const row = document.createElement("tr");
 
-        // 顯示位置名稱
         const locationCell = document.createElement("td");
         locationCell.textContent = carInfo.locationName;
         row.appendChild(locationCell);
 
-        // 顯示車號
         const carNumberCell = document.createElement("td");
         carNumberCell.textContent = carNumber;
         row.appendChild(carNumberCell);
 
-        // 顯示總數（固定為1，此處可以根據需求調整）
         const totalCell = document.createElement("td");
         totalCell.textContent = "1";
         row.appendChild(totalCell);
@@ -115,7 +114,7 @@ function updateStatusTable() {
     });
 }
 
-// 清除車號
+// 清除所有車號
 function clearCarNumbers() {
     const password = prompt("請輸入密碼以清除所有車號");
     const correctPassword = "348362";
@@ -125,12 +124,13 @@ function clearCarNumbers() {
         return;
     }
 
+    // 清除標記
     Object.keys(markers).forEach(carNumber => {
         markers[carNumber].setMap(null);
     });
 
-    markers = {};
-    carLocations = {};
+    markers = {}; // 清空標記
+    carLocations = {}; // 清空位置資料
 
     updateStatusTable();
 }
