@@ -108,12 +108,14 @@
   
   <script>
     // 確保在頁面加載完成後執行
-    window.onload = function() {
-      google.script.run
-    .withSuccessHandler(() => alert("提交成功！"))
-    .withFailureHandler(error => alert("提交失敗：" + error.message))
-    .saveCarLocation(carNumber, location, carLocation.lat, carLocation.lng); // 在頁面加載時執行步驟二
-    };
+    function saveCarLocation(carNumber, location, lat, lng) {
+  console.log(`車號: ${carNumber}, 位置: ${location}, 經緯度: ${lat}, ${lng}`);
+  alert("模擬提交成功！");
+}
+
+window.onload = function () {
+  saveCarLocation("軍E-21137", "二級廠", 25.033, 121.565);
+};
     
     document.addEventListener("DOMContentLoaded", () => {
       initMap(); // 確保在 DOM 準備好後執行初始化
