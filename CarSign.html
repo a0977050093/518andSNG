@@ -168,39 +168,7 @@ function submitCarLocation() {
 
 // 更新車況顯示
 function updateStatusTable() {
-    const tableBody = document.getElementById("statusTable");
-    tableBody.innerHTML = ""; // 清空表格內容
-
-    const fragment = document.createDocumentFragment(); // 優化 DOM 操作
-    Object.keys(carLocations).forEach(carNumber => {
-        const carInfo = carLocations[carNumber];
-
-        const row = document.createElement("tr");
-
-        // 顯示位置
-        const locationCell = document.createElement("td");
-        locationCell.textContent = carInfo.locationName || "未知";
-        row.appendChild(locationCell);
-
-        // 顯示車號
-        const carNumberCell = document.createElement("td");
-        carNumberCell.textContent = carNumber;
-        row.appendChild(carNumberCell);
-
-        // 顯示總數
-        const totalCell = document.createElement("td");
-        totalCell.textContent = "1"; // 如需累加，需額外處理
-        row.appendChild(totalCell);
-
-        fragment.appendChild(row);
-    });
-
-    tableBody.appendChild(fragment); // 一次性更新表格內容
-}
-
 // 顯示車況
-import { getDocs, collection } from "https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js";
-
 async function showStatus() {
     const modal = document.getElementById("modal");
     modal.style.display = "block"; // 顯示模態框
@@ -209,11 +177,11 @@ async function showStatus() {
         const carRef = collection(db, "carLocations"); // Firestore 集合名稱
         const snapshot = await getDocs(carRef);
 
-        // 清空 carLocations 的屬性，而不是重新賦值
-        Object.keys(carLocations).forEach(key => delete carLocations[key]);
+        carLocations = {}; // 清空舊資料
 
         snapshot.forEach(doc => {
             const data = doc.data();
+            // 把資料加入 carLocations 物件
             carLocations[data.carNumber] = {
                 locationName: data.locationName,
                 lat: data.lat,
@@ -228,12 +196,54 @@ async function showStatus() {
     }
 }
 
+// 更新車況顯示表格
+function updateStatusTable() {
+    const tableBody = document.getElementById("statusTable");
+    tableBody.innerHTML = ""; // 清空表格
+
+    const fragment = document.createDocumentFragment();
+    
+    // 確保 carLocations 物件存在且有資料
+    if (Object.keys(carLocations).length === 0) {
+        const row = document.createElement("tr");
+        const emptyCell = document.createElement("td");
+        emptyCell.setAttribute("colspan", "3");
+        emptyCell.textContent = "目前沒有車輛資料";
+        row.appendChild(emptyCell);
+        fragment.appendChild(row);
+    } else {
+        Object.keys(carLocations).forEach(carNumber => {
+            const carInfo = carLocations[carNumber];
+
+            const row = document.createElement("tr");
+
+            const locationCell = document.createElement("td");
+            locationCell.textContent = carInfo.locationName;
+            row.appendChild(locationCell);
+
+            const carNumberCell = document.createElement("td");
+            carNumberCell.textContent = carNumber;
+            row.appendChild(carNumberCell);
+
+            const totalCell = document.createElement("td");
+            totalCell.textContent = "1"; // 每台車總數為 1
+            row.appendChild(totalCell);
+
+            fragment.appendChild(row);
+        });
+    }
+
+    tableBody.appendChild(fragment); // 添加到表格
+}
+
 // 關閉車況顯示
 function closeModal() {
   document.getElementById('modal').style.display = 'none';
 }
 
 // 清除所有車號
+import { collection, getDocs, writeBatch, deleteDoc } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
+
 function clearCarNumbers() {
     const password = prompt("請輸入密碼以清除所有車號");
     const correctPassword = "348362";
@@ -256,11 +266,11 @@ function clearCarNumbers() {
     // 清空 Firestore 資料
     const carRef = collection(db, "carLocations");
     getDocs(carRef).then(snapshot => {
-        const batch = db.batch();
+        const batch = writeBatch(db);  // 創建批次操作
         snapshot.forEach(doc => {
-            batch.delete(doc.ref);
+            batch.delete(doc.ref); // 用 batch 操作來刪除資料
         });
-        return batch.commit();
+        return batch.commit(); // 提交批次操作
     }).then(() => {
         alert("所有車號已清除");
         updateStatusTable(); // 更新車況表格
