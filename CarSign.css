@@ -1,6 +1,6 @@
 body {
     font-family: 'Courier New', monospace;
-    background-color: #2e2e2e;
+    background-color: #2d3b2f; /* 軍事風的暗綠色背景 */
     color: white;
     margin: 0;
     padding: 20px;
@@ -11,7 +11,7 @@ body {
     top: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #4CAF50;
+    background-color: #556B2F; /* 軍事風的暗綠色 */
     color: white;
     padding: 10px 20px;
     border: none;
@@ -21,12 +21,13 @@ body {
 }
 
 #status-btn:hover {
-    background-color: #45a049;
+    background-color: #4b5320; /* 更深的綠色 */
 }
 
 h2 {
     text-align: center;
     font-size: 24px;
+    color: #c2b97f; /* 軍事風的金色字體 */
 }
 
 table {
@@ -36,25 +37,26 @@ table {
 }
 
 table, th, td {
-    border: 1px solid #ddd;
+    border: 1px solid #444; /* 迷彩風的邊框顏色 */
 }
 
 th, td {
-  padding: 10px;
-  text-align: left; /* 設置文字對齊方式 */
-  border: 1px solid #ddd; /* 邊框設置 */
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #444;
 }
 
 th {
-  background-color: #f2f2f2; /* 讓表頭有不同背景顏色 */
+    background-color: #4b5320; /* 軍事風的綠色表頭 */
+    color: white;
 }
 
 tr:nth-child(even) {
-    background-color: #333;
+    background-color: #3b4d3b; /* 深綠色 */
 }
 
 tr:nth-child(odd) {
-    background-color: #555;
+    background-color: #4d5a47; /* 淺綠色 */
 }
 
 button {
@@ -170,5 +172,58 @@ form button:hover {
 #statusTable {
     max-height: 400px;
     overflow-y: auto;
-    display: block; /* 這裡增加了顯示區域自動滾動的功能 */
+    display: block;
+}
+
+/* 響應式設計 - 針對不同螢幕大小 */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    table, th, td {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    #status-btn {
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    #modal-content {
+        width: 95%;
+    }
+
+    form {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 5px;
+    }
+
+    table, th, td {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    h2 {
+        font-size: 18px;
+    }
+
+    #status-btn {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+
+    #modal-content {
+        width: 90%;
+    }
 }
