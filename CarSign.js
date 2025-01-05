@@ -12,52 +12,70 @@ function initMap() {
 }
 
 // 提交車輛位置
+import { doc, setDoc, getFirestore } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBv-DYm4c4l9Dn-o7ME4TnI92YsCpss1nM",
+  authDomain: "carsign-423fc.firebaseapp.com",
+  projectId: "carsign-423fc",
+  storageBucket: "carsign-423fc.appspot.com",
+  messagingSenderId: "219688439999",
+  appId: "1:219688439999:web:2d4f8646c98bcb76e4360a",
+  measurementId: "G-7FRW6JPXBJ"
+};
+
+// 初始化 Firebase 應用
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// 提交車輛位置
 function submitCarLocation() {
-    const carNumber = document.getElementById('carNumbers').value;
-    const location = document.getElementById('locations').value;
+  const carNumber = document.getElementById('carNumbers').value;
+  const location = document.getElementById('locations').value;
 
-    const password = prompt("請輸入密碼，系統測試中348362");
-    const correctPassword = "348362";
+  const password = prompt("請輸入密碼，系統測試中348362");
+  const correctPassword = "348362";
 
-    if (password !== correctPassword) {
-        alert("密碼錯誤，無法提交車輛位置。");
-        return;
-    }
+  if (password !== correctPassword) {
+    alert("密碼錯誤，無法提交車輛位置。");
+    return;
+  }
 
-    const locations = {
-        "二級廠": { lat: 24.8953731, lng: 121.2110354 },
-        "OK鋼棚": { lat: 24.8955410, lng: 121.2094455 },
-        "連側鋼棚": { lat: 24.8955352, lng: 121.2088128 },
-        "無線電鋼棚": { lat: 24.8942494, lng: 121.2084913 },
-        "陸區鋼棚": { lat: 24.8936913, lng: 121.2085201 },
-        "玄捷鋼棚": { lat: 24.8933285, lng: 121.2084722 },
-        "風雨走廊": { lat: 24.8926953, lng: 121.2099437 },
-        "待安置車號": { lat: 24.8950000, lng: 121.2090000 }
-    };
+  const locations = {
+    "二級廠": { lat: 24.8953731, lng: 121.2110354 },
+    "OK鋼棚": { lat: 24.8955410, lng: 121.2094455 },
+    "連側鋼棚": { lat: 24.8955352, lng: 121.2088128 },
+    "無線電鋼棚": { lat: 24.8942494, lng: 121.2084913 },
+    "陸區鋼棚": { lat: 24.8936913, lng: 121.2085201 },
+    "玄捷鋼棚": { lat: 24.8933285, lng: 121.2084722 },
+    "風雨走廊": { lat: 24.8926953, lng: 121.2099437 },
+    "待安置車號": { lat: 24.8950000, lng: 121.2090000 }
+  };
 
-    const carLocation = locations[location];
-    if (!carLocation) {
-        alert("指定位置無效。");
-        return;
-    }
+  const carLocation = locations[location];
+  if (!carLocation) {
+    alert("指定位置無效。");
+    return;
+  }
 
-    // 儲存車號資料到 Firestore
-    const db = firebase.firestore();
-    db.collection("carLocations").doc(carNumber).set({
-        carNumber: carNumber,
-        locationName: location,
-        lat: carLocation.lat,
-        lng: carLocation.lng
-    })
+  // 儲存車號資料到 Firestore
+  const carRef = doc(db, "carLocations", carNumber);
+  setDoc(carRef, {
+    carNumber: carNumber,
+    locationName: location,
+    lat: carLocation.lat,
+    lng: carLocation.lng
+  })
     .then(() => {
-        alert("車號位置已儲存");
-        // 添加標記到地圖
-        addMarker(carLocation.lat, carLocation.lng, carNumber);
-        updateStatusTable();
+      alert("車號位置已儲存");
+      // 添加標記到地圖
+      addMarker(carLocation.lat, carLocation.lng, carNumber);
+      updateStatusTable();
     })
     .catch((error) => {
-        alert("無法儲存車號資料");
-        console.error(error);
+      alert("無法儲存車號資料");
+      console.error(error);
     });
 }
 
