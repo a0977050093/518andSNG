@@ -177,16 +177,21 @@ async function showStatus() {
         const carRef = collection(db, "carLocations"); // Firestore 集合名稱
         const snapshot = await getDocs(carRef);
 
-        let carLocations = {}; // 用來儲存每個位置的車輛數量
+        let carLocations = {}; // 用來儲存每個位置的車號和數量
 
         snapshot.forEach(doc => {
             const data = doc.data();
             const locationName = data.locationName;
+            const carNumber = data.carNumber; // 取出車號
 
             if (!carLocations[locationName]) {
-                carLocations[locationName] = 0; // 初始化位置的車輛數量
+                carLocations[locationName] = {
+                    carNumbers: [],  // 儲存車號的陣列
+                    count: 0          // 儲存車輛數量
+                };
             }
-            carLocations[locationName]++; // 增加該位置的車輛數量
+            carLocations[locationName].carNumbers.push(carNumber); // 加入車號
+            carLocations[locationName].count++;  // 車輛數量 +1
         });
 
         // 更新車況表格
@@ -206,12 +211,12 @@ function updateStatusTable(carLocations) {
     const fragment = document.createDocumentFragment();
 
     if (carLocations) {
-        Object.entries(carLocations).forEach(([locationName, carCount]) => {
+        Object.entries(carLocations).forEach(([locationName, { carNumbers, count }]) => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${locationName}</td>
-                <td>${carNumber}</td> <!-- 這裡顯示車號會是未來要補上的車號資料 -->
-                <td>${carCount}</td> <!-- 顯示每個位置的車輛數量 -->
+                <td>${carNumbers.join(', ')}</td> <!-- 顯示所有車號 -->
+                <td>${count}</td> <!-- 顯示車輛數量 -->
             `;
             fragment.appendChild(row);
         });
