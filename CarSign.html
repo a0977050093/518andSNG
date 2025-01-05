@@ -215,6 +215,17 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("submitBtn").addEventListener("click", submitCarLocation);
 });
 
+
+
+  // 掛載地圖初始化函數到全域範圍
+window.initMap = initMap;
+
+// 掛載其他全域函數
+window.submitCarLocation = submitCarLocation;
+window.showStatus = showStatus;
+window.closeModal = closeModal;
+window.clearCarNumbers = clearCarNumbers;
+
 </script>
 
 <script type="module">
