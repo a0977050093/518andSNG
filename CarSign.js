@@ -12,9 +12,10 @@ function initMap() {
 }
 
 // 提交車輛位置
-import { doc, setDoc, getFirestore } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
+import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
 
+// Firebase 配置
 const firebaseConfig = {
   apiKey: "AIzaSyBv-DYm4c4l9Dn-o7ME4TnI92YsCpss1nM",
   authDomain: "carsign-423fc.firebaseapp.com",
