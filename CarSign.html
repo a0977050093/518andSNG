@@ -175,7 +175,7 @@ async function showStatus() {
         const carRef = collection(db, "carLocations"); // Firestore 集合名稱
         const snapshot = await getDocs(carRef);
 
-        carLocations = {}; // 清空舊資料
+        let carLocations = {}; // 使用 let 讓它可以重新賦值
 
         snapshot.forEach(doc => {
             const data = doc.data();
@@ -187,7 +187,7 @@ async function showStatus() {
             };
         });
 
-        updateStatusTable(); // 更新車況表格
+        updateStatusTable(carLocations); // 更新車況表格
     } catch (error) {
         alert("無法讀取車輛資料，請檢查 Firebase 配置。");
         console.error(error);
@@ -195,7 +195,7 @@ async function showStatus() {
 }
 
 // 更新車況顯示表格
-function updateStatusTable() {
+function updateStatusTable(carLocations) { // 改為傳入 carLocations 參數
     const tableBody = document.getElementById("statusTable");
     tableBody.innerHTML = ""; // 清空表格
 
