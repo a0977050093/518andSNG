@@ -286,13 +286,6 @@ function addMarker(lat, lng, title) {
     markers[title] = marker;
 }
 
-// 綁定事件
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("submitBtn").addEventListener("click", submitCarLocation);
-});
-
-
-
   // 掛載地圖初始化函數到全域範圍
 window.initMap = initMap;
 
