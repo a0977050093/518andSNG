@@ -177,25 +177,20 @@ async function showStatus() {
         const carRef = collection(db, "carLocations"); // Firestore 集合名稱
         const snapshot = await getDocs(carRef);
 
-        let carLocations = {}; // 使用 let 讓它可以重新賦值
+        let carLocations = {}; // 用來儲存每個位置的車輛數量
 
         snapshot.forEach(doc => {
             const data = doc.data();
-            // 把資料加入 carLocations 物件
-            carLocations[data.carNumber] = {
-                locationName: data.locationName,
-                lat: data.lat,
-                lng: data.lng
-            };
+            const locationName = data.locationName;
+
+            if (!carLocations[locationName]) {
+                carLocations[locationName] = 0; // 初始化位置的車輛數量
+            }
+            carLocations[locationName]++; // 增加該位置的車輛數量
         });
 
-        // 確保 carLocations 為非空物件
-        if (carLocations && Object.keys(carLocations).length > 0) {
-            updateStatusTable(carLocations); // 更新車況表格
-        } else {
-            alert("目前沒有車輛資料");
-            updateStatusTable({}); // 傳遞空對象給表格函數
-        }
+        // 更新車況表格
+        updateStatusTable(carLocations);
 
     } catch (error) {
         alert("無法讀取車輛資料，請檢查 Firebase 配置。");
@@ -211,12 +206,12 @@ function updateStatusTable(carLocations) {
     const fragment = document.createDocumentFragment();
 
     if (carLocations) {
-        Object.entries(carLocations).forEach(([carNumber, { locationName, lat, lng }]) => {
+        Object.entries(carLocations).forEach(([locationName, carCount]) => {
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${locationName}</td>
-                <td>${carNumber}</td>
-                <td>1</td>
+                <td>--</td> <!-- 這裡顯示車號會是未來要補上的車號資料 -->
+                <td>${carCount}</td> <!-- 顯示每個位置的車輛數量 -->
             `;
             fragment.appendChild(row);
         });
