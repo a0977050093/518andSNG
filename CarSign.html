@@ -209,6 +209,50 @@ function updateStatusTable(carLocations) { // 改為傳入 carLocations 參數
     
     // 確保 carLocations 物件存在且有資料
     if (carLocations && Object.keys(carLocations).length === 0) {
+// 顯示車況
+async function showStatus() {
+    const modal = document.getElementById("modal");
+    modal.style.display = "block"; // 顯示模態框
+
+    try {
+        const carRef = collection(db, "carLocations"); // Firestore 集合名稱
+        const snapshot = await getDocs(carRef);
+
+        let carLocations = {}; // 使用 let 讓它可以重新賦值
+
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            // 把資料加入 carLocations 物件
+            carLocations[data.carNumber] = {
+                locationName: data.locationName,
+                lat: data.lat,
+                lng: data.lng
+            };
+        });
+
+        // 確保 carLocations 為非空物件
+        if (carLocations && Object.keys(carLocations).length > 0) {
+            updateStatusTable(carLocations); // 更新車況表格
+        } else {
+            alert("目前沒有車輛資料");
+            updateStatusTable({}); // 傳遞空對象給表格函數
+        }
+
+    } catch (error) {
+        alert("無法讀取車輛資料，請檢查 Firebase 配置。");
+        console.error(error);
+    }
+}
+
+// 更新車況顯示表格
+function updateStatusTable(carLocations) { // 改為傳入 carLocations 參數
+    const tableBody = document.getElementById("statusTable");
+    tableBody.innerHTML = ""; // 清空表格
+
+    const fragment = document.createDocumentFragment();
+    
+    // 如果 carLocations 為空物件，顯示無資料的提示
+    if (!carLocations || Object.keys(carLocations).length === 0) {
         const row = document.createElement("tr");
         const emptyCell = document.createElement("td");
         emptyCell.setAttribute("colspan", "3");
