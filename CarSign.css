@@ -74,6 +74,14 @@ button {
     margin: 8px 0;
 }
 
+.button-container {
+    display: flex;           /* 使用 flexbox 排列 */
+    justify-content: center; /* 水平居中對齊按鈕 */
+    align-items: center;     /* 垂直居中對齊按鈕 */
+    gap: 20px;               /* 設定兩個按鈕之間的間距 */
+    margin-top: 20px;        /* 可以為容器加一點上邊距 */
+}
+
 button:hover {
     background-color: #388E3C;
     border-color: #222;
