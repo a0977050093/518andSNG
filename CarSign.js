@@ -11,11 +11,10 @@ function initMap() {
     });
 }
 
-// 提交車輛位置
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
-import { getFirestore, doc, setDoc } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
-
 // Firebase 配置
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-app.js';
+import { getFirestore, collection, doc, setDoc, getDocs } from 'https://www.gstatic.com/firebasejs/9.1.3/firebase-firestore.js';
+
 const firebaseConfig = {
   apiKey: "AIzaSyBv-DYm4c4l9Dn-o7ME4TnI92YsCpss1nM",
   authDomain: "carsign-423fc.firebaseapp.com",
@@ -70,6 +69,14 @@ function submitCarLocation() {
   })
     .then(() => {
       alert("車號位置已儲存");
+
+      // 更新本地 carLocations 物件
+      carLocations[carNumber] = {
+        locationName: location,
+        lat: carLocation.lat,
+        lng: carLocation.lng
+      };
+
       // 添加標記到地圖
       addMarker(carLocation.lat, carLocation.lng, carNumber);
       updateStatusTable();
@@ -97,7 +104,24 @@ function addMarker(lat, lng, title) {
 function showStatus() {
     const modal = document.getElementById("modal");
     modal.style.display = "flex"; // 顯示模態框
-    updateStatusTable();
+    
+    // 從 Firestore 獲取車輛資料
+    const carRef = collection(db, "carLocations");
+    getDocs(carRef).then(snapshot => {
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            // 更新 carLocations
+            carLocations[data.carNumber] = {
+                locationName: data.locationName,
+                lat: data.lat,
+                lng: data.lng
+            };
+        });
+        updateStatusTable();
+    }).catch((error) => {
+        alert("無法讀取車輛資料");
+        console.error(error);
+    });
 }
 
 // 關閉模態框
@@ -133,7 +157,7 @@ function updateStatusTable() {
         row.appendChild(carNumberCell);
 
         const totalCell = document.createElement("td");
-        totalCell.textContent = "1";
+        totalCell.textContent = "1"; // 如果有需要可以更新總數
         row.appendChild(totalCell);
 
         tableBody.appendChild(row);
