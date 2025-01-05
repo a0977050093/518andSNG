@@ -41,17 +41,24 @@ function submitCarLocation() {
         return;
     }
 
-    // 添加標記
-    addMarker(carLocation.lat, carLocation.lng, carNumber);
-
-    // 儲存車號及位置
-    carLocations[carNumber] = {
-        locationName: location, 
+    // 儲存車號資料到 Firestore
+    const db = firebase.firestore();
+    db.collection("carLocations").doc(carNumber).set({
+        carNumber: carNumber,
+        locationName: location,
         lat: carLocation.lat,
         lng: carLocation.lng
-    };
-
-    updateStatusTable();
+    })
+    .then(() => {
+        alert("車號位置已儲存");
+        // 添加標記到地圖
+        addMarker(carLocation.lat, carLocation.lng, carNumber);
+        updateStatusTable();
+    })
+    .catch((error) => {
+        alert("無法儲存車號資料");
+        console.error(error);
+    });
 }
 
 // 添加標記
