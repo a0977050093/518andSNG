@@ -168,15 +168,31 @@ function submitCarLocation() {
 
 // 更新車況顯示
 function updateStatusTable() {
-  const table = document.getElementById('statusTable');
-  table.innerHTML = ''; // 清空當前內容
+    const tableBody = document.getElementById("statusTable");
+    tableBody.innerHTML = "";
 
-  for (const carNumber in carLocations) {
-    const location = carLocations[carNumber];
-    const row = document.createElement('tr');
-    row.innerHTML = `<td>${location.location}</td><td>${carNumber}</td><td>${location.count}</td>`;
-    table.appendChild(row);
-  }
+    const fragment = document.createDocumentFragment();
+    Object.keys(carLocations).forEach(carNumber => {
+        const carInfo = carLocations[carNumber];
+
+        const row = document.createElement("tr");
+
+        const locationCell = document.createElement("td");
+        locationCell.textContent = carInfo.locationName;
+        row.appendChild(locationCell);
+
+        const carNumberCell = document.createElement("td");
+        carNumberCell.textContent = carNumber;
+        row.appendChild(carNumberCell);
+
+        const totalCell = document.createElement("td");
+        totalCell.textContent = "1"; // 如果有需要可以更新總數
+        row.appendChild(totalCell);
+
+        fragment.appendChild(row);
+    });
+
+    tableBody.appendChild(fragment);
 }
 
 // 顯示車況
@@ -191,23 +207,56 @@ function closeModal() {
 
 // 清除所有車號
 function clearCarNumbers() {
-  carLocations = {};
-  updateStatusTable();
+    const password = prompt("請輸入密碼以清除所有車號");
+    const correctPassword = "348362";
+
+    if (password !== correctPassword) {
+        alert("密碼錯誤，無法清除車號。");
+        return;
+    }
+
+    // 清除標記
+    Object.keys(markers).forEach(carNumber => {
+        markers[carNumber].setMap(null);
+    });
+
+    markers = {}; // 清空標記
+    carLocations = {}; // 清空位置資料
+
+    // 清空 Firestore 資料
+    const carRef = collection(db, "carLocations");
+    getDocs(carRef).then(snapshot => {
+        const batch = db.batch();
+        snapshot.forEach(doc => {
+            batch.delete(doc.ref);
+        });
+        return batch.commit();
+    }).then(() => {
+        alert("所有車號已清除");
+        updateStatusTable();
+    }).catch(error => {
+        alert("清除失敗");
+        console.error(error);
+    });
 }
 
 // 添加標記到地圖
-function addMarker(lat, lng, carNumber) {
-  if (markers[carNumber]) {
-    markers[carNumber].setMap(null);
-  }
+function addMarker(lat, lng, title) {
+    if (markers[title]) {
+        markers[title].setMap(null); // 移除舊的標記
+    }
 
-  const marker = new google.maps.Marker({
-    position: { lat, lng },
-    map: map,
-    title: carNumber
-  });
+    const marker = new google.maps.Marker({
+        position: { lat, lng },
+        map: map,
+        title: title
+    });
 
-  markers[carNumber] = marker;
+    marker.addListener('click', () => {
+        alert(`車號: ${title}`);
+    });
+
+    markers[title] = marker;
 }
 
 // 綁定事件
