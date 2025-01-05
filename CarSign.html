@@ -85,9 +85,25 @@
   <script>
   // 此處將初始化地圖或其他需要初始化的腳本
   function initMap() {
-    // 確保這裡的 loadCarLocationsFromSheet 函式名稱與後端一致
-    loadCarLocationsFromSheet(); // 使用google.script.run調用後端函數
+  console.log("Initializing map...");
+  
+  // 檢查 loadCarLocationsFromSheet 函數是否存在
+  if (typeof loadCarLocationsFromSheet === "function") {
+    loadCarLocationsFromSheet();
+  } else {
+    console.error("loadCarLocationsFromSheet is not defined");
   }
+  
+  // 測試用：模擬車輛資料
+  const carLocations = [
+    { carNumber: "軍E-21137", location: "二級廠", lat: 25.033, lng: 121.565 },
+    // 其他數據
+  ];
+  
+  carLocations.forEach(car => {
+    console.log(`車號: ${car.carNumber}, 位置: ${car.location}`);
+  });
+}
 </script>
   
   <script>
