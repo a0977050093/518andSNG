@@ -84,18 +84,14 @@
   </div>
 
   <script>
-   // 確保在頁面加載完成後執行
-    window.onload = function() {
-    google.script.run.loadCarNumbersToInitialArea(); // 在頁面加載時執行步驟二
-    };
-     
     document.addEventListener("DOMContentLoaded", () => {
       initMap(); // 確保在 DOM 準備好後執行初始化
     });
-
   </script>
+  
+  <script src="CarSign.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAbPe0HVpOt6UHD47PFyRaAqF1CIzK__2U&callback=initMap" async defer></script>
   <script src="https://script.google.com/macros/s/AKfycbx5kUoB4z4cYDr-LvQhxzu-zvKTbQ_fkbgkN-XPdgaqKAsmkg5taHtRexbk51juhRYr/exec"></script>
-  <script src="CarSign.js"></script>
+  
 </body>
 </html>
