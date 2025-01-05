@@ -112,8 +112,8 @@ const carLocations = {}; // 儲存車輛位置
 // 初始化地圖
 window.initMap = function() {
   map = new google.maps.Map(document.getElementById('map'), {
-    center: { lat: 24.8940207, lng: 121.2095940 },
-    zoom: 17,
+    center: { lat: 24.8940584, lng: 121.2097559 },
+    zoom: 18,
     mapTypeId: google.maps.MapTypeId.SATELLITE
   });
 }
@@ -123,7 +123,7 @@ function submitCarLocation() {
   const carNumber = document.getElementById('carNumbers').value;
   const location = document.getElementById('locations').value;
 
-  const password = prompt("請輸入密碼，系統測試中348362");
+  const password = prompt("請輸入密碼以提交車號(六碼軍線)");
   const correctPassword = "348362";
 
   if (password !== correctPassword) {
@@ -246,8 +246,8 @@ function closeModal() {
 
 // 清除所有車號
 function clearCarNumbers() {
-    const password = prompt("請輸入密碼以清除所有車號");
-    const correctPassword = "348362";
+    const password = prompt("最高權限密碼以清除所有車號");
+    const correctPassword = "22140";
 
     if (password !== correctPassword) {
         alert("密碼錯誤，無法清除車號。");
