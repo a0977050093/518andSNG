@@ -214,17 +214,17 @@ function updateStatusTable(data) {
         const row = document.createElement('tr');
         
         // 創建並填入位置欄位
-        const locationCell = document.createElement('th');
+        const locationCell = document.createElement('td');
         locationCell.textContent = locationName; 
         row.appendChild(locationCell);
         
         // 創建並填入車號欄位
-        const carNumbersCell = document.createElement('th');
+        const carNumbersCell = document.createElement('td');
         carNumbersCell.textContent = locationData.carNumbers.join(', '); // 顯示車號，以逗號分隔
         row.appendChild(carNumbersCell);
         
         // 創建並填入總數欄位
-        const totalCell = document.createElement('th');
+        const totalCell = document.createElement('td');
         totalCell.textContent = locationData.count; // 顯示車號總數
         row.appendChild(totalCell);
         
