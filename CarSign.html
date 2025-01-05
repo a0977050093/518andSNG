@@ -204,26 +204,34 @@ async function showStatus() {
 }
 
 // 更新車況顯示表格
-function updateStatusTable(carLocations) {
-    const tableBody = document.getElementById("statusTable");
-    tableBody.innerHTML = ""; // 清空表格
+function updateStatusTable(data) {
+    const tableBody = document.getElementById('statusTable');
+    tableBody.innerHTML = ''; // 清空表格
 
-    const fragment = document.createDocumentFragment();
-
-    if (carLocations) {
-        Object.entries(carLocations).forEach(([locationName, { carNumbers, count }]) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${locationName}</td>
-                <td>${carNumbers.join(', ')}</td> <!-- 顯示所有車號 -->
-                <td>${count}</td> <!-- 顯示車輛數量 -->
-            `;
-            fragment.appendChild(row);
-        });
-    }
-
-    tableBody.appendChild(fragment);
+    // 假設 data 是一個包含車號狀況的陣列
+    data.forEach(item => {
+        const row = document.createElement('tr');
+        
+        // 創建並填入位置欄位
+        const locationCell = document.createElement('td');
+        locationCell.textContent = item.location; 
+        row.appendChild(locationCell);
+        
+        // 創建並填入車號欄位
+        const carNumbersCell = document.createElement('td');
+        carNumbersCell.textContent = item.carNumbers.join(', '); // 顯示車號，以逗號分隔
+        row.appendChild(carNumbersCell);
+        
+        // 創建並填入總數欄位
+        const totalCell = document.createElement('td');
+        totalCell.textContent = item.carNumbers.length; // 顯示車號總數
+        row.appendChild(totalCell);
+        
+        // 把行加入到表格中
+        tableBody.appendChild(row);
+    });
 }
+
 
 // 關閉車況顯示
 function closeModal() {
