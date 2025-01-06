@@ -9,14 +9,17 @@
         }
 
 form {
-      display: flex;
-      gap: 20px; /* 間距 */
+      width: 80%;  /* 可以根據需要調整這個寬度百分比 */
     }
 
     textarea {
+      width: 100%;  /* 使 textarea 寬度與父容器一致 */
+      height: 200px; /* 設定高度 */
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 5px;
+      background: #99f;
+      box-sizing: border-box; /* 確保內邊距不影響寬度計算 */
     }
 
         #status-btn {
