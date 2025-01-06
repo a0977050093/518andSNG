@@ -226,11 +226,21 @@ body.dark-mode {
        cursor: pointer;
    }
 
-   #modal-iframe {
-     width: 100%;
-     height: 100%;
-       border: none;
-   }
+   iframe {
+    width: 100%;
+    height:calc(100vh - 150px); /* 高度為視窗高度減去其他佔位元素（例如標題） */ 
+    border: none;
+    border-radius: 8px;       /* 圓角 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影 */
+    background-color: #fff;  /* 背景顏色 */
+    overflow: hidden;        /* 隱藏溢出內容 */
+}
+
+.modal iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
 
 /* 側邊欄樣式 */
 .sidebar {
