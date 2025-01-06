@@ -8,7 +8,19 @@
      min-height: 100vh; /* 確保 body 佔滿螢幕高度 */
      display: flex;
      flex-direction: column;
+     justify-content: center;
    }
+
+ form {
+      display: flex;
+      gap: 20px; /* 間距 */
+    }
+
+    textarea {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
 
 /* 護眼模式（黑色樣式） */
 body.dark-mode {
