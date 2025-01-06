@@ -4,7 +4,20 @@
             color: white;
             margin: 0;
             padding: 20px;
+            display: flex;
+            justify-content: center; /* 水平置中 */
         }
+
+form {
+      display: flex;
+      gap: 20px; /* 間距 */
+    }
+
+    textarea {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
 
         #status-btn {
             position: fixed;
