@@ -46,19 +46,24 @@ h1 {
 /* 標籤區域 */
 .tabs {
     display: flex;
-    justify-content: center;
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    flex-wrap: wrap; /* 允許按鈕換行 */
+    gap: 10px; /* 按鈕之間的間距 */
     margin-bottom: 20px;
-    flex-wrap: wrap; /* 允許標籤換行 */
 }
 
+/* 按鈕樣式 */
 .tab {
-    padding: 10px 15px;
-    background-color: #e0e0e0;
-    border: none;
-    cursor: pointer;
-    margin: 5px;
-    border-radius: 5px;
-    transition: background-color 0.3s;
+    padding: 10px 15px; /* 內邊距 */
+    background-color: #e0e0e0; /* 背景顏色 */
+    border: none; /* 移除邊框 */
+    cursor: pointer; /* 鼠標指針 */
+    border-radius: 5px; /* 圓角 */
+    transition: background-color 0.3s; /* 過渡效果 */
+    flex: 1 1 auto; /* 允許按鈕伸縮 */
+    text-align: center; /* 文字居中 */
+    min-width: 120px; /* 最小寬度 */
 }
 
 .tab.active {
