@@ -309,6 +309,74 @@ body.dark-mode .button:hover {
     background-color: #555;
 }
 
+/* 表單樣式 */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input, select, button[type="submit"] {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+input:focus, select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+button[type="submit"] {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+body.dark-mode input, body.dark-mode select, body.dark-mode button[type="submit"] {
+    background-color: #555;
+    color: #fff;
+    border-color: #777;
+}
+
+body.dark-mode button[type="submit"] {
+    background-color: #555;
+}
+
+body.dark-mode button[type="submit"]:hover {
+    background-color: #777;
+}
+
+/* 報告列表樣式 */
+#reports-list {
+    margin-top: 20px;
+}
+
+#reports li {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+body.dark-mode #reports li {
+    background-color: #444;
+    border-color: #777;
+    color: #ddd;
+}
+
 /* 響應式設計 */
 @media (max-width: 768px) {
     .container {
@@ -316,22 +384,13 @@ body.dark-mode .button:hover {
         padding: 15px;
     }
 
-    .tabs {
-        flex-direction: column;
-        gap: 5px;
-    }
-
-    .tab {
-        width: 100%;
-        min-width: auto;
-    }
-
-    .content-wrapper iframe {
-        height: 300px;
-    }
-
     h1 {
         font-size: 28px;
+    }
+
+    input, select, button[type="submit"] {
+        padding: 8px 12px;
+        font-size: 14px;
     }
 }
 
@@ -340,18 +399,8 @@ body.dark-mode .button:hover {
         font-size: 24px;
     }
 
-    .tab {
-        padding: 8px 12px;
-        font-size: 14px;
-    }
-
-    .content-wrapper iframe {
-        height: 200px;
-    }
-
-    .modal-content {
-        width: 100%;
-        height: 100%;
-        padding: 10px;
+    input, select, button[type="submit"] {
+        padding: 6px 10px;
+        font-size: 12px;
     }
 }
