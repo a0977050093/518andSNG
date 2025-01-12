@@ -109,7 +109,7 @@ body.dark-mode .tab:hover {
 
 .content-wrapper iframe {
     width: 100%; /* 寬度佔滿父容器 */
-    height: 100%; /* 設置一個固定的高度 */
+    height: 500px; /* 設置一個固定的高度 */
     border: 1px solid #ccc;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
