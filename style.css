@@ -5,27 +5,11 @@ body {
   background-color: #f4f4f4;
   color: #333;
   transition: background-color 0.3s, color 0.3s; /* 夜間模式切換動畫 */
-  min-height: 100vh; /* 確保 body 佔滿螢幕高度 */
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-
-form {
-  display: flex;
-  gap: 20px; /* 間距 */
-}
-
-textarea {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-/* 護眼模式（黑色樣式） */
-body.dark-mode {
-  background-color: #000;
-  color: #ddd;
+  position: relative; /* 父容器，讓按鈕能定位 */
 }
 
 .container {
@@ -37,8 +21,7 @@ body.dark-mode {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   display: flex;
-  flex-direction: column; /* 確保內容垂直排列 */
-  position: relative; /* 讓夜間模式按鈕可以絕對定位 */
+  flex-direction: column;
 }
 
 h1 {
@@ -70,206 +53,102 @@ h1 {
   background-color: #ddd;
 }
 
-.tab i {
-  margin-right: 5px; /* 圖示與文字之間間距 */
-}
-
-.tab-contents {
-  display: flex;
-  flex-direction: column; /* 確保內容垂直排列 */
-}
-
-.tab-content {
-  display: none;
-  padding: 10px;
-  position: relative; /* 讓 content-wrapper 可以絕對定位 */
-}
-
-.tab-content.active {
-  display: block;
-}
-
 .content-wrapper {
-  position: relative; /* 建立定位上下文 */
   display: flex;
-  flex-direction: column; /* 垂直排列 iframe 和按鈕 */
-  align-items: center; /* 讓內容置中 */
+  flex-direction: column;
+  align-items: center;
 }
 
-.content-wrapper iframe {
-  width: 100%; /* 讓 iframe 寬度填滿 container */
-  height: 500px; /* 設定 iframe 高度 */
-  border: 1px solid #ccc;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-  margin-bottom: 10px;
-  display: block;
+.expand-button, .button {
+  padding: 10px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
 .expand-button {
   background-color: #4CAF50;
   color: white;
-  padding: 10px 15px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  display: inline-flex;
-  align-items: center;
-  position: relative; /* 確保按鈕 z-index 生效 */
-  z-index: 2;
-  margin-bottom: 10px;
-}
-
-.expand-button i {
-  margin-right: 5px;
 }
 
 .button {
-  display: block;
-  margin: 20px auto;
-  padding: 10px 15px;
   background-color: #007bff;
   color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  text-decoration: none; /* 移除連結底線 */
-  transition: background-color 0.3s;
 }
 
-.button:hover {
-  background-color: #0056b3;
-}
-
-.dark-mode-button {
-  background-color: #333;
-  color: #fff;
+.dark-mode-button, .toggle-button {
+  background-color: #007bff;
+  color: white;
   padding: 10px 15px;
   border: none;
   cursor: pointer;
   border-radius: 5px;
   position: absolute;
   top: 10px;
-  right: 10px;
-  display: flex;
-  align-items: center;
-  z-index: 1000; /* 确保按钮在最上面 */
+  z-index: 1000;
   transition: background-color 0.3s;
 }
 
-.dark-mode-button i {
-  margin-right: 5px;
+.toggle-button {
+  left: 10px;
 }
 
-.dark-mode-button:hover {
-  background-color: #555;
+.dark-mode-button {
+  right: 10px;
 }
 
-.dark-mode {
-  background-color: #333;
-  color: #fff;
+body.dark-mode .toggle-button, body.dark-mode .dark-mode-button {
+  background-color: #444;
+  color: #ddd;
 }
 
-.dark-mode .container {
+body.dark-mode .container {
   background-color: #444;
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
-.dark-mode .tab {
+body.dark-mode .tab {
   background-color: #555;
   color: #fff;
 }
 
-.dark-mode .tab.active {
-  background-color: #777;
-}
-
-.dark-mode .tab:hover {
-  background-color: #777;
-}
-
-.dark-mode .button {
+body.dark-mode .button {
   background-color: #555;
 }
 
-.dark-mode .button:hover {
-  background-color: #777;
+body.dark-mode {
+  background-color: #000;
+  color: #ddd;
 }
 
-/* 全螢幕彈出視窗 */
 .modal {
   display: none;
   position: fixed;
-  z-index: 9999; /* 確保彈出視窗在最上層 */
-  left: 0;
+  z-index: 9999;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.7); /* 黑色背景半透明 */
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
-.modal-content {
-  background-color: #fefefe;
-  margin: 5% auto; /* 垂直置中 */
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
-  height: 80%; /* 彈出視窗高度佔 80% */
-  position: relative; /* 讓關閉按鈕可以絕對定位 */
-}
-
-.close-button {
-  color: #aaa;
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.close-button:hover,
-.close-button:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-iframe {
-  width: 100%;
-  height: calc(100vh - 150px); /* 高度為視窗高度減去其他佔位元素（例如標題） */
-  border: none;
-  border-radius: 8px; /* 圓角 */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 陰影 */
-  background-color: #fff; /* 背景顏色 */
-  overflow: hidden; /* 隱藏溢出內容 */
-}
-
-.modal iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-/* 側邊欄樣式 */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -250px; /* 初始隱藏在左側 */
+  left: -250px;
   width: 250px;
   height: 100%;
   background-color: #333;
   color: white;
-  padding-top: 60px;
   transition: left 0.3s ease;
-  z-index: 1000; /* 確保側邊欄在其他元素之上 */
 }
 
 .sidebar.open {
   left: 0;
 }
 
-/* 側邊欄的護眼模式樣式 */
 body.dark-mode .sidebar {
   background-color: #000;
   color: #ddd;
@@ -280,46 +159,14 @@ body.dark-mode .sidebar {
   padding: 10px 20px;
   color: inherit;
   text-decoration: none;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-body.dark-mode .sidebar-content a {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.sidebar-content a:hover {
-  background-color: rgba(0, 0, 0, 0.1);
 }
 
 body.dark-mode .sidebar-content a:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* 切換按鈕樣式 */
-.toggle-button, .dark-mode-button {
-  position: absolute;
-  top: 10px;
-  background-color: #007bff;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  cursor: pointer;
-  border-radius: 5px;
-  z-index: 1001;
-  transition: background-color 0.3s;
-}
-
-.toggle-button {
-  left: 10px; /* 設定 toggle-button 在左上角 */
-}
-
-.dark-mode-button {
-  right: 10px; /* 設定 dark-mode-button 在右上角 */
-}
-
-body.dark-mode .toggle-button, body.dark-mode .dark-mode-button {
-  background-color: #444;
-  color: #ddd;
+body.dark-mode .sidebar-content a {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .toggle-button:hover, .dark-mode-button:hover {
