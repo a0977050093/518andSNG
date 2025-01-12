@@ -230,7 +230,7 @@ body.dark-mode .sidebar-content a:hover {
   position: fixed;
   top: 10px;
   left: 10px;
-  background-color: #007bff;
+  background-color: #333;
   color: white;
   padding: 10px 15px;
   border: none;
