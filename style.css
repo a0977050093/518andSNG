@@ -10,7 +10,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-left: 250px; /* 預留空間給側邊欄 */
   transition: padding-left 0.3s ease; /* 平滑過渡效果 */
 }
 
