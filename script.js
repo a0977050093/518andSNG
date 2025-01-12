@@ -69,20 +69,3 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
-
-
-
-document.addEventListener('DOMContentLoaded', () => {
-    const sidebarLinks = document.querySelectorAll('.sidebar-content a');
-    const contentIframe = document.getElementById('content-iframe');
-
-    sidebarLinks.forEach(link => {
-        link.addEventListener('click', (event) => {
-            event.preventDefault(); // 阻止默認行為
-            const url = link.getAttribute('data-src'); // 獲取 data-src 的值
-            if (url) {
-                contentIframe.src = url; // 在 iframe 中加載內容
-            }
-        });
-    });
-});
