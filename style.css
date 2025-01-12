@@ -145,6 +145,14 @@ body.dark-mode .tab:hover {
     border: none;
 }
 
+/* 針對 modal-iframe 的特定樣式 */
+#modal-iframe {
+    height: 600px; /* 設置一個固定的高度 */
+    border: none; /* 移除邊框 */
+    margin: 0; /* 移除間距 */
+    padding: 0; /* 移除內邊距 */
+}
+
 .close-button {
     color: #aaa;
     position: absolute;
