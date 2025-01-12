@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>回報表單</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        input, select, button {
+            margin-top: 5px;
+        }
+        #reports-list {
+            margin-top: 20px;
+        }
+        #reports li {
+            margin-bottom: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>回報表單</h1>
+    <form id="report-form">
+        <label for="rank">級職：</label>
+        <select id="rank" name="rank" required>
+            <option value="上尉">上尉</option>
+            <option value="中尉">中尉</option>
+            <option value="少尉">少尉</option>
+            <option value="士官長">士官長</option>
+            <option value="上士">上士</option>
+            <option value="中士">中士</option>
+            <option value="下士">下士</option>
+            <option value="上兵">上兵</option>
+            <option value="一兵">一兵</option>
+            <option value="二兵">二兵</option>
+        </select>
+
+        <label for="name">姓名：</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="photo">上傳照片：</label>
+        <input type="file" id="photo" name="photo" accept="image/*" required>
+
+        <button type="submit">提交</button>
+    </form>
+
+    <div id="reports-list">
+        <h2>已提交的報告</h2>
+        <ul id="reports"></ul>
+    </div>
+
+    <!-- 引入 Firebase SDK -->
+    <script type="module">
+        // 引入 Firebase 功能
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+
+        // Firebase 設定檔
+        const firebaseConfig = {
+            apiKey: "AIzaSyBv-DYm4c4l9Dn-o7ME4TnI92YsCpss1nM",
+            authDomain: "carsign-423fc.firebaseapp.com",
+            databaseURL: "https://carsign-423fc-default-rtdb.firebaseio.com",
+            projectId: "carsign-423fc",
+            storageBucket: "carsign-423fc.firebasestorage.app",
+            messagingSenderId: "219688439999",
+            appId: "1:219688439999:web:2d4f8646c98bcb76e4360a",
+            measurementId: "G-7FRW6JPXBJ"
+        };
+
+        // 初始化 Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+        const auth = getAuth(app);
+
+        // 處理表單提交
+        document.getElementById('report-form').addEventListener('submit', async function (event) {
+            event.preventDefault(); // 阻止表單默認提交行為
+
+            // 獲取表單資料
+            const rank = document.getElementById('rank').value;
+            const name = document.getElementById('name').value;
+            const photo = document.getElementById('photo').files[0];
+
+            // 獲取當前使用者
+            const user = auth.currentUser;
+
+            if (user) {
+                try {
+                    // 上傳圖片到 Firebase Storage
+                    const storageRef = ref(storage, `photos/${photo.name}`);
+                    const snapshot = await uploadBytes(storageRef, photo);
+                    const photoUrl = await getDownloadURL(snapshot.ref);
+
+                    // 將資料存儲到 Firestore
+                    await addDoc(collection(db, 'reports'), {
+                        rank,
+                        name,
+                        photoUrl,
+                        uid: user.uid, // 記錄使用者的 UID
+                        timestamp: serverTimestamp()
+                    });
+
+                    alert('提交成功！');
+                    loadReports(); // 重新加載報告列表
+                } catch (error) {
+                    console.error('提交失敗：', error);
+                    alert('提交失敗，請稍後再試。');
+                }
+            } else {
+                alert('請先登入！');
+            }
+        });
+
+        // 加載並顯示報告
+        async function loadReports() {
+            try {
+                const querySnapshot = await getDocs(collection(db, 'reports'));
+
+                const reportsList = document.getElementById('reports');
+                reportsList.innerHTML = '';
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <strong>${data.name}</strong> (${data.rank})<br>
+                        <img src="${data.photoUrl}" alt="上傳的圖片" style="max-width: 200px;"><br>
+                        <small>時間：${data.timestamp?.toDate().toLocaleString()}</small>
+                    `;
+                    reportsList.appendChild(listItem);
+                });
+            } catch (error) {
+                console.error('讀取資料失敗：', error);
+            }
+        }
+
+        // 初始化加載報告
+        loadReports();
+
+        // 監聽使用者登入狀態
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log('使用者已登入：', user.email);
+            } else {
+                console.log('使用者未登入');
+            }
+        });
+    </script>
+</body>
+</html>
