@@ -299,7 +299,6 @@ body.dark-mode .sidebar-content a:hover {
 .toggle-button, .dark-mode-button {
   position: absolute;
   top: 10px;
-  left: 10px;
   background-color: #007bff;
   color: white;
   padding: 10px 15px;
@@ -308,6 +307,14 @@ body.dark-mode .sidebar-content a:hover {
   border-radius: 5px;
   z-index: 1001;
   transition: background-color 0.3s;
+}
+
+.toggle-button {
+  left: 10px; /* 設定 toggle-button 在左上角 */
+}
+
+.dark-mode-button {
+  right: 10px; /* 設定 dark-mode-button 在右上角 */
 }
 
 body.dark-mode .toggle-button, body.dark-mode .dark-mode-button {
