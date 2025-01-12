@@ -64,7 +64,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
 
         // Firebase 設定檔
         const firebaseConfig = {
@@ -82,7 +81,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const storage = getStorage(app);
-        const auth = getAuth(app);
 
         // 處理表單提交
         document.getElementById('report-form').addEventListener('submit', async function (event) {
@@ -93,33 +91,25 @@
             const name = document.getElementById('name').value;
             const photo = document.getElementById('photo').files[0];
 
-            // 獲取當前使用者
-            const user = auth.currentUser;
+            try {
+                // 上傳圖片到 Firebase Storage
+                const storageRef = ref(storage, `photos/${photo.name}`);
+                const snapshot = await uploadBytes(storageRef, photo);
+                const photoUrl = await getDownloadURL(snapshot.ref);
 
-            if (user) {
-                try {
-                    // 上傳圖片到 Firebase Storage
-                    const storageRef = ref(storage, `photos/${photo.name}`);
-                    const snapshot = await uploadBytes(storageRef, photo);
-                    const photoUrl = await getDownloadURL(snapshot.ref);
+                // 將資料存儲到 Firestore
+                await addDoc(collection(db, 'reports'), {
+                    rank,
+                    name,
+                    photoUrl,
+                    timestamp: serverTimestamp()
+                });
 
-                    // 將資料存儲到 Firestore
-                    await addDoc(collection(db, 'reports'), {
-                        rank,
-                        name,
-                        photoUrl,
-                        uid: user.uid, // 記錄使用者的 UID
-                        timestamp: serverTimestamp()
-                    });
-
-                    alert('提交成功！');
-                    loadReports(); // 重新加載報告列表
-                } catch (error) {
-                    console.error('提交失敗：', error);
-                    alert('提交失敗，請稍後再試。');
-                }
-            } else {
-                alert('請先登入！');
+                alert('提交成功！');
+                loadReports(); // 重新加載報告列表
+            } catch (error) {
+                console.error('提交失敗：', error);
+                alert('提交失敗，請稍後再試。');
             }
         });
 
@@ -148,15 +138,6 @@
 
         // 初始化加載報告
         loadReports();
-
-        // 監聽使用者登入狀態
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                console.log('使用者已登入：', user.email);
-            } else {
-                console.log('使用者未登入');
-            }
-        });
     </script>
 </body>
 </html>
