@@ -51,3 +51,26 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+
+
+// 側邊欄相關 DOM 元素
+const sidebar = document.getElementById('sidebar');
+const toggleButton = document.getElementById('toggleButton');
+
+// 側邊欄切換邏輯
+toggleButton.addEventListener('click', () => {
+    if (sidebar.classList.contains('open')) {
+        sidebar.classList.remove('open'); // 隱藏側邊欄
+    } else {
+        sidebar.classList.add('open'); // 顯示側邊欄
+    }
+});
+
+// 點擊側邊欄中的連結時，自動關閉側邊欄
+const sidebarLinks = document.querySelectorAll('.sidebar-content a');
+sidebarLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        sidebar.classList.remove('open'); // 關閉側邊欄
+    });
+});
