@@ -104,7 +104,7 @@ body.dark-mode .tab:hover {
 
 .content-wrapper iframe {
     width: 100%; /* 寬度佔滿父容器 */
-    height: 600px; /* 設置一個固定的高度 */
+    height: 100%; /* 設置一個固定的高度 */
     border: 1px solid #ccc;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
@@ -147,7 +147,7 @@ body.dark-mode .tab:hover {
 
 /* 針對 modal-iframe 的特定樣式 */
 #modal-iframe {
-    height: 600px; /* 設置一個固定的高度 */
+    height: 100%; /* 設置一個固定的高度 */
     border: none; /* 移除邊框 */
     margin: 0; /* 移除間距 */
     padding: 0; /* 移除內邊距 */
