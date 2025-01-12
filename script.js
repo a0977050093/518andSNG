@@ -64,4 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 點擊側邊欄連結關閉側邊欄
     document.querySelectorAll('.sidebar-content a').forEach(link => {
-        link
+        link.addEventListener('click', () => {
+            sidebar.classList.remove('open');
+        });
+    });
+});
