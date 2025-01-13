@@ -120,21 +120,15 @@
             <textarea id="suggestion" name="suggestion" placeholder="請輸入您的建議或問題..." required></textarea>
 
             <button type="submit">提交</button>
-            <h3 color=red>提交鈕按下後，請稍等，上傳需要時間</h3>
+            <h3 style="color: red;">提交鈕按下後，請稍等，上傳需要時間</h3>
         </form>
-
-    <!-- 顯示回報人數
-        <div id="reports-list">
-            <h2>已回報人員</h2>
-            <ul id="reports"></ul>
-        </div>
-    </div>  -->
+    </div>
 
     <!-- 引入 Firebase SDK -->
     <script type="module">
         // 引入 Firebase 功能
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, serverTimestamp, writeBatch, doc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
         import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-storage.js";
 
         // Firebase 設定檔
@@ -170,59 +164,39 @@
                 return;
             }
 
-            try {
-                // 上傳圖片到 Firebase Storage
-                const storageRef = ref(storage, `photos/${photo.name}`);
-                const snapshot = await uploadBytes(storageRef, photo);
-                const photoUrl = await getDownloadURL(snapshot.ref);
+            let retryCount = 3; // 重試次數
+            while (retryCount > 0) {
+                try {
+                    // 上傳圖片到 Firebase Storage
+                    const storageRef = ref(storage, `photos/${photo.name}`);
+                    const snapshot = await uploadBytes(storageRef, photo);
+                    const photoUrl = await getDownloadURL(snapshot.ref);
 
-                // 將資料存儲到 Firestore
-                await addDoc(collection(db, 'reports'), {
-                    rank,
-                    name,
-                    photoUrl, // 存儲圖片連結
-                    suggestion, // 存儲建議或問題
-                    timestamp: serverTimestamp()
-                });
+                    // 使用批次寫入功能
+                    const batch = writeBatch(db);
+                    const reportRef = doc(collection(db, 'reports'));
 
-                alert('提交成功！');
-                loadReports(); // 重新加載報告列表
-            } catch (error) {
-                console.error('提交失敗：', error);
-                alert('提交失敗，請稍後再試。');
+                    batch.set(reportRef, {
+                        rank,
+                        name,
+                        photoUrl, // 存儲圖片連結
+                        suggestion, // 存儲建議或問題
+                        timestamp: serverTimestamp()
+                    });
+
+                    await batch.commit(); // 提交批次寫入
+
+                    alert('提交成功！');
+                    return; // 提交成功，退出函式
+                } catch (error) {
+                    console.error('提交失敗：', error);
+                    retryCount--;
+                    if (retryCount === 0) {
+                        alert('提交失敗，請稍後再試。');
+                    }
+                }
             }
         });
-
-      /*  // 加載並顯示報告
-        async function loadReports() {
-            try {
-                const querySnapshot = await getDocs(collection(db, 'reports'));
-
-                const reportsList = document.getElementById('reports');
-                reportsList.innerHTML = '';
-
-                // 計算回報的數量
-                const reportCount = querySnapshot.size;
-
-                // 更新「已回報人員」標題，顯示回報的數量
-                document.getElementById('reports-list').querySelector('h2').textContent = `已回報人員 (${reportCount} 員)`;
-
-                querySnapshot.forEach((doc) => {
-                    const data = doc.data();
-                    const listItem = document.createElement('li');
-                    listItem.innerHTML = `
-                        <strong>${data.name}</strong> (${data.rank})<br>
-                        <small>時間：${data.timestamp?.toDate().toLocaleString()}</small>
-                    `;
-                    reportsList.appendChild(listItem);
-                });
-            } catch (error) {
-                console.error('讀取資料失敗：', error);
-            }
-        }
-
-        // 初始化加載報告
-        loadReports(); */
     </script>
 </body>
 </html>
