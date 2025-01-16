@@ -10,17 +10,22 @@ document.addEventListener('DOMContentLoaded', () => {
     let isDarkMode = localStorage.getItem('darkMode') === 'enabled';
 
     // 初始設定夜間模式
-    if (isDarkMode) {
-        document.body.classList.add('dark-mode');
-        darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> 護瞳'; // 更新按鈕圖標
-    }
+    const applyDarkMode = () => {
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i> 護瞳'; // 更新按鈕圖標
+        } else {
+            document.body.classList.remove('dark-mode');
+            darkModeToggle.innerHTML = '<i class="fas fa-moon"></i> 護瞳'; // 更新按鈕圖標
+        }
+    };
+    applyDarkMode();
 
     // 夜間模式切換
     darkModeToggle.addEventListener('click', () => {
         isDarkMode = !isDarkMode;
-        document.body.classList.toggle('dark-mode');
         localStorage.setItem('darkMode', isDarkMode ? 'enabled' : 'disabled');
-        darkModeToggle.innerHTML = isDarkMode ? '<i class="fas fa-sun"></i> 護瞳' : '<i class="fas fa-moon"></i> 護瞳'; // 更新按鈕圖標
+        applyDarkMode();
     });
 
     // 標籤切換
@@ -39,20 +44,20 @@ document.addEventListener('DOMContentLoaded', () => {
         button.addEventListener('click', () => {
             const iframe = button.parentElement.querySelector('iframe');
             modalIframe.src = iframe.src;
-            modal.classList.add('open'); // 顯示模態框
+            modal.style.display = 'block'; // 顯示模態框
         });
     });
 
     // 關閉模態框
     closeButton.addEventListener('click', () => {
-        modal.classList.remove('open');
+        modal.style.display = 'none';
         modalIframe.src = ''; // 清空 iframe
     });
 
     // 點擊外部關閉模態框
     window.addEventListener('click', (event) => {
         if (event.target === modal) {
-            modal.classList.remove('open');
+            modal.style.display = 'none';
             modalIframe.src = ''; // 清空 iframe
         }
     });
